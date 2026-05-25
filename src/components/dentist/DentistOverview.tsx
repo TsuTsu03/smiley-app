@@ -15,7 +15,7 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
   const today    = new Date().toISOString().split('T')[0];
   const todayApts = myApts.filter(a => a.date === today);
   const upcoming  = myApts.filter(a => a.date > today && (a.status === 'confirmed' || a.status === 'pending'));
-  const myPatients = [...new Set(myApts.map(a => a.patientId))];
+  const myPatients = Array.from(new Set(myApts.map(a => a.patientId)));
 
   return (
     <div className="space-y-8">
