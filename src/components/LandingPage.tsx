@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
-import { Tooth, ChevronRight, Building2, CheckCircle2, Star, Users, Calendar, Shield } from 'lucide-react';
+import { ChevronRight, Building2, CheckCircle2, Star, Users, Calendar, Shield } from 'lucide-react';
 import LoginModal from './LoginModal';
 import RegisterClinicModal from './RegisterClinicModal';
 
