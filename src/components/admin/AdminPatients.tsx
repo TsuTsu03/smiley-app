@@ -1,0 +1,228 @@
+'use client';
+
+import { useState } from 'react';
+import { Users, Search, Eye, FileText } from 'lucide-react';
+import { Card, Badge, SectionHeader, Modal, EmptyState } from '@/components/ui';
+import {
+  MOCK_PATIENTS, MOCK_RECORDS, MOCK_APPOINTMENTS,
+  getDentistById, fmtDate, fmtShortDate, calcAge, Patient, MedicalRecord
+} from '@/lib/data';
+
+export default function AdminPatients() {
+  const [search, setSearch]       = useState('');
+  const [selected, setSelected]   = useState<Patient | null>(null);
+  const [view, setView]           = useState<'info' | 'records'>('info');
+
+  const patients = MOCK_PATIENTS.filter(p =>
+    !search || p.fullName.toLowerCase().includes(search.toLowerCase()) ||
+    p.phone.includes(search) || p.email.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-6">
+      <SectionHeader title="Patients" sub={`${MOCK_PATIENTS.length} registered patients`} />
+
+      <Card className="p-4">
+        <div className="relative">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-400" />
+          <input
+            value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Search by name, phone or email..."
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-teal-100 bg-teal-50/30 text-sm text-teal-900 focus:border-teal-400 transition-colors"
+          />
+        </div>
+      </Card>
+
+      <Card>
+        {patients.length === 0 ? (
+          <EmptyState icon={<Users size={28} />} title="No patients found" desc="Try a different search." />
+        ) : (
+          <>
+            {/* Mobile card list (< md) */}
+            <div className="md:hidden divide-y divide-teal-50">
+              {patients.map(p => {
+                const records  = MOCK_RECORDS.filter(r => r.patientId === p.id);
+                const daysLeft = p.nextAdjustmentDate
+                  ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
+                  : null;
+                return (
+                  <div key={p.id} className="flex items-center gap-3 px-4 py-3.5 hover:bg-teal-50/30 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-300 to-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                      {p.fullName.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-teal-800 text-sm truncate">{p.fullName}</div>
+                      <div className="text-xs text-teal-500">{p.phone}</div>
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                        <span className="text-xs text-teal-400">{calcAge(p.dateOfBirth)} yrs · {p.gender}</span>
+                        <span className="bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded text-xs">{records.length} records</span>
+                        {daysLeft !== null && (
+                          <span className={`text-xs font-semibold ${daysLeft <= 7 ? 'text-amber-600' : 'text-teal-600'}`}>
+                            Adj: {daysLeft}d
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => { setSelected(p); setView('info'); }}
+                      className="p-2 text-teal-500 hover:text-teal-700 hover:bg-teal-50 rounded-lg transition-colors flex-shrink-0"
+                    >
+                      <Eye size={16} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop table (>= md) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-teal-50">
+                    {['Patient', 'Contact', 'DOB / Age', 'Next Adjustment', 'Records', ''].map(h => (
+                      <th key={h} className="text-left text-xs font-semibold text-teal-500 uppercase tracking-wide px-5 py-3.5">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {patients.map((p, i) => {
+                    const records   = MOCK_RECORDS.filter(r => r.patientId === p.id);
+                    const daysLeft  = p.nextAdjustmentDate
+                      ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
+                      : null;
+                    return (
+                      <tr key={p.id} className={`border-b border-teal-50/80 hover:bg-teal-50/40 transition-colors ${i % 2 ? 'bg-teal-50/20' : ''}`}>
+                        <td className="px-5 py-3.5">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-teal-300 to-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                              {p.fullName.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                            </div>
+                            <div>
+                              <div className="font-medium text-teal-800">{p.fullName}</div>
+                              <div className="text-xs text-teal-400 capitalize">{p.gender}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <div className="text-teal-700">{p.phone}</div>
+                          <div className="text-xs text-teal-400">{p.email}</div>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <div className="text-teal-700">{fmtShortDate(p.dateOfBirth)}</div>
+                          <div className="text-xs text-teal-400">{calcAge(p.dateOfBirth)} years old</div>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          {p.nextAdjustmentDate ? (
+                            <>
+                              <div className={`font-medium text-sm ${daysLeft! <= 7 ? 'text-amber-600' : 'text-teal-700'}`}>
+                                {fmtShortDate(p.nextAdjustmentDate)}
+                              </div>
+                              <div className="text-xs text-teal-400">{daysLeft} days away</div>
+                            </>
+                          ) : <span className="text-teal-300 text-xs">—</span>}
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <span className="bg-teal-50 text-teal-700 px-2 py-0.5 rounded-lg text-xs font-medium">
+                            {records.length} record{records.length !== 1 ? 's' : ''}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <button
+                            onClick={() => { setSelected(p); setView('info'); }}
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors"
+                          >
+                            <Eye size={13} /> View
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </Card>
+
+      {selected && (
+        <Modal title={selected.fullName} onClose={() => setSelected(null)} wide>
+          <PatientDetailModal patient={selected} view={view} setView={setView} />
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function PatientDetailModal({ patient, view, setView }: { patient: Patient; view: string; setView: (v: 'info' | 'records') => void }) {
+  const records = MOCK_RECORDS.filter(r => r.patientId === patient.id);
+  return (
+    <div>
+      <div className="flex gap-2 mb-5">
+        {(['info', 'records'] as const).map(v => (
+          <button key={v} onClick={() => setView(v)}
+            className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-colors ${view === v ? 'bg-teal-600 text-white' : 'bg-teal-50 text-teal-600 hover:bg-teal-100'}`}>
+            {v === 'info' ? 'Patient Info' : `Records (${records.length})`}
+          </button>
+        ))}
+      </div>
+
+      {view === 'info' ? (
+        <div className="space-y-5">
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              ['Full Name', patient.fullName],
+              ['Date of Birth', `${fmtDate(patient.dateOfBirth)} (${calcAge(patient.dateOfBirth)} yrs)`],
+              ['Gender', patient.gender],
+              ['Phone', patient.phone],
+              ['Email', patient.email],
+              ['Blood Type', patient.bloodType || '—'],
+              ['Allergies', patient.allergies.length ? patient.allergies.join(', ') : 'None'],
+              ['Emergency Contact', `${patient.emergencyContact} · ${patient.emergencyPhone}`],
+              ['Address', patient.address],
+              ['Registered', fmtDate(patient.registeredAt)],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <div className="text-xs text-teal-400 mb-0.5">{k}</div>
+                <div className="font-medium text-teal-800 text-sm">{v}</div>
+              </div>
+            ))}
+          </div>
+          {patient.nextAdjustmentDate && (
+            <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+              <div className="text-xs text-amber-600 font-medium mb-0.5">Next Adjustment Due</div>
+              <div className="font-semibold text-amber-800">{fmtDate(patient.nextAdjustmentDate)}</div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {records.length === 0 ? (
+            <div className="text-center py-10 text-teal-300 text-sm">No records yet</div>
+          ) : records.map(r => <RecordCard key={r.id} record={r} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RecordCard({ record }: { record: MedicalRecord }) {
+  const dentist = getDentistById(record.dentistId);
+  return (
+    <div className="border border-teal-100 rounded-xl p-4 space-y-2">
+      <div className="flex items-start justify-between">
+        <div>
+          <div className="font-semibold text-teal-800">{record.procedure}</div>
+          <div className="text-xs text-teal-400">{fmtDate(record.date)} · {dentist?.fullName}</div>
+        </div>
+        {record.tooth && <span className="text-xs bg-teal-50 text-teal-600 px-2 py-0.5 rounded-full">{record.tooth}</span>}
+      </div>
+      <div className="text-sm text-teal-600">{record.diagnosis}</div>
+      {record.notes && <div className="text-sm text-teal-500 bg-teal-50 rounded-lg px-3 py-2">{record.notes}</div>}
+      {record.prescription && (
+        <div className="text-xs text-teal-500">
+          <span className="font-medium">Rx: </span>{record.prescription}
+        </div>
+      )}
+    </div>
+  );
+}
