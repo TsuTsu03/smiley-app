@@ -19,26 +19,26 @@ export default function AdminDentists() {
           return (
             <Card key={d.id} className="p-5 cursor-pointer card-hover" onClick={() => setSelected(d)}>
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold text-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 to-sky-600 text-white font-bold text-lg flex items-center justify-center flex-shrink-0">
                   {d.fullName.split(' ').slice(-1)[0][0]}
                 </div>
                 <div>
-                  <div className="font-semibold text-blue-800">{d.fullName}</div>
-                  <div className="text-xs text-blue-500 mt-0.5">{d.specialization}</div>
+                  <div className="font-semibold text-sky-800">{d.fullName}</div>
+                  <div className="text-xs text-sky-500 mt-0.5">{d.specialization}</div>
                 </div>
               </div>
 
               <div className="space-y-2 mb-4">
-                <div className="text-xs font-semibold text-blue-500 uppercase tracking-wide">Schedule</div>
+                <div className="text-xs font-semibold text-sky-500 uppercase tracking-wide">Schedule</div>
                 {d.schedule.map(s => (
                   <div key={s.day} className="flex items-center justify-between text-sm">
-                    <span className="text-blue-700">{s.day}</span>
-                    <span className="text-blue-500 text-xs">{s.startTime} – {s.endTime}</span>
+                    <span className="text-sky-700">{s.day}</span>
+                    <span className="text-sky-500 text-xs">{s.startTime} – {s.endTime}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="flex items-center gap-3 pt-3 border-t border-blue-50 text-xs text-blue-500">
+              <div className="flex items-center gap-3 pt-3 border-t border-sky-50 text-xs text-sky-500">
                 <div className="flex items-center gap-1">
                   <Calendar size={12} />
                   <span>{upcoming.length} upcoming</span>
@@ -69,33 +69,33 @@ function DentistDetail({ dentist }: { dentist: Dentist }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4 text-sm">
-        <div><div className="text-xs text-blue-400 mb-0.5">Specialization</div><div className="font-medium text-blue-800">{dentist.specialization}</div></div>
-        <div><div className="text-xs text-blue-400 mb-0.5">Email</div><div className="font-medium text-blue-800">{dentist.email}</div></div>
-        <div><div className="text-xs text-blue-400 mb-0.5">Phone</div><div className="font-medium text-blue-800">{dentist.phone}</div></div>
+        <div><div className="text-xs text-sky-400 mb-0.5">Specialization</div><div className="font-medium text-sky-800">{dentist.specialization}</div></div>
+        <div><div className="text-xs text-sky-400 mb-0.5">Email</div><div className="font-medium text-sky-800">{dentist.email}</div></div>
+        <div><div className="text-xs text-sky-400 mb-0.5">Phone</div><div className="font-medium text-sky-800">{dentist.phone}</div></div>
       </div>
 
       <div>
-        <div className="font-semibold text-blue-700 text-sm mb-3">Weekly Schedule</div>
+        <div className="font-semibold text-sky-700 text-sm mb-3">Weekly Schedule</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {dentist.schedule.map(s => (
-            <div key={s.day} className="bg-blue-50 rounded-xl px-4 py-3 flex items-center justify-between">
-              <span className="font-medium text-blue-800 text-sm">{s.day}</span>
-              <span className="text-blue-500 text-xs">{s.startTime} – {s.endTime}</span>
+            <div key={s.day} className="bg-sky-50 rounded-xl px-4 py-3 flex items-center justify-between">
+              <span className="font-medium text-sky-800 text-sm">{s.day}</span>
+              <span className="text-sky-500 text-xs">{s.startTime} – {s.endTime}</span>
             </div>
           ))}
         </div>
       </div>
 
       <div>
-        <div className="font-semibold text-blue-700 text-sm mb-3">Appointments ({apts.length})</div>
+        <div className="font-semibold text-sky-700 text-sm mb-3">Appointments ({apts.length})</div>
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {apts.map(a => {
             const patient = getPatientById(a.patientId);
             return (
-              <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl border border-blue-50">
-                <div className="text-xs font-bold text-blue-600 w-16 flex-shrink-0">{a.date}</div>
-                <div className="text-xs text-blue-500 w-10">{a.time}</div>
-                <div className="flex-1 text-sm font-medium text-blue-800 truncate">{patient?.fullName}</div>
+              <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl border border-sky-50">
+                <div className="text-xs font-bold text-sky-600 w-16 flex-shrink-0">{a.date}</div>
+                <div className="text-xs text-sky-500 w-10">{a.time}</div>
+                <div className="flex-1 text-sm font-medium text-sky-800 truncate">{patient?.fullName}</div>
                 <Badge status={a.status} />
               </div>
             );

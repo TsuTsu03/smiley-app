@@ -8,9 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Blue — trust, authority, premium professionalism (primary)
-        // Amber — gold, prestige, warmth (accent)
-        // Both use Tailwind's built-in scales; custom teal kept for any residual uses
+        // Sky — clean, clinical, professional (primary)
+        // Teal — dental freshness (accent)
+        // Amber — warnings/alerts only
         teal: {
           50:  '#f0fdfa',
           100: '#ccfbf1',
@@ -34,10 +34,9 @@ module.exports = {
         '4xl': '2rem',
       },
       boxShadow: {
-        'soft':  '0 2px 20px rgba(37, 99, 235, 0.08)',
-        'card':  '0 4px 32px rgba(37, 99, 235, 0.10)',
-        'hover': '0 8px 40px rgba(37, 99, 235, 0.18)',
-        'gold':  '0 4px 24px rgba(217, 119, 6, 0.22)',
+        'soft':  '0 2px 20px rgba(2, 132, 199, 0.08)',
+        'card':  '0 4px 32px rgba(2, 132, 199, 0.10)',
+        'hover': '0 8px 40px rgba(2, 132, 199, 0.18)',
       },
       animation: {
         'fade-in':  'fadeIn 0.4s ease forwards',

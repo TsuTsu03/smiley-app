@@ -16,9 +16,9 @@ export default function DentistAddRecord() {
     const patient = MOCK_PATIENTS.find(p => p.id === form.patientId);
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <CheckCircle2 size={64} className="text-blue-400 mb-4" />
-        <h2 className="font-display text-2xl text-blue-800 mb-2">Record Saved!</h2>
-        <p className="text-blue-500 text-sm mb-8">
+        <CheckCircle2 size={64} className="text-sky-400 mb-4" />
+        <h2 className="font-display text-2xl text-sky-800 mb-2">Record Saved!</h2>
+        <p className="text-sky-500 text-sm mb-8">
           Medical record for <strong>{patient?.fullName}</strong> has been added.
         </p>
         <Btn onClick={() => { setDone(false); setForm({ patientId:'', date:'', procedure:'', tooth:'', diagnosis:'', notes:'', prescription:'', nextVisit:'' }); }}>
@@ -34,7 +34,7 @@ export default function DentistAddRecord() {
 
       <Card className="p-6 space-y-5">
         <div>
-          <h3 className="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-4">Visit Details</h3>
+          <h3 className="text-xs font-semibold text-sky-500 uppercase tracking-wide mb-4">Visit Details</h3>
           <div className="space-y-4">
             <Select label="Patient *" value={form.patientId} onChange={e => set('patientId', e.target.value)}>
               <option value="">Select patient...</option>
@@ -49,8 +49,8 @@ export default function DentistAddRecord() {
           </div>
         </div>
 
-        <div className="border-t border-blue-50 pt-5">
-          <h3 className="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-4">Clinical Notes</h3>
+        <div className="border-t border-sky-50 pt-5">
+          <h3 className="text-xs font-semibold text-sky-500 uppercase tracking-wide mb-4">Clinical Notes</h3>
           <div className="space-y-4">
             <Input label="Diagnosis *" value={form.diagnosis} onChange={e => set('diagnosis', e.target.value)} placeholder="Clinical diagnosis..." />
             <Textarea label="Notes" value={form.notes} onChange={e => set('notes', e.target.value)} rows={3} placeholder="Observations, patient complaints, treatment done..." />

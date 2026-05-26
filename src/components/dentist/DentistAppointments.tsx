@@ -29,7 +29,7 @@ export default function DentistAppointments() {
       <div className="flex flex-wrap gap-2">
         {['upcoming', 'today', 'past', 'all'].map(f => (
           <button key={f} onClick={() => setFilter(f)}
-            className={`px-3.5 sm:px-4 py-2 rounded-xl text-sm font-medium capitalize transition-colors ${filter === f ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border border-blue-100 hover:bg-blue-50'}`}>
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-sm font-medium capitalize transition-colors ${filter === f ? 'bg-sky-600 text-white' : 'bg-white text-sky-600 border border-sky-100 hover:bg-sky-50'}`}>
             {f}
           </button>
         ))}
@@ -39,21 +39,21 @@ export default function DentistAppointments() {
         {filtered.length === 0 ? (
           <EmptyState icon={<Calendar size={28} />} title="No appointments" desc="No appointments match this filter." />
         ) : (
-          <div className="divide-y divide-blue-50">
+          <div className="divide-y divide-sky-50">
             {filtered.map(apt => {
               const patient = getPatientById(apt.patientId);
               return (
-                <div key={apt.id} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 sm:py-4 hover:bg-blue-50/30 transition-colors cursor-pointer" onClick={() => setSelected(apt)}>
+                <div key={apt.id} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 sm:py-4 hover:bg-sky-50/30 transition-colors cursor-pointer" onClick={() => setSelected(apt)}>
                   <div className="flex-shrink-0 text-center min-w-14 sm:min-w-16">
-                    <div className="text-xs font-bold text-blue-600 bg-blue-50 rounded-lg px-1.5 sm:px-2 py-1">{apt.date}</div>
-                    <div className="text-sm font-semibold text-blue-800 mt-1">{apt.time}</div>
+                    <div className="text-xs font-bold text-sky-600 bg-sky-50 rounded-lg px-1.5 sm:px-2 py-1">{apt.date}</div>
+                    <div className="text-sm font-semibold text-sky-800 mt-1">{apt.time}</div>
                   </div>
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-300 to-blue-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-300 to-sky-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
                     {patient?.fullName.split(' ').map(n=>n[0]).slice(0,2).join('')}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-blue-800">{patient?.fullName}</div>
-                    <div className="text-sm text-blue-500">{apt.type}</div>
+                    <div className="font-medium text-sky-800">{patient?.fullName}</div>
+                    <div className="text-sm text-sky-500">{apt.type}</div>
                   </div>
                   <Badge status={apt.status} />
                 </div>
@@ -74,12 +74,12 @@ export default function DentistAppointments() {
               ['Status', selected.status],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between text-sm">
-                <span className="text-blue-500">{k}</span>
-                <span className="font-medium text-blue-800 capitalize">{v}</span>
+                <span className="text-sky-500">{k}</span>
+                <span className="font-medium text-sky-800 capitalize">{v}</span>
               </div>
             ))}
             {selected.notes && (
-              <div className="bg-blue-50 rounded-xl p-3 text-sm text-blue-600 mt-2">{selected.notes}</div>
+              <div className="bg-sky-50 rounded-xl p-3 text-sm text-sky-600 mt-2">{selected.notes}</div>
             )}
           </div>
         </Modal>

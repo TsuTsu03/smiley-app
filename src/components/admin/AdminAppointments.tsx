@@ -36,23 +36,23 @@ export default function AdminAppointments() {
       <Card className="p-4">
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
           <div className="relative flex-1 min-w-0 sm:min-w-48">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400" />
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-400" />
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search patient or dentist..."
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-100 bg-blue-50/30 text-sm text-blue-900 focus:border-blue-400 transition-colors"
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-sky-100 bg-sky-50/30 text-sm text-sky-900 focus:border-sky-400 transition-colors"
             />
           </div>
           <input
             type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-blue-100 bg-blue-50/30 text-sm text-blue-900 focus:border-blue-400 transition-colors"
+            className="px-3 py-2 rounded-xl border border-sky-100 bg-sky-50/30 text-sm text-sky-900 focus:border-sky-400 transition-colors"
           />
           <div className="flex flex-wrap gap-1.5">
             {['all', 'confirmed', 'pending', 'completed', 'cancelled'].map(s => (
               <button
                 key={s}
                 onClick={() => setFilter(s)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors ${filter === s ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'}`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors ${filter === s ? 'bg-sky-600 text-white' : 'bg-sky-50 text-sky-600 hover:bg-sky-100'}`}
               >
                 {s}
               </button>
@@ -68,22 +68,22 @@ export default function AdminAppointments() {
         ) : (
           <>
             {/* Mobile card list (< md) */}
-            <div className="md:hidden divide-y divide-blue-50">
+            <div className="md:hidden divide-y divide-sky-50">
               {appointments.map(apt => {
                 const patient = getPatientById(apt.patientId);
                 const dentist = getDentistById(apt.dentistId);
                 return (
-                  <div key={apt.id} className="px-4 py-3.5 hover:bg-blue-50/30 transition-colors">
+                  <div key={apt.id} className="px-4 py-3.5 hover:bg-sky-50/30 transition-colors">
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <div className="font-medium text-blue-800 text-sm">{patient?.fullName}</div>
+                      <div className="font-medium text-sky-800 text-sm">{patient?.fullName}</div>
                       <Badge status={apt.status} />
                     </div>
-                    <div className="text-xs text-blue-500 mb-0.5">{apt.type}</div>
-                    <div className="text-xs text-blue-600 font-medium">{fmtDate(apt.date)} · {apt.time}</div>
-                    <div className="text-xs text-blue-400 mb-2">{dentist?.fullName}</div>
+                    <div className="text-xs text-sky-500 mb-0.5">{apt.type}</div>
+                    <div className="text-xs text-sky-600 font-medium">{fmtDate(apt.date)} · {apt.time}</div>
+                    <div className="text-xs text-sky-400 mb-2">{dentist?.fullName}</div>
                     <button
                       onClick={() => setSelected(apt)}
-                      className="text-xs font-semibold text-blue-600 hover:text-blue-800"
+                      className="text-xs font-semibold text-sky-600 hover:text-sky-800"
                     >
                       View details →
                     </button>
@@ -96,9 +96,9 @@ export default function AdminAppointments() {
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-blue-50">
+                  <tr className="border-b border-sky-50">
                     {['Date & Time', 'Patient', 'Dentist', 'Procedure', 'Status', ''].map(h => (
-                      <th key={h} className="text-left text-xs font-semibold text-blue-500 uppercase tracking-wide px-5 py-3.5">{h}</th>
+                      <th key={h} className="text-left text-xs font-semibold text-sky-500 uppercase tracking-wide px-5 py-3.5">{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -107,14 +107,14 @@ export default function AdminAppointments() {
                     const patient = getPatientById(apt.patientId);
                     const dentist = getDentistById(apt.dentistId);
                     return (
-                      <tr key={apt.id} className={`border-b border-blue-50/80 hover:bg-blue-50/40 transition-colors ${i % 2 === 0 ? '' : 'bg-blue-50/20'}`}>
+                      <tr key={apt.id} className={`border-b border-sky-50/80 hover:bg-sky-50/40 transition-colors ${i % 2 === 0 ? '' : 'bg-sky-50/20'}`}>
                         <td className="px-5 py-3.5">
-                          <div className="font-medium text-blue-800">{fmtDate(apt.date)}</div>
-                          <div className="text-xs text-blue-400">{apt.time}</div>
+                          <div className="font-medium text-sky-800">{fmtDate(apt.date)}</div>
+                          <div className="text-xs text-sky-400">{apt.time}</div>
                         </td>
-                        <td className="px-5 py-3.5 font-medium text-blue-800">{patient?.fullName}</td>
-                        <td className="px-5 py-3.5 text-blue-600">{dentist?.fullName}</td>
-                        <td className="px-5 py-3.5 text-blue-600">{apt.type}</td>
+                        <td className="px-5 py-3.5 font-medium text-sky-800">{patient?.fullName}</td>
+                        <td className="px-5 py-3.5 text-sky-600">{dentist?.fullName}</td>
+                        <td className="px-5 py-3.5 text-sky-600">{apt.type}</td>
                         <td className="px-5 py-3.5"><Badge status={apt.status} /></td>
                         <td className="px-5 py-3.5">
                           <Btn variant="ghost" size="sm" onClick={() => setSelected(apt)}>View</Btn>
@@ -157,15 +157,15 @@ function AppointmentDetail({ apt }: { apt: Appointment }) {
           ['Status', apt.status],
         ].map(([k, v]) => (
           <div key={k}>
-            <div className="text-xs text-blue-500 mb-0.5">{k}</div>
-            <div className="font-medium text-blue-800 capitalize">{v}</div>
+            <div className="text-xs text-sky-500 mb-0.5">{k}</div>
+            <div className="font-medium text-sky-800 capitalize">{v}</div>
           </div>
         ))}
       </div>
       {apt.notes && (
         <div>
-          <div className="text-xs text-blue-500 mb-1">Notes</div>
-          <div className="bg-blue-50 rounded-xl px-4 py-3 text-sm text-blue-700">{apt.notes}</div>
+          <div className="text-xs text-sky-500 mb-1">Notes</div>
+          <div className="bg-sky-50 rounded-xl px-4 py-3 text-sm text-sky-700">{apt.notes}</div>
         </div>
       )}
     </div>

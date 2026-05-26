@@ -18,8 +18,8 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-blue-900">Good morning 👋</h1>
-        <p className="text-blue-500 text-sm mt-1">{fmtDate(today)} — Here&apos;s your clinic at a glance</p>
+        <h1 className="font-display text-2xl sm:text-3xl text-sky-900">Good morning 👋</h1>
+        <p className="text-sky-500 text-sm mt-1">{fmtDate(today)} — Here&apos;s your clinic at a glance</p>
       </div>
 
       {/* Stats */}
@@ -39,20 +39,20 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
             action={<Btn variant="ghost" size="sm" onClick={() => onNav('appointments')}>View All</Btn>}
           />
           {todayApts.length === 0 ? (
-            <div className="text-center py-10 text-blue-300 text-sm">No appointments today</div>
+            <div className="text-center py-10 text-sky-300 text-sm">No appointments today</div>
           ) : (
             <div className="space-y-3">
               {todayApts.map(apt => {
                 const patient = getPatientById(apt.patientId);
                 const dentist = getDentistById(apt.dentistId);
                 return (
-                  <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/50 border border-blue-50">
+                  <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-sky-50/50 border border-sky-50">
                     <div className="w-12 text-center">
-                      <div className="text-xs font-bold text-blue-700">{apt.time}</div>
+                      <div className="text-xs font-bold text-sky-700">{apt.time}</div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-blue-800 text-sm truncate">{patient?.fullName}</div>
-                      <div className="text-xs text-blue-500 truncate">{apt.type} · {dentist?.fullName}</div>
+                      <div className="font-medium text-sky-800 text-sm truncate">{patient?.fullName}</div>
+                      <div className="text-xs text-sky-500 truncate">{apt.type} · {dentist?.fullName}</div>
                     </div>
                     <Badge status={apt.status} />
                   </div>
@@ -69,17 +69,17 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
             {MOCK_DENTISTS.map(d => {
               const dApts = MOCK_APPOINTMENTS.filter(a => a.dentistId === d.id && a.date === today);
               return (
-                <div key={d.id} className="flex items-center gap-3 p-3 rounded-xl border border-blue-50 bg-white">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                <div key={d.id} className="flex items-center gap-3 p-3 rounded-xl border border-sky-50 bg-white">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {d.fullName.split(' ').slice(-1)[0][0]}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-blue-800 text-sm truncate">{d.fullName}</div>
-                    <div className="text-xs text-blue-400 truncate">{d.specialization}</div>
+                    <div className="font-medium text-sky-800 text-sm truncate">{d.fullName}</div>
+                    <div className="text-xs text-sky-400 truncate">{d.specialization}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-blue-700">{dApts.length}</div>
-                    <div className="text-xs text-blue-400">today</div>
+                    <div className="text-sm font-bold text-sky-700">{dApts.length}</div>
+                    <div className="text-xs text-sky-400">today</div>
                   </div>
                 </div>
               );
@@ -100,13 +100,13 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
             {upcomingAdj.map(p => {
               const daysLeft = Math.ceil((new Date(p.nextAdjustmentDate!).getTime() - Date.now()) / 86400000);
               return (
-                <div key={p.id} className={`p-3.5 rounded-xl border ${daysLeft <= 3 ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'}`}>
+                <div key={p.id} className={`p-3.5 rounded-xl border ${daysLeft <= 3 ? 'bg-amber-50 border-amber-100' : 'bg-sky-50 border-sky-100'}`}>
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <div className="font-medium text-blue-800 text-sm leading-tight">{p.fullName}</div>
+                    <div className="font-medium text-sky-800 text-sm leading-tight">{p.fullName}</div>
                     {daysLeft <= 3 && <AlertCircle size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />}
                   </div>
-                  <div className="text-xs text-blue-500">{fmtShortDate(p.nextAdjustmentDate!)}</div>
-                  <div className={`mt-1.5 text-xs font-semibold ${daysLeft <= 3 ? 'text-amber-600' : 'text-blue-600'}`}>
+                  <div className="text-xs text-sky-500">{fmtShortDate(p.nextAdjustmentDate!)}</div>
+                  <div className={`mt-1.5 text-xs font-semibold ${daysLeft <= 3 ? 'text-amber-600' : 'text-sky-600'}`}>
                     {daysLeft} day{daysLeft !== 1 ? 's' : ''} away
                   </div>
                 </div>

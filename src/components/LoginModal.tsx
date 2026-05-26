@@ -60,10 +60,10 @@ export default function LoginModal({ role, onClose }: Props) {
   };
 
   const roleLabels = { admin: 'Admin', dentist: 'Dentist', patient: 'Patient' };
-  const roleColors = { admin: 'from-blue-600 to-blue-500', dentist: 'from-blue-500 to-blue-500', patient: 'from-blue-500 to-blue-400' };
+  const roleColors = { admin: 'from-sky-600 to-sky-500', dentist: 'from-sky-500 to-sky-500', patient: 'from-sky-500 to-sky-400' };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-950/30 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-sky-950/30 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-hover w-full max-w-md overflow-hidden animate-slide-up">
         {/* Header */}
         <div className={`bg-gradient-to-r ${roleColors[role]} p-7 text-white`}>
@@ -77,7 +77,7 @@ export default function LoginModal({ role, onClose }: Props) {
 
         <div className="p-7">
           {/* Demo hint */}
-          <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-xs text-blue-700 mb-5 font-mono">
+          <div className="bg-sky-50 border border-sky-100 rounded-xl px-4 py-3 text-xs text-sky-700 mb-5 font-mono">
             {DEMO_CREDS[role].hint}
           </div>
 
@@ -85,38 +85,38 @@ export default function LoginModal({ role, onClose }: Props) {
             {role === 'patient' ? (
               <>
                 <div>
-                  <label className="block text-blue-800 text-sm font-medium mb-1.5">Full Name</label>
+                  <label className="block text-sky-800 text-sm font-medium mb-1.5">Full Name</label>
                   <input
                     value={field1}
                     onChange={e => setField1(e.target.value)}
                     placeholder="Juan dela Cruz"
-                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 placeholder-blue-300 focus:border-blue-400 focus:bg-white transition-colors text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white transition-colors text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-blue-800 text-sm font-medium mb-1.5">Date of Birth</label>
+                  <label className="block text-sky-800 text-sm font-medium mb-1.5">Date of Birth</label>
                   <input
                     type="date"
                     value={field2}
                     onChange={e => setField2(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 focus:border-blue-400 focus:bg-white transition-colors text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 focus:border-sky-400 focus:bg-white transition-colors text-sm"
                   />
                 </div>
               </>
             ) : (
               <>
                 <div>
-                  <label className="block text-blue-800 text-sm font-medium mb-1.5">Email Address</label>
+                  <label className="block text-sky-800 text-sm font-medium mb-1.5">Email Address</label>
                   <input
                     type="email"
                     value={field1}
                     onChange={e => setField1(e.target.value)}
                     placeholder="you@clinic.com"
-                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 placeholder-blue-300 focus:border-blue-400 focus:bg-white transition-colors text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white transition-colors text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-blue-800 text-sm font-medium mb-1.5">Password</label>
+                  <label className="block text-sky-800 text-sm font-medium mb-1.5">Password</label>
                   <div className="relative">
                     <input
                       type={showPwd ? 'text' : 'password'}
@@ -124,12 +124,12 @@ export default function LoginModal({ role, onClose }: Props) {
                       onChange={e => setField2(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleLogin()}
                       placeholder="••••••••"
-                      className="w-full px-4 py-3 pr-11 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 placeholder-blue-300 focus:border-blue-400 focus:bg-white transition-colors text-sm"
+                      className="w-full px-4 py-3 pr-11 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white transition-colors text-sm"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPwd(!showPwd)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-400 hover:text-sky-600"
                     >
                       {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>

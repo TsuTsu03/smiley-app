@@ -7,7 +7,13 @@
       "Bash(npm run *)",
       "Bash(Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue)",
       "Bash(xargs sed -i 's/teal-/blue-/g; s/mint-/blue-/g')",
-      "Bash(xargs sed -i 's/coral-/amber-/g')"
+      "Bash(xargs sed -i 's/coral-/amber-/g')",
+      "Bash(xargs sed -i 's/blue-/sky-/g')",
+      "Bash(sed -i 's/to-amber-50\\\\/40/to-teal-50\\\\/40/g; s/from-sky-500 to-amber-500/from-sky-500 to-teal-500/g; s/bg-amber-50 border border-amber-200/bg-teal-50 border border-teal-200/g; s/bg-amber-50 border-amber-200/bg-teal-50 border-teal-200/g; s/text-amber-700/text-teal-700/g; s/bg-amber-400 animate-pulse/bg-teal-400 animate-pulse/g; s/text-amber-500 not-italic/text-teal-500 not-italic/g; s/to-amber-400/to-teal-400/g; s/from-amber-400 to-amber-500/from-teal-400 to-teal-500/g; s/text-amber-500 text-sm font-medium/text-teal-500 text-sm font-medium/g; s/bg-amber-50 text-amber-500/bg-teal-50 text-teal-600/g' src/components/LandingPage.tsx)",
+      "Bash(sed -i 's/to-amber-500/to-teal-500/g; s/from-amber-500/from-teal-500/g' src/components/SidebarLayout.tsx)",
+      "Bash(sed -i 's/from-sky-700 to-amber-500/from-sky-600 to-teal-500/g' src/components/RegisterClinicModal.tsx)",
+      "Bash(sed -i 's/from-sky-600 to-amber-500/from-sky-600 to-teal-500/g; s/bg-amber-500 text-white flex items-center justify-center hover:bg-amber-600/bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600/g' src/components/patient/PatientChatbot.tsx)",
+      "Bash(sed -i 's/from-sky-600 to-amber-500/from-sky-600 to-teal-500/g' src/components/patient/PatientOverview.tsx)"
     ]
   }
 }

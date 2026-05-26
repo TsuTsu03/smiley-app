@@ -21,18 +21,18 @@ export default function PatientBook() {
     const dentist = MOCK_DENTISTS.find(d => d.id === form.dentistId);
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center mb-4">
-          <CheckCircle2 size={44} className="text-blue-400" />
+        <div className="w-20 h-20 rounded-full bg-sky-50 flex items-center justify-center mb-4">
+          <CheckCircle2 size={44} className="text-sky-400" />
         </div>
-        <h2 className="font-display text-2xl text-blue-800 mb-2">Appointment Requested!</h2>
-        <p className="text-blue-500 text-sm max-w-sm mb-2">
+        <h2 className="font-display text-2xl text-sky-800 mb-2">Appointment Requested!</h2>
+        <p className="text-sky-500 text-sm max-w-sm mb-2">
           Your appointment request has been sent. You will receive a confirmation from the clinic.
         </p>
-        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 my-4 text-sm text-left space-y-1.5 min-w-72">
-          <div className="flex justify-between"><span className="text-blue-400">Procedure</span><span className="font-medium text-blue-800">{form.type}</span></div>
-          <div className="flex justify-between"><span className="text-blue-400">Date</span><span className="font-medium text-blue-800">{form.date}</span></div>
-          <div className="flex justify-between"><span className="text-blue-400">Time</span><span className="font-medium text-blue-800">{form.time}</span></div>
-          {dentist && <div className="flex justify-between"><span className="text-blue-400">Dentist</span><span className="font-medium text-blue-800">{dentist.fullName}</span></div>}
+        <div className="bg-sky-50 border border-sky-100 rounded-2xl p-4 my-4 text-sm text-left space-y-1.5 min-w-72">
+          <div className="flex justify-between"><span className="text-sky-400">Procedure</span><span className="font-medium text-sky-800">{form.type}</span></div>
+          <div className="flex justify-between"><span className="text-sky-400">Date</span><span className="font-medium text-sky-800">{form.date}</span></div>
+          <div className="flex justify-between"><span className="text-sky-400">Time</span><span className="font-medium text-sky-800">{form.time}</span></div>
+          {dentist && <div className="flex justify-between"><span className="text-sky-400">Dentist</span><span className="font-medium text-sky-800">{dentist.fullName}</span></div>}
         </div>
         <Btn onClick={() => { setDone(false); setForm({ dentistId:'', date:'', time:'', type:'', notes:'' }); }}>
           Book Another
@@ -55,12 +55,12 @@ export default function PatientBook() {
             <button
               key={v}
               onClick={() => setMode(v)}
-              className={`flex flex-col items-start gap-2 p-4 rounded-xl border-2 transition-all text-left ${mode === v ? 'border-blue-500 bg-blue-50' : 'border-blue-100 hover:border-blue-200'}`}
+              className={`flex flex-col items-start gap-2 p-4 rounded-xl border-2 transition-all text-left ${mode === v ? 'border-sky-500 bg-sky-50' : 'border-sky-100 hover:border-sky-200'}`}
             >
-              <div className={`p-2 rounded-lg ${mode === v ? 'bg-blue-500 text-white' : 'bg-blue-50 text-blue-500'}`}>{icon}</div>
+              <div className={`p-2 rounded-lg ${mode === v ? 'bg-sky-500 text-white' : 'bg-sky-50 text-sky-500'}`}>{icon}</div>
               <div>
-                <div className="font-semibold text-blue-800 text-sm">{label}</div>
-                <div className="text-xs text-blue-400">{desc}</div>
+                <div className="font-semibold text-sky-800 text-sm">{label}</div>
+                <div className="text-xs text-sky-400">{desc}</div>
               </div>
             </button>
           ))}
@@ -71,22 +71,22 @@ export default function PatientBook() {
       <Card className="p-6 space-y-4">
         {mode === 'by-doctor' && (
           <div>
-            <div className="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-3">Choose Dentist</div>
+            <div className="text-xs font-semibold text-sky-500 uppercase tracking-wide mb-3">Choose Dentist</div>
             <div className="space-y-2">
               {MOCK_DENTISTS.map(d => (
                 <button
                   key={d.id}
                   onClick={() => set('dentistId', d.id)}
-                  className={`w-full flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all ${form.dentistId === d.id ? 'border-blue-500 bg-blue-50' : 'border-blue-100 hover:border-blue-200'}`}
+                  className={`w-full flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all ${form.dentistId === d.id ? 'border-sky-500 bg-sky-50' : 'border-sky-100 hover:border-sky-200'}`}
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold text-sm flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-sky-600 text-white font-bold text-sm flex items-center justify-center flex-shrink-0">
                     {d.fullName.split(' ').slice(-1)[0][0]}
                   </div>
                   <div className="flex-1">
-                    <div className="font-semibold text-blue-800 text-sm">{d.fullName}</div>
-                    <div className="text-xs text-blue-500">{d.specialization}</div>
+                    <div className="font-semibold text-sky-800 text-sm">{d.fullName}</div>
+                    <div className="text-xs text-sky-500">{d.specialization}</div>
                   </div>
-                  <div className="text-right text-xs text-blue-400">
+                  <div className="text-right text-xs text-sky-400">
                     {d.schedule.map(s => <div key={s.day}>{s.day}</div>).slice(0, 2)}
                   </div>
                 </button>
@@ -95,15 +95,15 @@ export default function PatientBook() {
           </div>
         )}
 
-        <div className="border-t border-blue-50 pt-4 space-y-4">
-          <div className="text-xs font-semibold text-blue-500 uppercase tracking-wide">Appointment Details</div>
+        <div className="border-t border-sky-50 pt-4 space-y-4">
+          <div className="text-xs font-semibold text-sky-500 uppercase tracking-wide">Appointment Details</div>
           <Input label="Preferred Date *" type="date" value={form.date} onChange={e => set('date', e.target.value)} />
           <div>
-            <label className="block text-sm font-medium text-blue-800 mb-1.5">Preferred Time *</label>
+            <label className="block text-sm font-medium text-sky-800 mb-1.5">Preferred Time *</label>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
               {TIME_SLOTS.map(t => (
                 <button key={t} onClick={() => set('time', t)}
-                  className={`py-2 px-1 rounded-lg text-xs font-medium transition-colors ${form.time === t ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'}`}>
+                  className={`py-2 px-1 rounded-lg text-xs font-medium transition-colors ${form.time === t ? 'bg-sky-600 text-white' : 'bg-sky-50 text-sky-600 hover:bg-sky-100'}`}>
                   {t}
                 </button>
               ))}
@@ -120,11 +120,11 @@ export default function PatientBook() {
             {PROCEDURE_TYPES.map(t => <option key={t}>{t}</option>)}
           </Select>
           <div>
-            <label className="block text-sm font-medium text-blue-800 mb-1.5">Additional Notes</label>
+            <label className="block text-sm font-medium text-sky-800 mb-1.5">Additional Notes</label>
             <textarea
               value={form.notes} onChange={e => set('notes', e.target.value)}
               rows={2} placeholder="Any specific concerns or requests..."
-              className="w-full px-4 py-2.5 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm resize-none focus:border-blue-400 transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 text-sm resize-none focus:border-sky-400 transition-colors"
             />
           </div>
         </div>
