@@ -24,9 +24,9 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const roleColors = {
-    admin: 'from-teal-700 to-teal-600',
-    dentist: 'from-teal-600 to-mint-600',
-    patient: 'from-mint-600 to-teal-500',
+    admin:   'from-teal-600 to-teal-700',
+    dentist: 'from-teal-600 to-coral-500',
+    patient: 'from-coral-500 to-teal-500',
   };
   const gradient = roleColors[role!] || roleColors.admin;
 

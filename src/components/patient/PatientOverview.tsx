@@ -20,7 +20,7 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
   return (
     <div className="space-y-8">
       {/* Welcome */}
-      <div className="bg-gradient-to-r from-teal-600 to-teal-500 rounded-2xl p-6 text-white">
+      <div className="bg-gradient-to-r from-teal-600 to-coral-500 rounded-2xl p-6 text-white">
         <div className="text-teal-100 text-sm mb-1">Welcome back,</div>
         <h1 className="font-display text-2xl">{patient?.fullName}</h1>
         <div className="text-teal-100 text-sm mt-1">

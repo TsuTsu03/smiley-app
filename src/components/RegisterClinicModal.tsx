@@ -39,7 +39,7 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-teal-950/30 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-hover w-full max-w-lg overflow-hidden animate-slide-up">
-        <div className="bg-gradient-to-r from-teal-700 to-teal-500 p-7 text-white relative">
+        <div className="bg-gradient-to-r from-teal-700 to-coral-500 p-7 text-white relative">
           <button onClick={onClose} className="absolute top-5 right-5 p-1 text-white/70 hover:text-white">
             <X size={20} />
           </button>
@@ -65,7 +65,7 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
               </div>
               <button
                 onClick={onSuccess}
-                className="w-full py-3.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity"
+                className="w-full py-3.5 bg-gradient-to-r from-coral-500 to-coral-400 text-white font-semibold rounded-xl shadow-coral hover:opacity-90 transition-opacity"
               >
                 Go to Admin Dashboard
               </button>
@@ -110,7 +110,7 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
               <button
                 onClick={() => setStep(2)}
                 disabled={!form.clinicName || !form.address}
-                className="mt-5 w-full py-3.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity disabled:opacity-40"
+                className="mt-5 w-full py-3.5 bg-gradient-to-r from-coral-500 to-coral-400 text-white font-semibold rounded-xl shadow-coral hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 Continue
               </button>
@@ -145,7 +145,7 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
                 <button
                   onClick={handleSubmit}
                   disabled={loading || !form.adminName || !form.adminEmail || !form.password}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 bg-gradient-to-r from-coral-500 to-coral-400 text-white font-semibold rounded-xl shadow-coral hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
                 >
                   {loading ? <><Loader size={15} className="animate-spin" /> Creating…</> : 'Create Clinic'}
                 </button>

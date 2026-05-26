@@ -154,7 +154,7 @@ export function Btn({ children, onClick, variant = 'primary', size = 'md', disab
   size?: 'sm' | 'md'; disabled?: boolean; type?: 'button' | 'submit'; className?: string;
 }) {
   const variants = {
-    primary:   'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-soft hover:opacity-90',
+    primary:   'bg-gradient-to-r from-coral-500 to-coral-400 text-white shadow-coral hover:opacity-90',
     secondary: 'bg-teal-50 text-teal-700 hover:bg-teal-100',
     danger:    'bg-red-50 text-red-600 hover:bg-red-100',
     ghost:     'text-teal-600 hover:bg-teal-50',

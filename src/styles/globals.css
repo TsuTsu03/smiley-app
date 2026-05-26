@@ -8,15 +8,16 @@
   --font-display: 'DM Serif Display', serif;
   --font-body: 'DM Sans', sans-serif;
 
-  --color-primary: #0d9488;
+  --color-primary:       #0d9488;
   --color-primary-light: #14b8a6;
-  --color-primary-dark: #0f766e;
-  --color-accent: #2dd4bf;
-  --color-bg: #f8fffe;
-  --color-surface: #ffffff;
-  --color-text: #134e4a;
-  --color-text-muted: #6b8f8c;
-  --color-border: #d1faf5;
+  --color-primary-dark:  #0f766e;
+  --color-accent:        #f97316;  /* coral — warmth, approachability */
+  --color-accent-light:  #fed7aa;
+  --color-bg:            #f0fdfa;
+  --color-surface:       #ffffff;
+  --color-text:          #134e4a;
+  --color-text-muted:    #6b8f8c;
+  --color-border:        #ccfbf1;
 }
 
 * {
@@ -52,7 +53,7 @@ html, body {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card-hover:hover {
-  box-shadow: 0 8px 40px rgba(14, 148, 136, 0.16);
+  box-shadow: 0 8px 40px rgba(14, 148, 136, 0.14);
   transform: translateY(-2px);
 }
 
@@ -63,11 +64,11 @@ html, body {
 }
 .tooth-pulse { animation: toothPulse 1.4s ease-in-out infinite; }
 
-/* Sidebar nav active */
+/* Sidebar nav active — teal stays for navigation (trust) */
 .nav-active {
-  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  background: linear-gradient(135deg, #0f766e, #0d9488);
   color: white;
-  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.28);
 }
 
 /* Status badges */
