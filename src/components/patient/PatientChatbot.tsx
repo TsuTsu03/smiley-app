@@ -179,17 +179,17 @@ export default function PatientChatbot() {
     <>
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-96 flex flex-col bg-white rounded-2xl shadow-2xl border border-teal-100 overflow-hidden animate-slide-up"
+        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-96 flex flex-col bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden animate-slide-up"
           style={{ height: 'min(520px, calc(100dvh - 120px))' }}>
 
           {/* Header */}
-          <div className="bg-gradient-to-r from-teal-600 to-coral-500 px-4 py-3 text-white flex items-center gap-3 flex-shrink-0">
+          <div className="bg-gradient-to-r from-blue-600 to-amber-500 px-4 py-3 text-white flex items-center gap-3 flex-shrink-0">
             <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
               <Bot size={16} />
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-semibold text-sm leading-none">Smiley Assistant</div>
-              <div className="text-teal-100 text-xs mt-0.5 flex items-center gap-1.5">
+              <div className="text-blue-100 text-xs mt-0.5 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-300 inline-block animate-pulse" />
                 Online — Ask me anything!
               </div>
@@ -206,10 +206,10 @@ export default function PatientChatbot() {
           <div className="flex-1 overflow-y-auto space-y-3 p-3.5 min-h-0">
             {messages.map(msg => (
               <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 ${msg.role === 'bot' ? 'bg-teal-100 text-teal-600' : 'bg-coral-500 text-white'}`}>
+                <div className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 ${msg.role === 'bot' ? 'bg-blue-100 text-blue-600' : 'bg-blue-600 text-white'}`}>
                   {msg.role === 'bot' ? <Bot size={12} /> : <User size={12} />}
                 </div>
-                <div className={`max-w-[82%] px-3 py-2.5 rounded-xl text-xs leading-relaxed whitespace-pre-line ${msg.role === 'bot' ? 'bg-teal-50 text-teal-800 rounded-tl-sm' : 'bg-coral-500 text-white rounded-tr-sm'}`}>
+                <div className={`max-w-[82%] px-3 py-2.5 rounded-xl text-xs leading-relaxed whitespace-pre-line ${msg.role === 'bot' ? 'bg-blue-50 text-blue-800 rounded-tl-sm' : 'bg-blue-600 text-white rounded-tr-sm'}`}>
                   {renderText(msg.text)}
                 </div>
               </div>
@@ -217,14 +217,14 @@ export default function PatientChatbot() {
 
             {typing && (
               <div className="flex gap-2">
-                <div className="w-7 h-7 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
                   <Bot size={12} />
                 </div>
-                <div className="bg-teal-50 px-3 py-2.5 rounded-xl rounded-tl-sm">
+                <div className="bg-blue-50 px-3 py-2.5 rounded-xl rounded-tl-sm">
                   <div className="flex gap-1 items-center h-3.5">
-                    <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -239,7 +239,7 @@ export default function PatientChatbot() {
                 <button
                   key={s}
                   onClick={() => { setInput(s); inputRef.current?.focus(); }}
-                  className="text-xs bg-teal-50 text-teal-700 border border-teal-100 px-2.5 py-1 rounded-full hover:bg-teal-100 transition-colors"
+                  className="text-xs bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
                 >
                   {s}
                 </button>
@@ -248,7 +248,7 @@ export default function PatientChatbot() {
           )}
 
           {/* Input */}
-          <div className="p-3 border-t border-teal-100 flex gap-2 flex-shrink-0 bg-white">
+          <div className="p-3 border-t border-blue-100 flex gap-2 flex-shrink-0 bg-white">
             <input
               ref={inputRef}
               type="text"
@@ -256,12 +256,12 @@ export default function PatientChatbot() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && send()}
               placeholder="Ask a question..."
-              className="flex-1 px-3 py-2 rounded-xl border border-teal-100 bg-teal-50/40 text-teal-900 text-xs focus:border-teal-400 focus:outline-none transition-colors"
+              className="flex-1 px-3 py-2 rounded-xl border border-blue-100 bg-blue-50/40 text-blue-900 text-xs focus:border-blue-400 focus:outline-none transition-colors"
             />
             <button
               onClick={send}
               disabled={!input.trim()}
-              className="w-9 h-9 rounded-xl bg-coral-500 text-white flex items-center justify-center hover:bg-coral-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+              className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
             >
               <Send size={14} />
             </button>
@@ -273,7 +273,7 @@ export default function PatientChatbot() {
       <button
         onClick={() => setOpen(o => !o)}
         aria-label={open ? 'Close chat' : 'Open Smiley Assistant'}
-        className={`fixed bottom-6 right-4 sm:right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-200 ${open ? 'bg-teal-700 rotate-90' : 'bg-gradient-to-br from-coral-400 to-coral-600 hover:scale-110 active:scale-95'}`}
+        className={`fixed bottom-6 right-4 sm:right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-200 ${open ? 'bg-blue-700 rotate-90' : 'bg-gradient-to-br from-blue-600 to-blue-800 hover:scale-110 active:scale-95'}`}
       >
         {open
           ? <X size={22} className="text-white" />

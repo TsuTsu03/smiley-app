@@ -20,10 +20,10 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
   return (
     <div className="space-y-8">
       {/* Welcome */}
-      <div className="bg-gradient-to-r from-teal-600 to-coral-500 rounded-2xl p-6 text-white">
-        <div className="text-teal-100 text-sm mb-1">Welcome back,</div>
+      <div className="bg-gradient-to-r from-blue-600 to-amber-500 rounded-2xl p-6 text-white">
+        <div className="text-blue-100 text-sm mb-1">Welcome back,</div>
         <h1 className="font-display text-2xl">{patient?.fullName}</h1>
-        <div className="text-teal-100 text-sm mt-1">
+        <div className="text-blue-100 text-sm mt-1">
           {calcAge(patient?.dateOfBirth || '')} years old · {patient?.bloodType || 'Blood type not set'}
         </div>
         {patient?.allergies && patient.allergies.length > 0 && (
@@ -44,13 +44,13 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
 
       {/* Adjustment reminder */}
       {patient?.nextAdjustmentDate && daysToAdj !== null && daysToAdj <= 14 && (
-        <div className={`flex items-start gap-3 p-4 rounded-2xl border ${daysToAdj <= 7 ? 'bg-amber-50 border-amber-100' : 'bg-teal-50 border-teal-100'}`}>
-          <AlertCircle size={18} className={daysToAdj <= 7 ? 'text-amber-500 flex-shrink-0 mt-0.5' : 'text-teal-500 flex-shrink-0 mt-0.5'} />
+        <div className={`flex items-start gap-3 p-4 rounded-2xl border ${daysToAdj <= 7 ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'}`}>
+          <AlertCircle size={18} className={daysToAdj <= 7 ? 'text-amber-500 flex-shrink-0 mt-0.5' : 'text-blue-500 flex-shrink-0 mt-0.5'} />
           <div className="flex-1">
-            <div className={`font-semibold text-sm ${daysToAdj <= 7 ? 'text-amber-700' : 'text-teal-700'}`}>
+            <div className={`font-semibold text-sm ${daysToAdj <= 7 ? 'text-amber-700' : 'text-blue-700'}`}>
               Orthodontic Adjustment Reminder
             </div>
-            <div className={`text-sm ${daysToAdj <= 7 ? 'text-amber-600' : 'text-teal-600'}`}>
+            <div className={`text-sm ${daysToAdj <= 7 ? 'text-amber-600' : 'text-blue-600'}`}>
               Your next adjustment is on <strong>{fmtDate(patient.nextAdjustmentDate)}</strong> — {daysToAdj} days away.
             </div>
           </div>
@@ -63,8 +63,8 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
         <SectionHeader title="My Appointments" sub={`${upcoming.length} upcoming`} action={<Btn variant="ghost" size="sm" onClick={() => onNav('book')}>Book New</Btn>} />
         {upcoming.length === 0 ? (
           <div className="text-center py-10">
-            <Calendar size={32} className="text-teal-200 mx-auto mb-3" />
-            <div className="text-teal-400 text-sm">No upcoming appointments</div>
+            <Calendar size={32} className="text-blue-200 mx-auto mb-3" />
+            <div className="text-blue-400 text-sm">No upcoming appointments</div>
             <Btn onClick={() => onNav('book')} className="mt-4 mx-auto">Book an Appointment</Btn>
           </div>
         ) : (
@@ -72,14 +72,14 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
             {upcoming.map(apt => {
               const dentist = getDentistById(apt.dentistId);
               return (
-                <div key={apt.id} className="flex items-center gap-4 p-3.5 rounded-xl border border-teal-50 bg-teal-50/30">
+                <div key={apt.id} className="flex items-center gap-4 p-3.5 rounded-xl border border-blue-50 bg-blue-50/30">
                   <div className="text-center min-w-12">
-                    <div className="text-lg font-bold text-teal-800">{new Date(apt.date).getDate()}</div>
-                    <div className="text-xs text-teal-500">{new Date(apt.date).toLocaleString('en', { month: 'short' })}</div>
+                    <div className="text-lg font-bold text-blue-800">{new Date(apt.date).getDate()}</div>
+                    <div className="text-xs text-blue-500">{new Date(apt.date).toLocaleString('en', { month: 'short' })}</div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-teal-800">{apt.type}</div>
-                    <div className="text-sm text-teal-500">{apt.time} · {dentist?.fullName}</div>
+                    <div className="font-medium text-blue-800">{apt.type}</div>
+                    <div className="text-sm text-blue-500">{apt.time} · {dentist?.fullName}</div>
                   </div>
                   <Badge status={apt.status} />
                 </div>
@@ -97,14 +97,14 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
             {myRecs.slice(0, 2).map(r => {
               const dentist = getDentistById(r.dentistId);
               return (
-                <div key={r.id} className="flex items-start gap-3 p-3.5 rounded-xl border border-teal-50">
-                  <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center flex-shrink-0">
+                <div key={r.id} className="flex items-start gap-3 p-3.5 rounded-xl border border-blue-50">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
                     <FileText size={16} />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-teal-800 text-sm">{r.procedure}</div>
-                    <div className="text-xs text-teal-400">{fmtDate(r.date)} · {dentist?.fullName}</div>
-                    <div className="text-sm text-teal-600 mt-0.5">{r.diagnosis}</div>
+                    <div className="font-medium text-blue-800 text-sm">{r.procedure}</div>
+                    <div className="text-xs text-blue-400">{fmtDate(r.date)} · {dentist?.fullName}</div>
+                    <div className="text-sm text-blue-600 mt-0.5">{r.diagnosis}</div>
                   </div>
                 </div>
               );

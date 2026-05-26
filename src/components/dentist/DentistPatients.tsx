@@ -20,10 +20,10 @@ export default function DentistPatients() {
 
       <Card className="p-4">
         <div className="relative">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search patients..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-teal-100 bg-teal-50/30 text-sm focus:border-teal-400 transition-colors" />
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-blue-100 bg-blue-50/30 text-sm focus:border-blue-400 transition-colors" />
         </div>
       </Card>
 
@@ -37,21 +37,21 @@ export default function DentistPatients() {
             <Card key={patient.id} className="overflow-hidden">
               <button
                 onClick={() => setExpanded(isOpen ? null : patient.id)}
-                className="w-full flex items-center gap-4 px-5 py-4 hover:bg-teal-50/30 transition-colors text-left"
+                className="w-full flex items-center gap-4 px-5 py-4 hover:bg-blue-50/30 transition-colors text-left"
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-300 to-teal-500 text-white font-bold text-sm flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-300 to-blue-500 text-white font-bold text-sm flex items-center justify-center flex-shrink-0">
                   {patient.fullName.split(' ').map(n=>n[0]).slice(0,2).join('')}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-teal-800">{patient.fullName}</div>
-                  <div className="text-xs text-teal-400">{calcAge(patient.dateOfBirth)} yrs · {patient.phone}</div>
+                  <div className="font-semibold text-blue-800">{patient.fullName}</div>
+                  <div className="text-xs text-blue-400">{calcAge(patient.dateOfBirth)} yrs · {patient.phone}</div>
                 </div>
-                <div className="text-xs text-teal-500 mr-2">{records.length} record{records.length !== 1 ? 's' : ''}</div>
-                {isOpen ? <ChevronUp size={16} className="text-teal-400" /> : <ChevronDown size={16} className="text-teal-400" />}
+                <div className="text-xs text-blue-500 mr-2">{records.length} record{records.length !== 1 ? 's' : ''}</div>
+                {isOpen ? <ChevronUp size={16} className="text-blue-400" /> : <ChevronDown size={16} className="text-blue-400" />}
               </button>
 
               {isOpen && (
-                <div className="border-t border-teal-50 px-5 pb-5 pt-4 space-y-4">
+                <div className="border-t border-blue-50 px-5 pb-5 pt-4 space-y-4">
                   {/* Quick info */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                     {[
@@ -60,19 +60,19 @@ export default function DentistPatients() {
                       ['Emergency', patient.emergencyContact],
                       ['Next Adjustment', patient.nextAdjustmentDate ? fmtShortDate(patient.nextAdjustmentDate) : '—'],
                     ].map(([k, v]) => (
-                      <div key={k} className="bg-teal-50/60 rounded-xl p-2.5">
-                        <div className="text-teal-400 mb-0.5">{k}</div>
-                        <div className="font-medium text-teal-800">{v}</div>
+                      <div key={k} className="bg-blue-50/60 rounded-xl p-2.5">
+                        <div className="text-blue-400 mb-0.5">{k}</div>
+                        <div className="font-medium text-blue-800">{v}</div>
                       </div>
                     ))}
                   </div>
 
                   {/* Records */}
                   {records.length === 0 ? (
-                    <div className="text-sm text-teal-300 text-center py-4">No records yet</div>
+                    <div className="text-sm text-blue-300 text-center py-4">No records yet</div>
                   ) : (
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-teal-500 uppercase tracking-wide">Medical Records</div>
+                      <div className="text-xs font-semibold text-blue-500 uppercase tracking-wide">Medical Records</div>
                       {records.map(r => <MiniRecord key={r.id} record={r} />)}
                     </div>
                   )}
@@ -89,17 +89,17 @@ export default function DentistPatients() {
 function MiniRecord({ record }: { record: MedicalRecord }) {
   const dentist = getDentistById(record.dentistId);
   return (
-    <div className="border border-teal-100 rounded-xl p-3.5 space-y-1.5">
+    <div className="border border-blue-100 rounded-xl p-3.5 space-y-1.5">
       <div className="flex items-start justify-between gap-2">
-        <span className="font-medium text-teal-800 text-sm">{record.procedure}</span>
-        <span className="text-xs text-teal-400 flex-shrink-0">{fmtDate(record.date)}</span>
+        <span className="font-medium text-blue-800 text-sm">{record.procedure}</span>
+        <span className="text-xs text-blue-400 flex-shrink-0">{fmtDate(record.date)}</span>
       </div>
-      <div className="text-xs text-teal-500">By {dentist?.fullName}</div>
-      <div className="text-sm text-teal-600">{record.diagnosis}</div>
-      {record.tooth && <div className="text-xs text-teal-400">Tooth: {record.tooth}</div>}
-      {record.notes && <div className="text-xs text-teal-500 bg-teal-50 rounded-lg px-2.5 py-1.5">{record.notes}</div>}
-      {record.prescription && <div className="text-xs text-teal-500"><span className="font-medium">Rx: </span>{record.prescription}</div>}
-      {record.nextVisit && <div className="text-xs text-teal-500"><span className="font-medium">Next visit: </span>{fmtDate(record.nextVisit)}</div>}
+      <div className="text-xs text-blue-500">By {dentist?.fullName}</div>
+      <div className="text-sm text-blue-600">{record.diagnosis}</div>
+      {record.tooth && <div className="text-xs text-blue-400">Tooth: {record.tooth}</div>}
+      {record.notes && <div className="text-xs text-blue-500 bg-blue-50 rounded-lg px-2.5 py-1.5">{record.notes}</div>}
+      {record.prescription && <div className="text-xs text-blue-500"><span className="font-medium">Rx: </span>{record.prescription}</div>}
+      {record.nextVisit && <div className="text-xs text-blue-500"><span className="font-medium">Next visit: </span>{fmtDate(record.nextVisit)}</div>}
     </div>
   );
 }

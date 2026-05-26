@@ -59,14 +59,14 @@ export default function AdminReminders() {
     <div className="flex gap-2 flex-shrink-0 mt-2 sm:mt-0">
       <button
         onClick={onSms}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${sent[smsKey] ? 'bg-teal-50 text-teal-400 cursor-default' : 'bg-teal-100 text-teal-700 hover:bg-teal-200'}`}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${sent[smsKey] ? 'bg-blue-50 text-blue-400 cursor-default' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}`}
       >
         {sent[smsKey] ? <CheckCircle2 size={12} /> : <MessageSquare size={12} />}
         SMS
       </button>
       <button
         onClick={onEmail}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${sent[emailKey] ? 'bg-teal-50 text-teal-400 cursor-default' : 'bg-teal-100 text-teal-700 hover:bg-teal-200'}`}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${sent[emailKey] ? 'bg-blue-50 text-blue-400 cursor-default' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}`}
       >
         {sent[emailKey] ? <CheckCircle2 size={12} /> : <Mail size={12} />}
         Email
@@ -77,15 +77,15 @@ export default function AdminReminders() {
   const PatientAdjustmentRow = ({ patient, urgent = false }: { patient: typeof MOCK_PATIENTS[0]; urgent?: boolean }) => {
     const daysLeft = Math.ceil((new Date(patient.nextAdjustmentDate!).getTime() - Date.now()) / 86400000);
     return (
-      <div className={`flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-3 sm:gap-4 p-4 rounded-xl border ${urgent ? 'bg-amber-50 border-amber-100' : 'bg-white border-teal-50'}`}>
+      <div className={`flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-3 sm:gap-4 p-4 rounded-xl border ${urgent ? 'bg-amber-50 border-amber-100' : 'bg-white border-blue-50'}`}>
         {urgent && <AlertTriangle size={16} className="text-amber-500 flex-shrink-0 mt-0.5 sm:mt-0 hidden sm:block" />}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             {urgent && <AlertTriangle size={14} className="text-amber-500 sm:hidden" />}
-            <div className="font-medium text-teal-800">{patient.fullName}</div>
+            <div className="font-medium text-blue-800">{patient.fullName}</div>
           </div>
-          <div className="text-xs text-teal-500">{patient.phone} · {patient.email}</div>
-          <div className={`text-xs font-semibold mt-0.5 ${urgent ? 'text-amber-600' : 'text-teal-600'}`}>
+          <div className="text-xs text-blue-500">{patient.phone} · {patient.email}</div>
+          <div className={`text-xs font-semibold mt-0.5 ${urgent ? 'text-amber-600' : 'text-blue-600'}`}>
             Adjustment: {fmtShortDate(patient.nextAdjustmentDate!)} ({daysLeft} days)
           </div>
         </div>
@@ -104,20 +104,20 @@ export default function AdminReminders() {
     const dentist  = getDentistById(apt.dentistId);
     const daysLeft = Math.ceil((new Date(apt.date).getTime() - Date.now()) / 86400000);
     return (
-      <div className="flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-3 sm:gap-4 p-4 rounded-xl border bg-white border-teal-50">
+      <div className="flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-3 sm:gap-4 p-4 rounded-xl border bg-white border-blue-50">
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-teal-800">{patient?.fullName}</div>
-          <div className="text-xs text-teal-500">{patient?.phone} · {patient?.email}</div>
-          <div className="text-xs text-teal-600 font-semibold mt-0.5 flex flex-wrap items-center gap-1">
+          <div className="font-medium text-blue-800">{patient?.fullName}</div>
+          <div className="text-xs text-blue-500">{patient?.phone} · {patient?.email}</div>
+          <div className="text-xs text-blue-600 font-semibold mt-0.5 flex flex-wrap items-center gap-1">
             <span>{apt.type}</span>
-            <span className="text-teal-400">·</span>
+            <span className="text-blue-400">·</span>
             <span>{fmtShortDate(apt.date)} at {apt.time}</span>
-            <span className="text-teal-400">·</span>
+            <span className="text-blue-400">·</span>
             <span>{dentist?.fullName}</span>
-            <span className={`px-1.5 py-0.5 rounded text-[10px] ${apt.status === 'confirmed' ? 'bg-teal-100 text-teal-600' : 'bg-amber-100 text-amber-600'}`}>
+            <span className={`px-1.5 py-0.5 rounded text-[10px] ${apt.status === 'confirmed' ? 'bg-blue-100 text-blue-600' : 'bg-amber-100 text-amber-600'}`}>
               {apt.status}
             </span>
-            <span className="text-teal-400">({daysLeft}d)</span>
+            <span className="text-blue-400">({daysLeft}d)</span>
           </div>
         </div>
         <ReminderButtons
@@ -141,11 +141,11 @@ export default function AdminReminders() {
       {/* Booking reminders */}
       <Card className="p-5">
         <div className="flex items-center gap-2 mb-4">
-          <Calendar size={16} className="text-teal-500" />
-          <h3 className="font-semibold text-teal-700">Booking Reminders — Upcoming Appointments ({upcomingApts.length})</h3>
+          <Calendar size={16} className="text-blue-500" />
+          <h3 className="font-semibold text-blue-700">Booking Reminders — Upcoming Appointments ({upcomingApts.length})</h3>
         </div>
         {upcomingApts.length === 0 ? (
-          <div className="text-sm text-teal-400 py-4 text-center">No upcoming appointments</div>
+          <div className="text-sm text-blue-400 py-4 text-center">No upcoming appointments</div>
         ) : (
           <div className="space-y-2">
             {upcomingApts.map(apt => <BookingReminderRow key={apt.id} apt={apt} />)}
@@ -168,7 +168,7 @@ export default function AdminReminders() {
 
       {upcoming14.length > 0 && (
         <Card className="p-5">
-          <h3 className="font-semibold text-teal-700 mb-4">Orthodontic Adjustments — 7–14 Days ({upcoming14.length})</h3>
+          <h3 className="font-semibold text-blue-700 mb-4">Orthodontic Adjustments — 7–14 Days ({upcoming14.length})</h3>
           <div className="space-y-2">
             {upcoming14.map(p => <PatientAdjustmentRow key={p.id} patient={p} />)}
           </div>
@@ -177,17 +177,17 @@ export default function AdminReminders() {
 
       {upcomingApts.length === 0 && upcoming7.length === 0 && upcoming14.length === 0 && (
         <Card className="p-10 text-center">
-          <Bell size={36} className="text-teal-200 mx-auto mb-3" />
-          <div className="font-medium text-teal-400">No reminders needed</div>
-          <div className="text-sm text-teal-300 mt-1">No upcoming appointments or adjustments</div>
+          <Bell size={36} className="text-blue-200 mx-auto mb-3" />
+          <div className="font-medium text-blue-400">No reminders needed</div>
+          <div className="text-sm text-blue-300 mt-1">No upcoming appointments or adjustments</div>
         </Card>
       )}
 
       {/* Compose overlay */}
       {compose && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-teal-950/25 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-950/25 backdrop-blur-sm p-4">
           <div className="bg-white rounded-3xl shadow-hover w-full max-w-lg animate-slide-up overflow-hidden">
-            <div className="bg-gradient-to-r from-teal-600 to-teal-500 px-6 py-5 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 text-white">
               <div className="flex items-center gap-2">
                 {compose.type === 'sms' ? <MessageSquare size={18} /> : <Mail size={18} />}
                 <h3 className="font-semibold">Compose {compose.type === 'sms' ? 'SMS' : 'Email'} Reminder</h3>
@@ -199,7 +199,7 @@ export default function AdminReminders() {
                 value={msgText}
                 onChange={e => setMsgText(e.target.value)}
                 rows={compose.type === 'email' ? 8 : 4}
-                className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm resize-none focus:border-teal-400 transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm resize-none focus:border-blue-400 transition-colors"
               />
               <div className="flex gap-3">
                 <Btn variant="secondary" onClick={() => setCompose(null)} className="flex-1">Cancel</Btn>

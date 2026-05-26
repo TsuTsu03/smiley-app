@@ -37,9 +37,9 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-teal-950/30 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-950/30 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-hover w-full max-w-lg overflow-hidden animate-slide-up">
-        <div className="bg-gradient-to-r from-teal-700 to-coral-500 p-7 text-white relative">
+        <div className="bg-gradient-to-r from-blue-700 to-amber-500 p-7 text-white relative">
           <button onClick={onClose} className="absolute top-5 right-5 p-1 text-white/70 hover:text-white">
             <X size={20} />
           </button>
@@ -57,95 +57,95 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
         <div className="p-7">
           {step === 3 ? (
             <div className="text-center py-6">
-              <CheckCircle2 size={56} className="text-teal-500 mx-auto mb-4" />
-              <h3 className="font-display text-2xl text-teal-800 mb-2">You&apos;re all set!</h3>
-              <p className="text-teal-600/70 text-sm mb-2">Your clinic portal is ready at:</p>
-              <div className="bg-teal-50 border border-teal-100 rounded-xl px-4 py-3 font-mono text-teal-700 text-sm mb-6">
+              <CheckCircle2 size={56} className="text-blue-500 mx-auto mb-4" />
+              <h3 className="font-display text-2xl text-blue-800 mb-2">You&apos;re all set!</h3>
+              <p className="text-blue-600/70 text-sm mb-2">Your clinic portal is ready at:</p>
+              <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 font-mono text-blue-700 text-sm mb-6">
                 {form.slug || 'yourclinic'}.dentaflow.app
               </div>
               <button
                 onClick={onSuccess}
-                className="w-full py-3.5 bg-gradient-to-r from-coral-500 to-coral-400 text-white font-semibold rounded-xl shadow-coral hover:opacity-90 transition-opacity"
+                className="w-full py-3.5 bg-gradient-to-r from-blue-700 to-blue-600 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity"
               >
                 Go to Admin Dashboard
               </button>
             </div>
           ) : step === 1 ? (
             <>
-              <h3 className="font-semibold text-teal-800 mb-4">Clinic Information</h3>
+              <h3 className="font-semibold text-blue-800 mb-4">Clinic Information</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-teal-800 mb-1.5 block">Clinic Name *</label>
+                  <label className="text-sm font-medium text-blue-800 mb-1.5 block">Clinic Name *</label>
                   <input value={form.clinicName} onChange={e => set('clinicName', e.target.value)}
                     placeholder="BrightSmile Dental Clinic"
-                    className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                 </div>
                 {form.slug && (
-                  <div className="flex items-center gap-2 text-xs text-teal-600 bg-teal-50 rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 rounded-lg px-3 py-2">
                     <Building2 size={12} />
                     Your portal: <span className="font-mono font-semibold">{form.slug}.dentaflow.app</span>
                   </div>
                 )}
                 <div>
-                  <label className="text-sm font-medium text-teal-800 mb-1.5 block">Clinic Address *</label>
+                  <label className="text-sm font-medium text-blue-800 mb-1.5 block">Clinic Address *</label>
                   <input value={form.address} onChange={e => set('address', e.target.value)}
                     placeholder="123 Mabini St., Makati City"
-                    className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-sm font-medium text-teal-800 mb-1.5 block">Phone</label>
+                    <label className="text-sm font-medium text-blue-800 mb-1.5 block">Phone</label>
                     <input value={form.phone} onChange={e => set('phone', e.target.value)}
                       placeholder="(02) 8123-4567"
-                      className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                      className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-teal-800 mb-1.5 block">Email</label>
+                    <label className="text-sm font-medium text-blue-800 mb-1.5 block">Email</label>
                     <input value={form.email} onChange={e => set('email', e.target.value)}
                       placeholder="hello@clinic.com"
-                      className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                      className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                   </div>
                 </div>
               </div>
               <button
                 onClick={() => setStep(2)}
                 disabled={!form.clinicName || !form.address}
-                className="mt-5 w-full py-3.5 bg-gradient-to-r from-coral-500 to-coral-400 text-white font-semibold rounded-xl shadow-coral hover:opacity-90 transition-opacity disabled:opacity-40"
+                className="mt-5 w-full py-3.5 bg-gradient-to-r from-blue-700 to-blue-600 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 Continue
               </button>
             </>
           ) : (
             <>
-              <h3 className="font-semibold text-teal-800 mb-4">Admin Account</h3>
+              <h3 className="font-semibold text-blue-800 mb-4">Admin Account</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-teal-800 mb-1.5 block">Your Full Name *</label>
+                  <label className="text-sm font-medium text-blue-800 mb-1.5 block">Your Full Name *</label>
                   <input value={form.adminName} onChange={e => set('adminName', e.target.value)}
                     placeholder="Dr. Ana Reyes"
-                    className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-teal-800 mb-1.5 block">Admin Email *</label>
+                  <label className="text-sm font-medium text-blue-800 mb-1.5 block">Admin Email *</label>
                   <input type="email" value={form.adminEmail} onChange={e => set('adminEmail', e.target.value)}
                     placeholder="admin@yourclinic.com"
-                    className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-teal-800 mb-1.5 block">Password *</label>
+                  <label className="text-sm font-medium text-blue-800 mb-1.5 block">Password *</label>
                   <input type="password" value={form.password} onChange={e => set('password', e.target.value)}
                     placeholder="Create a strong password"
-                    className="w-full px-4 py-3 rounded-xl border border-teal-100 bg-teal-50/30 text-teal-900 text-sm focus:border-teal-400 focus:bg-white transition-colors" />
+                    className="w-full px-4 py-3 rounded-xl border border-blue-100 bg-blue-50/30 text-blue-900 text-sm focus:border-blue-400 focus:bg-white transition-colors" />
                 </div>
               </div>
               <div className="flex gap-3 mt-5">
-                <button onClick={() => setStep(1)} className="flex-1 py-3.5 bg-teal-50 text-teal-700 font-semibold rounded-xl hover:bg-teal-100 transition-colors">
+                <button onClick={() => setStep(1)} className="flex-1 py-3.5 bg-blue-50 text-blue-700 font-semibold rounded-xl hover:bg-blue-100 transition-colors">
                   Back
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={loading || !form.adminName || !form.adminEmail || !form.password}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-coral-500 to-coral-400 text-white font-semibold rounded-xl shadow-coral hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 bg-gradient-to-r from-blue-700 to-blue-600 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
                 >
                   {loading ? <><Loader size={15} className="animate-spin" /> Creating…</> : 'Create Clinic'}
                 </button>

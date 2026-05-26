@@ -24,11 +24,11 @@ export default function PatientRecords() {
               <Card key={r.id} className="p-5 space-y-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="font-semibold text-teal-800 text-base">{r.procedure}</h3>
-                    <div className="text-sm text-teal-500 mt-0.5">{fmtDate(r.date)} · {dentist?.fullName}</div>
+                    <h3 className="font-semibold text-blue-800 text-base">{r.procedure}</h3>
+                    <div className="text-sm text-blue-500 mt-0.5">{fmtDate(r.date)} · {dentist?.fullName}</div>
                   </div>
                   {r.tooth && (
-                    <span className="text-xs bg-teal-50 text-teal-600 border border-teal-100 px-2.5 py-1 rounded-full flex-shrink-0">
+                    <span className="text-xs bg-blue-50 text-blue-600 border border-blue-100 px-2.5 py-1 rounded-full flex-shrink-0">
                       {r.tooth}
                     </span>
                   )}
@@ -41,15 +41,15 @@ export default function PatientRecords() {
 
                 {r.notes && (
                   <div>
-                    <div className="text-xs text-teal-400 mb-1.5 font-medium uppercase tracking-wide">Dentist Notes</div>
-                    <div className="bg-teal-50/60 rounded-xl px-4 py-3 text-sm text-teal-700 leading-relaxed">{r.notes}</div>
+                    <div className="text-xs text-blue-400 mb-1.5 font-medium uppercase tracking-wide">Dentist Notes</div>
+                    <div className="bg-blue-50/60 rounded-xl px-4 py-3 text-sm text-blue-700 leading-relaxed">{r.notes}</div>
                   </div>
                 )}
 
                 {r.prescription && (
                   <div>
-                    <div className="text-xs text-teal-400 mb-1.5 font-medium uppercase tracking-wide">Prescription</div>
-                    <div className="bg-mint-50/60 rounded-xl px-4 py-3 text-sm text-teal-700 font-mono text-xs leading-relaxed border border-teal-100">{r.prescription}</div>
+                    <div className="text-xs text-blue-400 mb-1.5 font-medium uppercase tracking-wide">Prescription</div>
+                    <div className="bg-blue-50/60 rounded-xl px-4 py-3 text-sm text-blue-700 font-mono text-xs leading-relaxed border border-blue-100">{r.prescription}</div>
                   </div>
                 )}
               </Card>
@@ -63,9 +63,9 @@ export default function PatientRecords() {
 
 function InfoBox({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl p-3.5 ${highlight ? 'bg-teal-50 border border-teal-100' : 'bg-gray-50 border border-gray-100'}`}>
-      <div className="text-xs text-teal-400 mb-0.5 font-medium uppercase tracking-wide">{label}</div>
-      <div className={`text-sm font-medium ${highlight ? 'text-teal-700' : 'text-teal-800'}`}>{value}</div>
+    <div className={`rounded-xl p-3.5 ${highlight ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50 border border-gray-100'}`}>
+      <div className="text-xs text-blue-400 mb-0.5 font-medium uppercase tracking-wide">{label}</div>
+      <div className={`text-sm font-medium ${highlight ? 'text-blue-700' : 'text-blue-800'}`}>{value}</div>
     </div>
   );
 }

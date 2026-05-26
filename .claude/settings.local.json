@@ -5,7 +5,9 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(npm run *)",
-      "Bash(Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue)"
+      "Bash(Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue)",
+      "Bash(xargs sed -i 's/teal-/blue-/g; s/mint-/blue-/g')",
+      "Bash(xargs sed -i 's/coral-/amber-/g')"
     ]
   }
 }

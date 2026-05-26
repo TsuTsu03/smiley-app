@@ -20,8 +20,8 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-teal-900">Welcome, {dentist?.fullName} 👋</h1>
-        <p className="text-teal-500 text-sm mt-1">{dentist?.specialization} · {fmtDate(today)}</p>
+        <h1 className="font-display text-2xl sm:text-3xl text-blue-900">Welcome, {dentist?.fullName} 👋</h1>
+        <p className="text-blue-500 text-sm mt-1">{dentist?.specialization} · {fmtDate(today)}</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -36,19 +36,19 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
         <Card className="p-5">
           <SectionHeader title="Today's Patients" sub={`${todayApts.length} scheduled`} action={<Btn variant="ghost" size="sm" onClick={() => onNav('schedule')}>Full Schedule</Btn>} />
           {todayApts.length === 0 ? (
-            <div className="text-center py-10 text-teal-300 text-sm">No patients today</div>
+            <div className="text-center py-10 text-blue-300 text-sm">No patients today</div>
           ) : (
             <div className="space-y-3">
               {todayApts.map(apt => {
                 const patient = getPatientById(apt.patientId);
                 return (
-                  <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-teal-50/50 border border-teal-50">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-300 to-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                  <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/50 border border-blue-50">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-300 to-blue-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
                       {patient?.fullName.split(' ').map(n=>n[0]).slice(0,2).join('')}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-teal-800 text-sm">{patient?.fullName}</div>
-                      <div className="text-xs text-teal-500">{apt.time} · {apt.type}</div>
+                      <div className="font-medium text-blue-800 text-sm">{patient?.fullName}</div>
+                      <div className="text-xs text-blue-500">{apt.time} · {apt.type}</div>
                     </div>
                     <Badge status={apt.status} />
                   </div>
@@ -63,9 +63,9 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
           <SectionHeader title="My Schedule" sub="Weekly availability" />
           <div className="space-y-2">
             {dentist?.schedule.map(s => (
-              <div key={s.day} className="flex items-center justify-between p-3 bg-teal-50 rounded-xl">
-                <span className="font-medium text-teal-800 text-sm">{s.day}</span>
-                <span className="text-teal-500 text-xs">{s.startTime} – {s.endTime}</span>
+              <div key={s.day} className="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+                <span className="font-medium text-blue-800 text-sm">{s.day}</span>
+                <span className="text-blue-500 text-xs">{s.startTime} – {s.endTime}</span>
               </div>
             ))}
           </div>
@@ -82,14 +82,14 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
             {upcoming.slice(0, 8).map(apt => {
               const patient = getPatientById(apt.patientId);
               return (
-                <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-teal-50/40 border border-teal-50">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-300 to-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/40 border border-blue-50">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-300 to-blue-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
                     {patient?.fullName.split(' ').map(n => n[0]).slice(0, 2).join('')}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-teal-800 text-sm truncate">{patient?.fullName}</div>
-                    <div className="text-xs text-teal-500">{apt.type}</div>
-                    <div className="text-xs text-teal-600 font-medium">{fmtDate(apt.date)} · {apt.time}</div>
+                    <div className="font-medium text-blue-800 text-sm truncate">{patient?.fullName}</div>
+                    <div className="text-xs text-blue-500">{apt.type}</div>
+                    <div className="text-xs text-blue-600 font-medium">{fmtDate(apt.date)} · {apt.time}</div>
                   </div>
                   <Badge status={apt.status} />
                 </div>
@@ -101,9 +101,9 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-teal-50">
+                <tr className="border-b border-blue-50">
                   {['Date', 'Time', 'Patient', 'Procedure', 'Status'].map(h => (
-                    <th key={h} className="text-left text-xs font-semibold text-teal-400 uppercase tracking-wide px-3 py-2.5">{h}</th>
+                    <th key={h} className="text-left text-xs font-semibold text-blue-400 uppercase tracking-wide px-3 py-2.5">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -111,11 +111,11 @@ export default function DentistOverview({ onNav }: { onNav: (k: string) => void 
                 {upcoming.slice(0, 8).map(apt => {
                   const patient = getPatientById(apt.patientId);
                   return (
-                    <tr key={apt.id} className="border-b border-teal-50/80 hover:bg-teal-50/30">
-                      <td className="px-3 py-2.5 font-medium text-teal-800">{fmtDate(apt.date)}</td>
-                      <td className="px-3 py-2.5 text-teal-600">{apt.time}</td>
-                      <td className="px-3 py-2.5 font-medium text-teal-800">{patient?.fullName}</td>
-                      <td className="px-3 py-2.5 text-teal-500">{apt.type}</td>
+                    <tr key={apt.id} className="border-b border-blue-50/80 hover:bg-blue-50/30">
+                      <td className="px-3 py-2.5 font-medium text-blue-800">{fmtDate(apt.date)}</td>
+                      <td className="px-3 py-2.5 text-blue-600">{apt.time}</td>
+                      <td className="px-3 py-2.5 font-medium text-blue-800">{patient?.fullName}</td>
+                      <td className="px-3 py-2.5 text-blue-500">{apt.type}</td>
                       <td className="px-3 py-2.5"><Badge status={apt.status} /></td>
                     </tr>
                   );
