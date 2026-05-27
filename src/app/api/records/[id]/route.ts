@@ -1,0 +1,30 @@
+import { createClient } from '@/lib/supabase/server';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+  const supabase = createClient();
+  const body = await request.json();
+
+  const { error } = await supabase
+    .from('medical_records')
+    .update({
+      date: body.date,
+      procedure: body.procedure,
+      tooth: body.tooth ?? null,
+      notes: body.notes,
+      diagnosis: body.diagnosis,
+      prescription: body.prescription ?? null,
+      next_visit: body.nextVisit ?? null,
+    })
+    .eq('id', params.id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ success: true });
+}
+
+export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
+  const supabase = createClient();
+  const { error } = await supabase.from('medical_records').delete().eq('id', params.id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ success: true });
+}

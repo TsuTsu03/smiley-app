@@ -7,7 +7,15 @@ import DentistDashboard from '@/components/dentist/DentistDashboard';
 import PatientDashboard from '@/components/patient/PatientDashboard';
 
 export default function Home() {
-  const { role } = useAuth();
+  const { role, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-sky-50">
+        <div className="w-8 h-8 border-4 border-sky-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!role) return <LandingPage />;
   if (role === 'admin') return <AdminDashboard />;

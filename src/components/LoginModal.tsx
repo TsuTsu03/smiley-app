@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
 import { X, Eye, EyeOff, Loader } from 'lucide-react';
-import { MOCK_PATIENTS, MOCK_DENTISTS } from '@/lib/data';
 
 interface Props {
   role: 'admin' | 'dentist' | 'patient';
@@ -26,37 +25,20 @@ export default function LoginModal({ role, onClose }: Props) {
 
   const handleLogin = async () => {
     setError('');
-    setLoading(true);
-    await new Promise(r => setTimeout(r, 800)); // simulate
-
-    if (role === 'admin') {
-      if (field1 === 'admin@brightsmile.com' && field2 === 'admin123') {
-        login('admin', 'admin-1', 'BrightSmile Dental Clinic', 'brightsmile');
-        onClose();
-      } else {
-        setError('Invalid email or password.');
-      }
-    } else if (role === 'dentist') {
-      const found = MOCK_DENTISTS.find(d => d.email.toLowerCase() === field1.toLowerCase());
-      if (found && field2 === 'dentist123') {
-        login('dentist', found.id, 'BrightSmile Dental Clinic', 'brightsmile');
-        onClose();
-      } else {
-        setError('Invalid email or password.');
-      }
-    } else {
-      // patient: full name + date of birth
-      const found = MOCK_PATIENTS.find(
-        p => p.fullName.toLowerCase() === field1.toLowerCase() && p.dateOfBirth === field2
-      );
-      if (found) {
-        login('patient', found.id, 'BrightSmile Dental Clinic', 'brightsmile');
-        onClose();
-      } else {
-        setError('Patient not found. Check your full name and date of birth.');
-      }
+    if (!field1 || !field2) {
+      setError('Please fill in all fields.');
+      return;
     }
-    setLoading(false);
+    setLoading(true);
+
+    const result = await login(field1, field2, role === 'patient');
+
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+    } else {
+      onClose();
+    }
   };
 
   const roleLabels = { admin: 'Admin', dentist: 'Dentist', patient: 'Patient' };
@@ -66,7 +48,7 @@ export default function LoginModal({ role, onClose }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-sky-950/30 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-hover w-full max-w-md overflow-hidden animate-slide-up">
         {/* Header */}
-        <div className={`bg-gradient-to-r ${roleColors[role]} p-7 text-white`}>
+        <div className={`bg-gradient-to-r ${roleColors[role]} p-7 text-white relative`}>
           <button onClick={onClose} className="absolute top-5 right-5 p-1 text-white/70 hover:text-white transition-colors">
             <X size={20} />
           </button>
