@@ -1,13 +1,38 @@
+-- ══════════════════════════════════════════════════════════════════════════════
+-- DEMO AUTH USERS  (run in Supabase SQL Editor with service role)
+-- BrightSmile:  admin@brightsmile.com / admin123
+--               maria@brightsmile.com / dentist123
+--               (patients log in with name + DOB — no auth user needed)
+-- ══════════════════════════════════════════════════════════════════════════════
+insert into auth.users (
+  id, instance_id, email, encrypted_password,
+  email_confirmed_at, created_at, updated_at,
+  raw_app_meta_data, raw_user_meta_data,
+  confirmation_token, email_change, email_change_token_new, recovery_token,
+  aud, role, is_super_admin
+) values
+  ('00000000-0000-0000-0006-000000000001','00000000-0000-0000-0000-000000000000','admin@brightsmile.com', crypt('admin123',   gen_salt('bf')), now(), now(), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{}'::jsonb, '', '', '', '', 'authenticated', 'authenticated', false),
+  ('00000000-0000-0000-0006-000000000002','00000000-0000-0000-0000-000000000000','maria@brightsmile.com', crypt('dentist123', gen_salt('bf')), now(), now(), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{}'::jsonb, '', '', '', '', 'authenticated', 'authenticated', false)
+on conflict (id) do nothing;
+
+-- ─── Profiles for BrightSmile ─────────────────────────────────────────────────
+-- (inserted before the clinic row via deferred FK — or insert clinic first below)
+
 -- ─── Seed Clinic ──────────────────────────────────────────────────────────────
 insert into clinics (id, name, slug, address, phone, email) values
   ('00000000-0000-0000-0000-000000000001', 'BrightSmile Dental Clinic', 'brightsmile', '123 Mabini St., Makati City', '(02) 8123-4567', 'hello@brightsmile.com')
 on conflict (id) do nothing;
 
+insert into profiles (id, full_name, email, role, clinic_id) values
+  ('00000000-0000-0000-0006-000000000001', 'Admin BrightSmile',  'admin@brightsmile.com', 'admin',   '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0006-000000000002', 'Dr. Maria Santos',   'maria@brightsmile.com', 'dentist', '00000000-0000-0000-0000-000000000001')
+on conflict (id) do nothing;
+
 -- ─── Seed Dentists ────────────────────────────────────────────────────────────
-insert into dentists (id, full_name, specialization, email, phone, clinic_id) values
-  ('00000000-0000-0000-0001-000000000001', 'Dr. Maria Santos', 'General Dentistry & Orthodontics', 'maria@brightsmile.com', '0917-123-4567', '00000000-0000-0000-0000-000000000001'),
-  ('00000000-0000-0000-0001-000000000002', 'Dr. Jose Reyes', 'Oral Surgery & Implantology', 'jose@brightsmile.com', '0918-765-4321', '00000000-0000-0000-0000-000000000001'),
-  ('00000000-0000-0000-0001-000000000003', 'Dr. Ana Cruz', 'Pediatric Dentistry', 'ana@brightsmile.com', '0919-222-3333', '00000000-0000-0000-0000-000000000001')
+insert into dentists (id, profile_id, full_name, specialization, email, phone, clinic_id) values
+  ('00000000-0000-0000-0001-000000000001', '00000000-0000-0000-0006-000000000002', 'Dr. Maria Santos', 'General Dentistry & Orthodontics', 'maria@brightsmile.com', '0917-123-4567', '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0001-000000000002', null,                                   'Dr. Jose Reyes',   'Oral Surgery & Implantology',       'jose@brightsmile.com',  '0918-765-4321', '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0001-000000000003', null,                                   'Dr. Ana Cruz',     'Pediatric Dentistry',               'ana@brightsmile.com',   '0919-222-3333', '00000000-0000-0000-0000-000000000001')
 on conflict (id) do nothing;
 
 -- ─── Seed Dentist Schedules ───────────────────────────────────────────────────
