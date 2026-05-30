@@ -1,17 +1,34 @@
 'use client';
 
 import { useAuth } from '@/lib/auth';
+import { useState, useEffect } from 'react';
 import { Calendar, FileText, Clock, AlertCircle } from 'lucide-react';
 import { StatCard, Card, Badge, SectionHeader, Btn } from '@/components/ui';
-import { MOCK_PATIENTS, MOCK_APPOINTMENTS, MOCK_RECORDS, getDentistById, fmtDate, fmtShortDate, calcAge } from '@/lib/data';
+import { fmtDate, fmtShortDate, calcAge } from '@/lib/data';
 
 export default function PatientOverview({ onNav }: { onNav: (k: string) => void }) {
-  const { userId } = useAuth();
-  const patient  = MOCK_PATIENTS.find(p => p.id === userId);
-  const myApts   = MOCK_APPOINTMENTS.filter(a => a.patientId === userId);
-  const myRecs   = MOCK_RECORDS.filter(r => r.patientId === userId);
+  const { userId, user } = useAuth();
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [records, setRecords]           = useState<any[]>([]);
+  const [patient, setPatient]           = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!userId || !user?.clinicId) return;
+    Promise.all([
+      fetch(`/api/appointments?patientId=${userId}`).then(r => r.json()),
+      fetch(`/api/records?patientId=${userId}`).then(r => r.json()),
+      fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
+    ]).then(([apts, recs, allPatients]) => {
+      setAppointments(Array.isArray(apts) ? apts : []);
+      setRecords(Array.isArray(recs) ? recs : []);
+      const me = Array.isArray(allPatients) ? allPatients.find((p: any) => p.id === userId) : null;
+      setPatient(me ?? null);
+    });
+  }, [userId, user?.clinicId]);
+
   const today    = new Date().toISOString().split('T')[0];
-  const upcoming = myApts.filter(a => a.date >= today && a.status !== 'cancelled')
+  const upcoming = appointments
+    .filter(a => a.date >= today && a.status !== 'cancelled')
     .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
   const daysToAdj = patient?.nextAdjustmentDate
     ? Math.ceil((new Date(patient.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
@@ -36,7 +53,7 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <StatCard icon={<Calendar size={20} />} label="Upcoming" value={upcoming.length} sub="Appointments" />
-        <StatCard icon={<FileText size={20} />} label="Records" value={myRecs.length} sub="Visit history" color="mint" />
+        <StatCard icon={<FileText size={20} />} label="Records" value={records.length} sub="Visit history" color="mint" />
         {daysToAdj !== null && (
           <StatCard icon={<Clock size={20} />} label="Next Adjustment" value={`${daysToAdj}d`} sub={fmtShortDate(patient!.nextAdjustmentDate!)} color={daysToAdj <= 7 ? 'amber' : 'blue'} />
         )}
@@ -69,46 +86,40 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
           </div>
         ) : (
           <div className="space-y-3">
-            {upcoming.map(apt => {
-              const dentist = getDentistById(apt.dentistId);
-              return (
-                <div key={apt.id} className="flex items-center gap-4 p-3.5 rounded-xl border border-sky-50 bg-sky-50/30">
-                  <div className="text-center min-w-12">
-                    <div className="text-lg font-bold text-sky-800">{new Date(apt.date).getDate()}</div>
-                    <div className="text-xs text-sky-500">{new Date(apt.date).toLocaleString('en', { month: 'short' })}</div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sky-800">{apt.type}</div>
-                    <div className="text-sm text-sky-500">{apt.time} · {dentist?.fullName}</div>
-                  </div>
-                  <Badge status={apt.status} />
+            {upcoming.map(apt => (
+              <div key={apt.id} className="flex items-center gap-4 p-3.5 rounded-xl border border-sky-50 bg-sky-50/30">
+                <div className="text-center min-w-12">
+                  <div className="text-lg font-bold text-sky-800">{new Date(apt.date).getDate()}</div>
+                  <div className="text-xs text-sky-500">{new Date(apt.date).toLocaleString('en', { month: 'short' })}</div>
                 </div>
-              );
-            })}
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sky-800">{apt.type}</div>
+                  <div className="text-sm text-sky-500">{apt.time} · {apt.dentistName}</div>
+                </div>
+                <Badge status={apt.status} />
+              </div>
+            ))}
           </div>
         )}
       </Card>
 
       {/* Recent records */}
-      {myRecs.length > 0 && (
+      {records.length > 0 && (
         <Card className="p-5">
           <SectionHeader title="Recent Visits" sub="Your latest records" action={<Btn variant="ghost" size="sm" onClick={() => onNav('records')}>See All</Btn>} />
           <div className="space-y-3">
-            {myRecs.slice(0, 2).map(r => {
-              const dentist = getDentistById(r.dentistId);
-              return (
-                <div key={r.id} className="flex items-start gap-3 p-3.5 rounded-xl border border-sky-50">
-                  <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center flex-shrink-0">
-                    <FileText size={16} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-sky-800 text-sm">{r.procedure}</div>
-                    <div className="text-xs text-sky-400">{fmtDate(r.date)} · {dentist?.fullName}</div>
-                    <div className="text-sm text-sky-600 mt-0.5">{r.diagnosis}</div>
-                  </div>
+            {records.slice(0, 2).map(r => (
+              <div key={r.id} className="flex items-start gap-3 p-3.5 rounded-xl border border-sky-50">
+                <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center flex-shrink-0">
+                  <FileText size={16} />
                 </div>
-              );
-            })}
+                <div className="flex-1">
+                  <div className="font-medium text-sky-800 text-sm">{r.procedure}</div>
+                  <div className="text-xs text-sky-400">{fmtDate(r.date)} · {r.dentistName}</div>
+                  <div className="text-sm text-sky-600 mt-0.5">{r.diagnosis}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </Card>
       )}

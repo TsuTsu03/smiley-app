@@ -10,11 +10,13 @@ interface AuthUser {
   email: string;
   role: Role;
   clinicId: string;
+  dentistId?: string | null;
 }
 
 interface AuthContextType {
   role: Role | null;
   userId: string | null;
+  dentistId: string | null;
   clinicName: string;
   clinicSlug: string;
   user: AuthUser | null;
@@ -96,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         role: user?.role ?? null,
         userId: user?.id ?? null,
+        dentistId: user?.dentistId ?? null,
         clinicName,
         clinicSlug,
         user,

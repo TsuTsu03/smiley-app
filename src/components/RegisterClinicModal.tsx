@@ -12,6 +12,7 @@ interface Props {
 export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [form, setForm] = useState({
     clinicName: '',
@@ -33,9 +34,35 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
 
   const handleSubmit = async () => {
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1200));
-    setLoading(false);
-    setStep(3);
+    setSubmitError('');
+    try {
+      const res = await fetch('/api/clinics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clinicName: form.clinicName,
+          slug: form.slug,
+          address: form.address,
+          phone: form.phone,
+          email: form.email,
+          adminName: form.adminName,
+          adminEmail: form.adminEmail,
+          password: form.password,
+        }),
+      });
+      const json = await res.json();
+      if (res.status === 201) {
+        setStep(3);
+      } else if (res.status === 409) {
+        setSubmitError(json.error ?? 'This clinic name is already taken');
+      } else {
+        setSubmitError(json.error ?? 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setSubmitError('Network error. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -160,6 +187,11 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
                   . I understand that patient dental records are sensitive personal information protected under the Philippine Data Privacy Act (RA 10173) and I am responsible for obtaining patient consent before entering their data.
                 </span>
               </label>
+              {submitError && (
+                <div className="mt-3 px-4 py-2.5 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+                  {submitError}
+                </div>
+              )}
               <div className="flex gap-3 mt-4">
                 <button onClick={() => setStep(1)} className="flex-1 py-3.5 bg-sky-50 text-sky-700 font-semibold rounded-xl hover:bg-sky-100 transition-colors">
                   Back

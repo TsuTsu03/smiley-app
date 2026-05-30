@@ -1,19 +1,64 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckCircle2, FilePlus } from 'lucide-react';
 import { Card, SectionHeader, Input, Select, Textarea, Btn } from '@/components/ui';
-import { MOCK_PATIENTS, PROCEDURE_TYPES } from '@/lib/data';
+import { useAuth } from '@/lib/auth';
+import { PROCEDURE_TYPES } from '@/lib/data';
 
 export default function DentistAddRecord() {
-  const [done, setDone] = useState(false);
-  const [form, setForm] = useState({
+  const { user, dentistId } = useAuth();
+  const [done, setDone]     = useState(false);
+  const [error, setError]   = useState('');
+  const [loading, setLoading] = useState(false);
+  const [patients, setPatients] = useState<any[]>([]);
+  const [form, setForm]     = useState({
     patientId: '', date: '', procedure: '', tooth: '', diagnosis: '', notes: '', prescription: '', nextVisit: '',
   });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    fetch(`/api/patients?clinicId=${user.clinicId}`)
+      .then(r => r.json())
+      .then(p => setPatients(Array.isArray(p) ? p : []));
+  }, [user?.clinicId]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientId: form.patientId,
+          dentistId,
+          clinicId: user?.clinicId,
+          date: form.date,
+          procedure: form.procedure,
+          tooth: form.tooth || null,
+          diagnosis: form.diagnosis,
+          notes: form.notes || '',
+          prescription: form.prescription || null,
+          nextVisit: form.nextVisit || null,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setDone(true);
+      } else {
+        setError(json.error ?? 'Failed to save record.');
+      }
+    } catch {
+      setError('Network error.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (done) {
-    const patient = MOCK_PATIENTS.find(p => p.id === form.patientId);
+    const patient = patients.find(p => p.id === form.patientId);
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <CheckCircle2 size={64} className="text-sky-400 mb-4" />
@@ -21,7 +66,7 @@ export default function DentistAddRecord() {
         <p className="text-sky-500 text-sm mb-8">
           Medical record for <strong>{patient?.fullName}</strong> has been added.
         </p>
-        <Btn onClick={() => { setDone(false); setForm({ patientId:'', date:'', procedure:'', tooth:'', diagnosis:'', notes:'', prescription:'', nextVisit:'' }); }}>
+        <Btn onClick={() => { setDone(false); setError(''); setForm({ patientId:'', date:'', procedure:'', tooth:'', diagnosis:'', notes:'', prescription:'', nextVisit:'' }); }}>
           Add Another Record
         </Btn>
       </div>
@@ -38,7 +83,7 @@ export default function DentistAddRecord() {
           <div className="space-y-4">
             <Select label="Patient *" value={form.patientId} onChange={e => set('patientId', e.target.value)}>
               <option value="">Select patient...</option>
-              {MOCK_PATIENTS.map(p => <option key={p.id} value={p.id}>{p.fullName}</option>)}
+              {patients.map(p => <option key={p.id} value={p.id}>{p.fullName}</option>)}
             </Select>
             <Input label="Date *" type="date" value={form.date} onChange={e => set('date', e.target.value)} />
             <Select label="Procedure *" value={form.procedure} onChange={e => set('procedure', e.target.value)}>
@@ -59,13 +104,19 @@ export default function DentistAddRecord() {
           </div>
         </div>
 
+        {error && (
+          <div className="px-4 py-2.5 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         <Btn
-          onClick={() => setDone(true)}
-          disabled={!form.patientId || !form.date || !form.procedure || !form.diagnosis}
+          onClick={handleSubmit}
+          disabled={loading || !form.patientId || !form.date || !form.procedure || !form.diagnosis}
           className="w-full justify-center"
         >
           <FilePlus size={16} />
-          Save Record
+          {loading ? 'Saving…' : 'Save Record'}
         </Btn>
       </Card>
     </div>

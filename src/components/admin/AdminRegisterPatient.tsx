@@ -3,14 +3,52 @@
 import { useState } from 'react';
 import { CheckCircle2, UserPlus } from 'lucide-react';
 import { Card, Input, Select, Textarea, Btn, SectionHeader } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
 
 export default function AdminRegisterPatient() {
-  const [done, setDone]   = useState(false);
-  const [form, setForm]   = useState({
+  const { user } = useAuth();
+  const [done, setDone]     = useState(false);
+  const [error, setError]   = useState('');
+  const [loading, setLoading] = useState(false);
+  const [form, setForm]     = useState({
     fullName: '', dateOfBirth: '', gender: '', phone: '', email: '',
     address: '', bloodType: '', allergies: '', emergencyContact: '', emergencyPhone: '',
   });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/patients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          dateOfBirth: form.dateOfBirth,
+          gender: form.gender,
+          phone: form.phone,
+          email: form.email || '',
+          address: form.address || '',
+          bloodType: form.bloodType || null,
+          allergies: form.allergies ? form.allergies.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+          emergencyContact: form.emergencyContact || '',
+          emergencyPhone: form.emergencyPhone || '',
+          clinicId: user?.clinicId,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setDone(true);
+      } else {
+        setError(json.error ?? 'Failed to register patient. Please try again.');
+      }
+    } catch {
+      setError('Network error. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (done) {
     return (
@@ -23,7 +61,7 @@ export default function AdminRegisterPatient() {
         <p className="text-sky-400 text-xs mb-8">
           They can log in using their full name and date of birth.
         </p>
-        <Btn onClick={() => { setDone(false); setForm({ fullName:'',dateOfBirth:'',gender:'',phone:'',email:'',address:'',bloodType:'',allergies:'',emergencyContact:'',emergencyPhone:'' }); }}>
+        <Btn onClick={() => { setDone(false); setError(''); setForm({ fullName:'',dateOfBirth:'',gender:'',phone:'',email:'',address:'',bloodType:'',allergies:'',emergencyContact:'',emergencyPhone:'' }); }}>
           Register Another Patient
         </Btn>
       </div>
@@ -85,13 +123,19 @@ export default function AdminRegisterPatient() {
           <strong>Login credentials:</strong> The patient will use their <strong>Full Name</strong> + <strong>Date of Birth</strong> to sign in.
         </div>
 
+        {error && (
+          <div className="px-4 py-2.5 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         <Btn
-          onClick={() => setDone(true)}
-          disabled={!form.fullName || !form.dateOfBirth || !form.gender || !form.phone}
+          onClick={handleSubmit}
+          disabled={loading || !form.fullName || !form.dateOfBirth || !form.gender || !form.phone}
           className="w-full justify-center"
         >
           <UserPlus size={16} />
-          Register Patient
+          {loading ? 'Registering…' : 'Register Patient'}
         </Btn>
       </Card>
     </div>

@@ -1,17 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ChevronDown, ChevronUp, FileText, FilePlus, X, CheckCircle2, Loader } from 'lucide-react';
-import { Card, Badge, SectionHeader, EmptyState } from '@/components/ui';
-import { MOCK_PATIENTS, MOCK_RECORDS, getDentistById, fmtDate, fmtShortDate, calcAge, Patient, MedicalRecord, PROCEDURE_TYPES } from '@/lib/data';
+import { Card, SectionHeader, EmptyState } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
+import { fmtDate, fmtShortDate, calcAge, PROCEDURE_TYPES } from '@/lib/data';
 
 export default function DentistPatients() {
+  const { user, dentistId } = useAuth();
   const [search, setSearch]     = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [addFor, setAddFor]     = useState<Patient | null>(null);
+  const [addFor, setAddFor]     = useState<any | null>(null);
+  const [patients, setPatients] = useState<any[]>([]);
+  const [records, setRecords]   = useState<any[]>([]);
+  const [loading, setLoading]   = useState(true);
 
-  const patients = MOCK_PATIENTS.filter(p =>
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    Promise.all([
+      fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/records?clinicId=${user.clinicId}`).then(r => r.json()),
+    ]).then(([p, r]) => {
+      setPatients(Array.isArray(p) ? p : []);
+      setRecords(Array.isArray(r) ? r : []);
+    }).finally(() => setLoading(false));
+  }, [user?.clinicId]);
+
+  const refreshRecords = () => {
+    if (!user?.clinicId) return;
+    fetch(`/api/records?clinicId=${user.clinicId}`).then(r => r.json()).then(r => {
+      setRecords(Array.isArray(r) ? r : []);
+    });
+  };
+
+  const filtered = patients.filter(p =>
     !search || p.fullName.toLowerCase().includes(search.toLowerCase()) || p.phone.includes(search)
+  );
+
+  if (loading) return (
+    <div className="space-y-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="h-16 bg-sky-50 rounded-2xl animate-pulse" />
+      ))}
+    </div>
   );
 
   return (
@@ -28,11 +59,11 @@ export default function DentistPatients() {
       </Card>
 
       <div className="space-y-3">
-        {patients.length === 0 ? (
+        {filtered.length === 0 ? (
           <EmptyState icon={<FileText size={28} />} title="No patients found" desc="Adjust the search term." />
-        ) : patients.map(patient => {
-          const records = MOCK_RECORDS.filter(r => r.patientId === patient.id);
-          const isOpen  = expanded === patient.id;
+        ) : filtered.map(patient => {
+          const patRecords = records.filter(r => r.patientId === patient.id);
+          const isOpen     = expanded === patient.id;
           return (
             <Card key={patient.id} className="overflow-hidden">
               <button
@@ -40,13 +71,13 @@ export default function DentistPatients() {
                 className="w-full flex items-center gap-4 px-5 py-4 hover:bg-sky-50/30 transition-colors text-left"
               >
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-300 to-sky-500 text-white font-bold text-sm flex items-center justify-center flex-shrink-0">
-                  {patient.fullName.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                  {patient.fullName.split(' ').map((n: string) => n[0]).slice(0, 2).join('')}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-sky-800">{patient.fullName}</div>
                   <div className="text-xs text-sky-400">{calcAge(patient.dateOfBirth)} yrs · {patient.phone}</div>
                 </div>
-                <div className="text-xs text-sky-500 mr-2">{records.length} record{records.length !== 1 ? 's' : ''}</div>
+                <div className="text-xs text-sky-500 mr-2">{patRecords.length} record{patRecords.length !== 1 ? 's' : ''}</div>
                 {isOpen ? <ChevronUp size={16} className="text-sky-400" /> : <ChevronDown size={16} className="text-sky-400" />}
               </button>
 
@@ -56,7 +87,7 @@ export default function DentistPatients() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                     {[
                       ['Blood Type', patient.bloodType || '—'],
-                      ['Allergies', patient.allergies.length ? patient.allergies.join(', ') : 'None'],
+                      ['Allergies', patient.allergies?.length ? patient.allergies.join(', ') : 'None'],
                       ['Emergency', patient.emergencyContact],
                       ['Next Adjustment', patient.nextAdjustmentDate ? fmtShortDate(patient.nextAdjustmentDate) : '—'],
                     ].map(([k, v]) => (
@@ -68,12 +99,12 @@ export default function DentistPatients() {
                   </div>
 
                   {/* Records */}
-                  {records.length === 0 ? (
+                  {patRecords.length === 0 ? (
                     <div className="text-sm text-sky-300 text-center py-4">No records yet</div>
                   ) : (
                     <div className="space-y-2">
                       <div className="text-xs font-semibold text-sky-500 uppercase tracking-wide">Medical Records</div>
-                      {records.map(r => <MiniRecord key={r.id} record={r} />)}
+                      {patRecords.map(r => <MiniRecord key={r.id} record={r} />)}
                     </div>
                   )}
 
@@ -94,26 +125,66 @@ export default function DentistPatients() {
 
       {/* Inline add-record modal */}
       {addFor && (
-        <AddRecordModal patient={addFor} onClose={() => setAddFor(null)} />
+        <AddRecordModal
+          patient={addFor}
+          dentistId={dentistId}
+          clinicId={user?.clinicId ?? ''}
+          onClose={() => setAddFor(null)}
+          onSaved={refreshRecords}
+        />
       )}
     </div>
   );
 }
 
-function AddRecordModal({ patient, onClose }: { patient: Patient; onClose: () => void }) {
+function AddRecordModal({ patient, dentistId, clinicId, onClose, onSaved }: {
+  patient: any;
+  dentistId: string | null;
+  clinicId: string;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
   const today = new Date().toISOString().split('T')[0];
   const [form, setForm] = useState({
     date: today, procedure: '', tooth: '', diagnosis: '', notes: '', prescription: '', nextVisit: '',
   });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
   const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(false);
+  const [done, setDone]       = useState(false);
+  const [error, setError]     = useState('');
 
   const handleSave = async () => {
     setLoading(true);
-    await new Promise(r => setTimeout(r, 600));
-    setLoading(false);
-    setDone(true);
+    setError('');
+    try {
+      const res = await fetch('/api/records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientId: patient.id,
+          dentistId,
+          clinicId,
+          date: form.date,
+          procedure: form.procedure,
+          tooth: form.tooth || null,
+          diagnosis: form.diagnosis,
+          notes: form.notes || '',
+          prescription: form.prescription || null,
+          nextVisit: form.nextVisit || null,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setDone(true);
+        onSaved();
+      } else {
+        setError(json.error ?? 'Failed to save record.');
+      }
+    } catch {
+      setError('Network error.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -212,6 +283,8 @@ function AddRecordModal({ patient, onClose }: { patient: Patient; onClose: () =>
                 </div>
               </div>
 
+              {error && <div className="text-sm text-red-500">{error}</div>}
+
               <button
                 onClick={handleSave}
                 disabled={loading || !form.date || !form.procedure || !form.diagnosis}
@@ -227,15 +300,14 @@ function AddRecordModal({ patient, onClose }: { patient: Patient; onClose: () =>
   );
 }
 
-function MiniRecord({ record }: { record: MedicalRecord }) {
-  const dentist = getDentistById(record.dentistId);
+function MiniRecord({ record }: { record: any }) {
   return (
     <div className="border border-sky-100 rounded-xl p-3.5 space-y-1.5">
       <div className="flex items-start justify-between gap-2">
         <span className="font-medium text-sky-800 text-sm">{record.procedure}</span>
         <span className="text-xs text-sky-400 flex-shrink-0">{fmtDate(record.date)}</span>
       </div>
-      <div className="text-xs text-sky-500">By {dentist?.fullName}</div>
+      <div className="text-xs text-sky-500">By {record.dentistName}</div>
       <div className="text-sm text-sky-600">{record.diagnosis}</div>
       {record.tooth && <div className="text-xs text-sky-400">Tooth: {record.tooth}</div>}
       {record.notes && <div className="text-xs text-sky-500 bg-sky-50 rounded-lg px-2.5 py-1.5">{record.notes}</div>}

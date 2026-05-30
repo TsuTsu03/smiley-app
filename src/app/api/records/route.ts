@@ -8,7 +8,10 @@ export async function GET(request: NextRequest) {
   const patientId = searchParams.get('patientId');
   const dentistId = searchParams.get('dentistId');
 
-  let query = supabase.from('medical_records').select('*').order('date', { ascending: false });
+  let query = supabase
+    .from('medical_records')
+    .select('*, dentists(full_name)')
+    .order('date', { ascending: false });
   if (clinicId) query = query.eq('clinic_id', clinicId);
   if (patientId) query = query.eq('patient_id', patientId);
   if (dentistId) query = query.eq('dentist_id', dentistId);
@@ -16,7 +19,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  const records = data.map((r) => ({
+  const records = (data as any[]).map((r) => ({
     id: r.id,
     patientId: r.patient_id,
     dentistId: r.dentist_id,
@@ -29,6 +32,7 @@ export async function GET(request: NextRequest) {
     prescription: r.prescription,
     nextVisit: r.next_visit,
     images: r.images ?? [],
+    dentistName: r.dentists?.full_name ?? null,
   }));
 
   return NextResponse.json(records);

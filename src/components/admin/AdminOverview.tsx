@@ -1,18 +1,43 @@
 'use client';
 
-import { Users, Calendar, Bell, Stethoscope, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Users, Calendar, Bell, Clock, AlertCircle } from 'lucide-react';
 import { StatCard, Card, Badge, SectionHeader, Btn } from '@/components/ui';
-import {
-  MOCK_PATIENTS, MOCK_APPOINTMENTS, MOCK_DENTISTS,
-  getUpcomingAdjustments, getDentistById, getPatientById,
-  fmtDate, fmtShortDate
-} from '@/lib/data';
+import { useAuth } from '@/lib/auth';
+import { fmtDate, fmtShortDate } from '@/lib/data';
 
 export default function AdminOverview({ onNav }: { onNav: (k: string) => void }) {
+  const { user } = useAuth();
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [patients, setPatients]         = useState<any[]>([]);
+  const [dentists, setDentists]         = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    Promise.all([
+      fetch(`/api/appointments?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/dentists?clinicId=${user.clinicId}`).then(r => r.json()),
+    ]).then(([a, p, d]) => {
+      setAppointments(Array.isArray(a) ? a : []);
+      setPatients(Array.isArray(p) ? p : []);
+      setDentists(Array.isArray(d) ? d : []);
+    });
+  }, [user?.clinicId]);
+
   const today = new Date().toISOString().split('T')[0];
-  const todayApts = MOCK_APPOINTMENTS.filter(a => a.date === today);
-  const upcoming  = MOCK_APPOINTMENTS.filter(a => a.date > today && a.status !== 'cancelled');
-  const upcomingAdj = getUpcomingAdjustments(14);
+  const todayApts   = appointments.filter(a => a.date === today);
+  const upcoming    = appointments.filter(a => a.date > today && a.status !== 'cancelled');
+
+  // Patients needing adjustment within 14 days
+  const now    = new Date();
+  const future = new Date();
+  future.setDate(future.getDate() + 14);
+  const upcomingAdj = patients.filter(p => {
+    if (!p.nextAdjustmentDate) return false;
+    const d = new Date(p.nextAdjustmentDate);
+    return d >= now && d <= future;
+  });
 
   return (
     <div className="space-y-8">
@@ -24,10 +49,10 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard icon={<Users size={20} />}     label="Total Patients"      value={MOCK_PATIENTS.length}      sub="Registered" />
-        <StatCard icon={<Calendar size={20} />}  label="Today's Appts"       value={todayApts.length}           sub="Scheduled today" color="mint" />
-        <StatCard icon={<Clock size={20} />}     label="Upcoming"            value={upcoming.length}            sub="Next 7 days"  color="amber" />
-        <StatCard icon={<Bell size={20} />}      label="Adjustments Due"     value={upcomingAdj.length}         sub="Within 14 days" color="blue" />
+        <StatCard icon={<Users size={20} />}     label="Total Patients"      value={patients.length}       sub="Registered" />
+        <StatCard icon={<Calendar size={20} />}  label="Today's Appts"       value={todayApts.length}      sub="Scheduled today" color="mint" />
+        <StatCard icon={<Clock size={20} />}     label="Upcoming"            value={upcoming.length}       sub="Next 7 days"  color="amber" />
+        <StatCard icon={<Bell size={20} />}      label="Adjustments Due"     value={upcomingAdj.length}    sub="Within 14 days" color="blue" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -42,22 +67,18 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
             <div className="text-center py-10 text-sky-300 text-sm">No appointments today</div>
           ) : (
             <div className="space-y-3">
-              {todayApts.map(apt => {
-                const patient = getPatientById(apt.patientId);
-                const dentist = getDentistById(apt.dentistId);
-                return (
-                  <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-sky-50/50 border border-sky-50">
-                    <div className="w-12 text-center">
-                      <div className="text-xs font-bold text-sky-700">{apt.time}</div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sky-800 text-sm truncate">{patient?.fullName}</div>
-                      <div className="text-xs text-sky-500 truncate">{apt.type} · {dentist?.fullName}</div>
-                    </div>
-                    <Badge status={apt.status} />
+              {todayApts.map(apt => (
+                <div key={apt.id} className="flex items-center gap-3 p-3 rounded-xl bg-sky-50/50 border border-sky-50">
+                  <div className="w-12 text-center">
+                    <div className="text-xs font-bold text-sky-700">{apt.time}</div>
                   </div>
-                );
-              })}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sky-800 text-sm truncate">{apt.patientName}</div>
+                    <div className="text-xs text-sky-500 truncate">{apt.type} · {apt.dentistName}</div>
+                  </div>
+                  <Badge status={apt.status} />
+                </div>
+              ))}
             </div>
           )}
         </Card>
@@ -66,8 +87,8 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
         <Card className="p-5">
           <SectionHeader title="Dentists" sub="Clinic roster" action={<Btn variant="ghost" size="sm" onClick={() => onNav('dentists')}>View All</Btn>} />
           <div className="space-y-3">
-            {MOCK_DENTISTS.map(d => {
-              const dApts = MOCK_APPOINTMENTS.filter(a => a.dentistId === d.id && a.date === today);
+            {dentists.map(d => {
+              const dApts = appointments.filter(a => a.dentistId === d.id && a.date === today);
               return (
                 <div key={d.id} className="flex items-center gap-3 p-3 rounded-xl border border-sky-50 bg-white">
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">

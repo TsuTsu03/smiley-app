@@ -1,34 +1,65 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, Plus, Search } from 'lucide-react';
 import { Card, Badge, SectionHeader, Modal, Input, Select, Btn, EmptyState } from '@/components/ui';
-import {
-  MOCK_APPOINTMENTS, MOCK_PATIENTS, MOCK_DENTISTS,
-  getPatientById, getDentistById, fmtDate, PROCEDURE_TYPES, Appointment
-} from '@/lib/data';
+import { useAuth } from '@/lib/auth';
+import { fmtDate, PROCEDURE_TYPES } from '@/lib/data';
 
 export default function AdminAppointments() {
-  const [filter, setFilter]     = useState('all');
-  const [search, setSearch]     = useState('');
-  const [showAdd, setShowAdd]   = useState(false);
-  const [selected, setSelected] = useState<Appointment | null>(null);
+  const { user } = useAuth();
+  const [filter, setFilter]         = useState('all');
+  const [search, setSearch]         = useState('');
+  const [showAdd, setShowAdd]       = useState(false);
+  const [selected, setSelected]     = useState<any | null>(null);
   const [dateFilter, setDateFilter] = useState('');
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [patients, setPatients]     = useState<any[]>([]);
+  const [dentists, setDentists]     = useState<any[]>([]);
+  const [loading, setLoading]       = useState(true);
 
-  const appointments = MOCK_APPOINTMENTS.filter(a => {
-    const patient = getPatientById(a.patientId);
-    const dentist = getDentistById(a.dentistId);
-    const matchSearch = !search || patient?.fullName.toLowerCase().includes(search.toLowerCase()) || dentist?.fullName.toLowerCase().includes(search.toLowerCase());
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    Promise.all([
+      fetch(`/api/appointments?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/dentists?clinicId=${user.clinicId}`).then(r => r.json()),
+    ]).then(([a, p, d]) => {
+      setAppointments(Array.isArray(a) ? a : []);
+      setPatients(Array.isArray(p) ? p : []);
+      setDentists(Array.isArray(d) ? d : []);
+    }).finally(() => setLoading(false));
+  }, [user?.clinicId]);
+
+  const refreshAppointments = () => {
+    if (!user?.clinicId) return;
+    fetch(`/api/appointments?clinicId=${user.clinicId}`).then(r => r.json()).then(a => {
+      setAppointments(Array.isArray(a) ? a : []);
+    });
+  };
+
+  const filtered = appointments.filter(a => {
+    const matchSearch = !search ||
+      (a.patientName || '').toLowerCase().includes(search.toLowerCase()) ||
+      (a.dentistName || '').toLowerCase().includes(search.toLowerCase());
     const matchStatus = filter === 'all' || a.status === filter;
     const matchDate   = !dateFilter || a.date === dateFilter;
     return matchSearch && matchStatus && matchDate;
-  }).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  }).sort((a: any, b: any) => (a.date + a.time).localeCompare(b.date + b.time));
+
+  if (loading) return (
+    <div className="space-y-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="h-16 bg-sky-50 rounded-2xl animate-pulse" />
+      ))}
+    </div>
+  );
 
   return (
     <div className="space-y-6">
       <SectionHeader
         title="Appointments"
-        sub={`${MOCK_APPOINTMENTS.length} total records`}
+        sub={`${appointments.length} total records`}
         action={<Btn onClick={() => setShowAdd(true)}><Plus size={15} /> New Appointment</Btn>}
       />
 
@@ -63,33 +94,29 @@ export default function AdminAppointments() {
 
       {/* List */}
       <Card>
-        {appointments.length === 0 ? (
+        {filtered.length === 0 ? (
           <EmptyState icon={<Calendar size={28} />} title="No appointments found" desc="Try adjusting filters or add a new appointment." />
         ) : (
           <>
             {/* Mobile card list (< md) */}
             <div className="md:hidden divide-y divide-sky-50">
-              {appointments.map(apt => {
-                const patient = getPatientById(apt.patientId);
-                const dentist = getDentistById(apt.dentistId);
-                return (
-                  <div key={apt.id} className="px-4 py-3.5 hover:bg-sky-50/30 transition-colors">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <div className="font-medium text-sky-800 text-sm">{patient?.fullName}</div>
-                      <Badge status={apt.status} />
-                    </div>
-                    <div className="text-xs text-sky-500 mb-0.5">{apt.type}</div>
-                    <div className="text-xs text-sky-600 font-medium">{fmtDate(apt.date)} · {apt.time}</div>
-                    <div className="text-xs text-sky-400 mb-2">{dentist?.fullName}</div>
-                    <button
-                      onClick={() => setSelected(apt)}
-                      className="text-xs font-semibold text-sky-600 hover:text-sky-800"
-                    >
-                      View details →
-                    </button>
+              {filtered.map(apt => (
+                <div key={apt.id} className="px-4 py-3.5 hover:bg-sky-50/30 transition-colors">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <div className="font-medium text-sky-800 text-sm">{apt.patientName}</div>
+                    <Badge status={apt.status} />
                   </div>
-                );
-              })}
+                  <div className="text-xs text-sky-500 mb-0.5">{apt.type}</div>
+                  <div className="text-xs text-sky-600 font-medium">{fmtDate(apt.date)} · {apt.time}</div>
+                  <div className="text-xs text-sky-400 mb-2">{apt.dentistName}</div>
+                  <button
+                    onClick={() => setSelected(apt)}
+                    className="text-xs font-semibold text-sky-600 hover:text-sky-800"
+                  >
+                    View details →
+                  </button>
+                </div>
+              ))}
             </div>
 
             {/* Desktop table (>= md) */}
@@ -103,25 +130,21 @@ export default function AdminAppointments() {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments.map((apt, i) => {
-                    const patient = getPatientById(apt.patientId);
-                    const dentist = getDentistById(apt.dentistId);
-                    return (
-                      <tr key={apt.id} className={`border-b border-sky-50/80 hover:bg-sky-50/40 transition-colors ${i % 2 === 0 ? '' : 'bg-sky-50/20'}`}>
-                        <td className="px-5 py-3.5">
-                          <div className="font-medium text-sky-800">{fmtDate(apt.date)}</div>
-                          <div className="text-xs text-sky-400">{apt.time}</div>
-                        </td>
-                        <td className="px-5 py-3.5 font-medium text-sky-800">{patient?.fullName}</td>
-                        <td className="px-5 py-3.5 text-sky-600">{dentist?.fullName}</td>
-                        <td className="px-5 py-3.5 text-sky-600">{apt.type}</td>
-                        <td className="px-5 py-3.5"><Badge status={apt.status} /></td>
-                        <td className="px-5 py-3.5">
-                          <Btn variant="ghost" size="sm" onClick={() => setSelected(apt)}>View</Btn>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {filtered.map((apt, i) => (
+                    <tr key={apt.id} className={`border-b border-sky-50/80 hover:bg-sky-50/40 transition-colors ${i % 2 === 0 ? '' : 'bg-sky-50/20'}`}>
+                      <td className="px-5 py-3.5">
+                        <div className="font-medium text-sky-800">{fmtDate(apt.date)}</div>
+                        <div className="text-xs text-sky-400">{apt.time}</div>
+                      </td>
+                      <td className="px-5 py-3.5 font-medium text-sky-800">{apt.patientName}</td>
+                      <td className="px-5 py-3.5 text-sky-600">{apt.dentistName}</td>
+                      <td className="px-5 py-3.5 text-sky-600">{apt.type}</td>
+                      <td className="px-5 py-3.5"><Badge status={apt.status} /></td>
+                      <td className="px-5 py-3.5">
+                        <Btn variant="ghost" size="sm" onClick={() => setSelected(apt)}>View</Btn>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -130,7 +153,15 @@ export default function AdminAppointments() {
       </Card>
 
       {/* Add modal */}
-      {showAdd && <AddAppointmentModal onClose={() => setShowAdd(false)} />}
+      {showAdd && (
+        <AddAppointmentModal
+          onClose={() => setShowAdd(false)}
+          onSaved={() => { setShowAdd(false); refreshAppointments(); }}
+          patients={patients}
+          dentists={dentists}
+          clinicId={user?.clinicId ?? ''}
+        />
+      )}
 
       {/* Detail modal */}
       {selected && (
@@ -142,15 +173,13 @@ export default function AdminAppointments() {
   );
 }
 
-function AppointmentDetail({ apt }: { apt: Appointment }) {
-  const patient = getPatientById(apt.patientId);
-  const dentist = getDentistById(apt.dentistId);
+function AppointmentDetail({ apt }: { apt: any }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         {[
-          ['Patient', patient?.fullName],
-          ['Dentist', dentist?.fullName],
+          ['Patient', apt.patientName],
+          ['Dentist', apt.dentistName],
           ['Date', fmtDate(apt.date)],
           ['Time', apt.time],
           ['Type', apt.type],
@@ -172,19 +201,50 @@ function AppointmentDetail({ apt }: { apt: Appointment }) {
   );
 }
 
-function AddAppointmentModal({ onClose }: { onClose: () => void }) {
-  const [form, setForm] = useState({ patientId: '', dentistId: '', date: '', time: '', type: '', notes: '' });
+function AddAppointmentModal({ onClose, onSaved, patients, dentists, clinicId }: {
+  onClose: () => void;
+  onSaved: () => void;
+  patients: any[];
+  dentists: any[];
+  clinicId: string;
+}) {
+  const [form, setForm]   = useState({ patientId: '', dentistId: '', date: '', time: '', type: '', notes: '' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  const handleSave = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, clinicId }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        onSaved();
+      } else {
+        setError(json.error ?? 'Failed to save appointment.');
+      }
+    } catch {
+      setError('Network error.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal title="New Appointment" onClose={onClose}>
       <div className="space-y-4">
         <Select label="Patient" value={form.patientId} onChange={e => set('patientId', e.target.value)}>
           <option value="">Select patient...</option>
-          {MOCK_PATIENTS.map(p => <option key={p.id} value={p.id}>{p.fullName}</option>)}
+          {patients.map(p => <option key={p.id} value={p.id}>{p.fullName}</option>)}
         </Select>
         <Select label="Dentist" value={form.dentistId} onChange={e => set('dentistId', e.target.value)}>
           <option value="">Select dentist...</option>
-          {MOCK_DENTISTS.map(d => <option key={d.id} value={d.id}>{d.fullName}</option>)}
+          {dentists.map(d => <option key={d.id} value={d.id}>{d.fullName}</option>)}
         </Select>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Input label="Date" type="date" value={form.date} onChange={e => set('date', e.target.value)} />
@@ -195,9 +255,12 @@ function AddAppointmentModal({ onClose }: { onClose: () => void }) {
           {PROCEDURE_TYPES.map(t => <option key={t}>{t}</option>)}
         </Select>
         <Input label="Notes (optional)" value={form.notes} onChange={e => set('notes', e.target.value)} placeholder="Any special notes..." />
+        {error && <div className="text-sm text-red-500">{error}</div>}
         <div className="flex gap-3 pt-2">
           <Btn variant="secondary" onClick={onClose} className="flex-1">Cancel</Btn>
-          <Btn onClick={onClose} className="flex-1">Save Appointment</Btn>
+          <Btn onClick={handleSave} disabled={loading || !form.patientId || !form.dentistId || !form.date || !form.time || !form.type} className="flex-1">
+            {loading ? 'Saving…' : 'Save Appointment'}
+          </Btn>
         </div>
       </div>
     </Modal>

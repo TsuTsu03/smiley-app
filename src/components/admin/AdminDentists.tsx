@@ -1,20 +1,43 @@
 'use client';
 
-import { useState } from 'react';
-import { Stethoscope, Clock, Calendar } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Clock, Calendar } from 'lucide-react';
 import { Card, SectionHeader, Modal, Badge } from '@/components/ui';
-import { MOCK_DENTISTS, MOCK_APPOINTMENTS, getPatientById, fmtDate, Dentist } from '@/lib/data';
+import { useAuth } from '@/lib/auth';
 
 export default function AdminDentists() {
-  const [selected, setSelected] = useState<Dentist | null>(null);
+  const { user } = useAuth();
+  const [selected, setSelected]   = useState<any | null>(null);
+  const [dentists, setDentists]   = useState<any[]>([]);
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [loading, setLoading]     = useState(true);
+
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    Promise.all([
+      fetch(`/api/dentists?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/appointments?clinicId=${user.clinicId}`).then(r => r.json()),
+    ]).then(([d, a]) => {
+      setDentists(Array.isArray(d) ? d : []);
+      setAppointments(Array.isArray(a) ? a : []);
+    }).finally(() => setLoading(false));
+  }, [user?.clinicId]);
+
+  if (loading) return (
+    <div className="space-y-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="h-16 bg-sky-50 rounded-2xl animate-pulse" />
+      ))}
+    </div>
+  );
 
   return (
     <div className="space-y-6">
       <SectionHeader title="Dentists & Schedules" sub="Clinic staff roster and availability" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {MOCK_DENTISTS.map(d => {
-          const apts     = MOCK_APPOINTMENTS.filter(a => a.dentistId === d.id);
+        {dentists.map(d => {
+          const apts     = appointments.filter(a => a.dentistId === d.id);
           const upcoming = apts.filter(a => a.status === 'confirmed' || a.status === 'pending');
           return (
             <Card key={d.id} className="p-5 cursor-pointer card-hover" onClick={() => setSelected(d)}>
@@ -30,7 +53,7 @@ export default function AdminDentists() {
 
               <div className="space-y-2 mb-4">
                 <div className="text-xs font-semibold text-sky-500 uppercase tracking-wide">Schedule</div>
-                {d.schedule.map(s => (
+                {(d.schedule || []).map((s: any) => (
                   <div key={s.day} className="flex items-center justify-between text-sm">
                     <span className="text-sky-700">{s.day}</span>
                     <span className="text-sky-500 text-xs">{s.startTime} – {s.endTime}</span>
@@ -55,16 +78,15 @@ export default function AdminDentists() {
 
       {selected && (
         <Modal title={selected.fullName} onClose={() => setSelected(null)} wide>
-          <DentistDetail dentist={selected} />
+          <DentistDetail dentist={selected} appointments={appointments.filter(a => a.dentistId === selected.id)} />
         </Modal>
       )}
     </div>
   );
 }
 
-function DentistDetail({ dentist }: { dentist: Dentist }) {
-  const apts = MOCK_APPOINTMENTS.filter(a => a.dentistId === dentist.id)
-    .sort((a, b) => a.date.localeCompare(b.date));
+function DentistDetail({ dentist, appointments }: { dentist: any; appointments: any[] }) {
+  const apts = [...appointments].sort((a, b) => a.date.localeCompare(b.date));
 
   return (
     <div className="space-y-6">
@@ -77,7 +99,7 @@ function DentistDetail({ dentist }: { dentist: Dentist }) {
       <div>
         <div className="font-semibold text-sky-700 text-sm mb-3">Weekly Schedule</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {dentist.schedule.map(s => (
+          {(dentist.schedule || []).map((s: any) => (
             <div key={s.day} className="bg-sky-50 rounded-xl px-4 py-3 flex items-center justify-between">
               <span className="font-medium text-sky-800 text-sm">{s.day}</span>
               <span className="text-sky-500 text-xs">{s.startTime} – {s.endTime}</span>
@@ -89,17 +111,14 @@ function DentistDetail({ dentist }: { dentist: Dentist }) {
       <div>
         <div className="font-semibold text-sky-700 text-sm mb-3">Appointments ({apts.length})</div>
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {apts.map(a => {
-            const patient = getPatientById(a.patientId);
-            return (
-              <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl border border-sky-50">
-                <div className="text-xs font-bold text-sky-600 w-16 flex-shrink-0">{a.date}</div>
-                <div className="text-xs text-sky-500 w-10">{a.time}</div>
-                <div className="flex-1 text-sm font-medium text-sky-800 truncate">{patient?.fullName}</div>
-                <Badge status={a.status} />
-              </div>
-            );
-          })}
+          {apts.map(a => (
+            <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl border border-sky-50">
+              <div className="text-xs font-bold text-sky-600 w-16 flex-shrink-0">{a.date}</div>
+              <div className="text-xs text-sky-500 w-10">{a.time}</div>
+              <div className="flex-1 text-sm font-medium text-sky-800 truncate">{a.patientName}</div>
+              <Badge status={a.status} />
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -1,24 +1,65 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth';
-import { CheckCircle2, Calendar, User, Stethoscope } from 'lucide-react';
+import { CheckCircle2, Calendar, Stethoscope } from 'lucide-react';
 import { Card, SectionHeader, Select, Input, Btn } from '@/components/ui';
-import { MOCK_DENTISTS, PROCEDURE_TYPES } from '@/lib/data';
+import { PROCEDURE_TYPES } from '@/lib/data';
 
 type BookMode = 'by-date' | 'by-doctor';
 
 export default function PatientBook() {
-  const { userId } = useAuth();
-  const [mode, setMode] = useState<BookMode>('by-date');
-  const [done, setDone] = useState(false);
-  const [form, setForm] = useState({ dentistId: '', date: '', time: '', type: '', notes: '' });
+  const { userId, user } = useAuth();
+  const [mode, setMode]   = useState<BookMode>('by-date');
+  const [done, setDone]   = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [dentists, setDentists] = useState<any[]>([]);
+  const [form, setForm]   = useState({ dentistId: '', date: '', time: '', type: '', notes: '' });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
   const TIME_SLOTS = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00'];
 
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    fetch(`/api/dentists?clinicId=${user.clinicId}`)
+      .then(r => r.json())
+      .then(d => setDentists(Array.isArray(d) ? d : []));
+  }, [user?.clinicId]);
+
+  const handleBook = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientId: userId,
+          clinicId: user?.clinicId,
+          dentistId: form.dentistId || null,
+          date: form.date,
+          time: form.time,
+          type: form.type,
+          notes: form.notes || null,
+          status: 'pending',
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setDone(true);
+      } else {
+        setError(json.error ?? 'Failed to book appointment.');
+      }
+    } catch {
+      setError('Network error.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (done) {
-    const dentist = MOCK_DENTISTS.find(d => d.id === form.dentistId);
+    const dentist = dentists.find(d => d.id === form.dentistId);
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <div className="w-20 h-20 rounded-full bg-sky-50 flex items-center justify-center mb-4">
@@ -34,7 +75,7 @@ export default function PatientBook() {
           <div className="flex justify-between"><span className="text-sky-400">Time</span><span className="font-medium text-sky-800">{form.time}</span></div>
           {dentist && <div className="flex justify-between"><span className="text-sky-400">Dentist</span><span className="font-medium text-sky-800">{dentist.fullName}</span></div>}
         </div>
-        <Btn onClick={() => { setDone(false); setForm({ dentistId:'', date:'', time:'', type:'', notes:'' }); }}>
+        <Btn onClick={() => { setDone(false); setError(''); setForm({ dentistId:'', date:'', time:'', type:'', notes:'' }); }}>
           Book Another
         </Btn>
       </div>
@@ -73,7 +114,7 @@ export default function PatientBook() {
           <div>
             <div className="text-xs font-semibold text-sky-500 uppercase tracking-wide mb-3">Choose Dentist</div>
             <div className="space-y-2">
-              {MOCK_DENTISTS.map(d => (
+              {dentists.map(d => (
                 <button
                   key={d.id}
                   onClick={() => set('dentistId', d.id)}
@@ -87,7 +128,7 @@ export default function PatientBook() {
                     <div className="text-xs text-sky-500">{d.specialization}</div>
                   </div>
                   <div className="text-right text-xs text-sky-400">
-                    {d.schedule.map(s => <div key={s.day}>{s.day}</div>).slice(0, 2)}
+                    {(d.schedule || []).map((s: any) => <div key={s.day}>{s.day}</div>).slice(0, 2)}
                   </div>
                 </button>
               ))}
@@ -112,7 +153,7 @@ export default function PatientBook() {
           {mode === 'by-date' && (
             <Select label="Preferred Dentist (optional)" value={form.dentistId} onChange={e => set('dentistId', e.target.value)}>
               <option value="">Any available dentist</option>
-              {MOCK_DENTISTS.map(d => <option key={d.id} value={d.id}>{d.fullName}</option>)}
+              {dentists.map(d => <option key={d.id} value={d.id}>{d.fullName}</option>)}
             </Select>
           )}
           <Select label="Procedure Type *" value={form.type} onChange={e => set('type', e.target.value)}>
@@ -129,13 +170,19 @@ export default function PatientBook() {
           </div>
         </div>
 
+        {error && (
+          <div className="px-4 py-2.5 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         <Btn
-          onClick={() => setDone(true)}
-          disabled={!form.date || !form.time || !form.type}
+          onClick={handleBook}
+          disabled={loading || !form.date || !form.time || !form.type}
           className="w-full justify-center mt-2"
         >
           <Calendar size={16} />
-          Request Appointment
+          {loading ? 'Requesting…' : 'Request Appointment'}
         </Btn>
       </Card>
     </div>

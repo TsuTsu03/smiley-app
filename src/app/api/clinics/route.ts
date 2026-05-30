@@ -1,0 +1,58 @@
+import { createAdminClient } from '@/lib/supabase/admin';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const { clinicName, slug, address, phone, email, adminName, adminEmail, password } = await request.json();
+
+  const adminClient = createAdminClient();
+
+  // Step 1: Insert clinic
+  const { data: clinic, error: clinicError } = await adminClient
+    .from('clinics')
+    .insert({ name: clinicName, slug, address, phone, email })
+    .select()
+    .single();
+
+  if (clinicError) {
+    if (clinicError.code === '23505') {
+      return NextResponse.json({ error: 'This clinic name is already taken' }, { status: 409 });
+    }
+    return NextResponse.json({ error: clinicError.message }, { status: 500 });
+  }
+
+  // Step 2: Create Supabase auth user
+  const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+    email: adminEmail,
+    password,
+    email_confirm: true,
+  });
+
+  if (authError) {
+    // Rollback: delete clinic
+    await adminClient.from('clinics').delete().eq('id', clinic.id);
+    if (authError.message.toLowerCase().includes('already registered') || authError.message.toLowerCase().includes('already been registered')) {
+      return NextResponse.json({ error: 'This email is already registered' }, { status: 409 });
+    }
+    return NextResponse.json({ error: authError.message }, { status: 500 });
+  }
+
+  // Step 3: Insert profile
+  const { error: profileError } = await adminClient
+    .from('profiles')
+    .insert({
+      id: authData.user.id,
+      full_name: adminName,
+      email: adminEmail,
+      role: 'admin',
+      clinic_id: clinic.id,
+    });
+
+  if (profileError) {
+    // Rollback: delete auth user and clinic
+    await adminClient.auth.admin.deleteUser(authData.user.id);
+    await adminClient.from('clinics').delete().eq('id', clinic.id);
+    return NextResponse.json({ error: profileError.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ clinic: { name: clinic.name, slug: clinic.slug } }, { status: 201 });
+}

@@ -21,6 +21,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
   }
 
+  let dentistId: string | null = null;
+  if (profile.role === 'dentist') {
+    const { data: dentist } = await supabase
+      .from('dentists')
+      .select('id')
+      .eq('profile_id', profile.id)
+      .single();
+    dentistId = dentist?.id ?? null;
+  }
+
   return NextResponse.json({
     user: {
       id: profile.id,
@@ -28,6 +38,7 @@ export async function POST(request: NextRequest) {
       email: profile.email,
       role: profile.role,
       clinicId: profile.clinic_id,
+      dentistId,
     },
     clinic: {
       name: profile.clinics?.name ?? '',

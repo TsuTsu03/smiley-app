@@ -19,6 +19,16 @@ export async function GET() {
     return NextResponse.json({ user: null }, { status: 404 });
   }
 
+  let dentistId: string | null = null;
+  if (profile.role === 'dentist') {
+    const { data: dentist } = await supabase
+      .from('dentists')
+      .select('id')
+      .eq('profile_id', profile.id)
+      .single();
+    dentistId = dentist?.id ?? null;
+  }
+
   return NextResponse.json({
     user: {
       id: profile.id,
@@ -26,6 +36,7 @@ export async function GET() {
       email: profile.email,
       role: profile.role,
       clinicId: profile.clinic_id,
+      dentistId,
     },
     clinic: {
       name: profile.clinics?.name ?? '',

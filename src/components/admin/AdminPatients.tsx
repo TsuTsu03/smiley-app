@@ -1,26 +1,47 @@
 'use client';
 
-import { useState } from 'react';
-import { Users, Search, Eye, FileText } from 'lucide-react';
-import { Card, Badge, SectionHeader, Modal, EmptyState } from '@/components/ui';
-import {
-  MOCK_PATIENTS, MOCK_RECORDS, MOCK_APPOINTMENTS,
-  getDentistById, fmtDate, fmtShortDate, calcAge, Patient, MedicalRecord
-} from '@/lib/data';
+import { useState, useEffect } from 'react';
+import { Users, Search, Eye } from 'lucide-react';
+import { Card, SectionHeader, Modal, EmptyState } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
+import { fmtDate, fmtShortDate, calcAge } from '@/lib/data';
 
 export default function AdminPatients() {
+  const { user } = useAuth();
   const [search, setSearch]       = useState('');
-  const [selected, setSelected]   = useState<Patient | null>(null);
+  const [selected, setSelected]   = useState<any | null>(null);
   const [view, setView]           = useState<'info' | 'records'>('info');
+  const [patients, setPatients]   = useState<any[]>([]);
+  const [records, setRecords]     = useState<any[]>([]);
+  const [loading, setLoading]     = useState(true);
 
-  const patients = MOCK_PATIENTS.filter(p =>
+  useEffect(() => {
+    if (!user?.clinicId) return;
+    Promise.all([
+      fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/records?clinicId=${user.clinicId}`).then(r => r.json()),
+    ]).then(([p, r]) => {
+      setPatients(Array.isArray(p) ? p : []);
+      setRecords(Array.isArray(r) ? r : []);
+    }).finally(() => setLoading(false));
+  }, [user?.clinicId]);
+
+  const filtered = patients.filter(p =>
     !search || p.fullName.toLowerCase().includes(search.toLowerCase()) ||
-    p.phone.includes(search) || p.email.toLowerCase().includes(search.toLowerCase())
+    p.phone.includes(search) || (p.email || '').toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (loading) return (
+    <div className="space-y-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="h-16 bg-sky-50 rounded-2xl animate-pulse" />
+      ))}
+    </div>
   );
 
   return (
     <div className="space-y-6">
-      <SectionHeader title="Patients" sub={`${MOCK_PATIENTS.length} registered patients`} />
+      <SectionHeader title="Patients" sub={`${patients.length} registered patients`} />
 
       <Card className="p-4">
         <div className="relative">
@@ -34,28 +55,28 @@ export default function AdminPatients() {
       </Card>
 
       <Card>
-        {patients.length === 0 ? (
+        {filtered.length === 0 ? (
           <EmptyState icon={<Users size={28} />} title="No patients found" desc="Try a different search." />
         ) : (
           <>
             {/* Mobile card list (< md) */}
             <div className="md:hidden divide-y divide-sky-50">
-              {patients.map(p => {
-                const records  = MOCK_RECORDS.filter(r => r.patientId === p.id);
+              {filtered.map(p => {
+                const patRecords = records.filter(r => r.patientId === p.id);
                 const daysLeft = p.nextAdjustmentDate
                   ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
                   : null;
                 return (
                   <div key={p.id} className="flex items-center gap-3 px-4 py-3.5 hover:bg-sky-50/30 transition-colors">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-300 to-sky-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
-                      {p.fullName.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                      {p.fullName.split(' ').map((n: string) => n[0]).slice(0, 2).join('')}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-sky-800 text-sm truncate">{p.fullName}</div>
                       <div className="text-xs text-sky-500">{p.phone}</div>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                         <span className="text-xs text-sky-400">{calcAge(p.dateOfBirth)} yrs · {p.gender}</span>
-                        <span className="bg-sky-50 text-sky-600 px-1.5 py-0.5 rounded text-xs">{records.length} records</span>
+                        <span className="bg-sky-50 text-sky-600 px-1.5 py-0.5 rounded text-xs">{patRecords.length} records</span>
                         {daysLeft !== null && (
                           <span className={`text-xs font-semibold ${daysLeft <= 7 ? 'text-amber-600' : 'text-sky-600'}`}>
                             Adj: {daysLeft}d
@@ -85,8 +106,8 @@ export default function AdminPatients() {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((p, i) => {
-                    const records   = MOCK_RECORDS.filter(r => r.patientId === p.id);
+                  {filtered.map((p, i) => {
+                    const patRecords = records.filter(r => r.patientId === p.id);
                     const daysLeft  = p.nextAdjustmentDate
                       ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
                       : null;
@@ -95,7 +116,7 @@ export default function AdminPatients() {
                         <td className="px-5 py-3.5">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-300 to-sky-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
-                              {p.fullName.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                              {p.fullName.split(' ').map((n: string) => n[0]).slice(0, 2).join('')}
                             </div>
                             <div>
                               <div className="font-medium text-sky-800">{p.fullName}</div>
@@ -123,7 +144,7 @@ export default function AdminPatients() {
                         </td>
                         <td className="px-5 py-3.5">
                           <span className="bg-sky-50 text-sky-700 px-2 py-0.5 rounded-lg text-xs font-medium">
-                            {records.length} record{records.length !== 1 ? 's' : ''}
+                            {patRecords.length} record{patRecords.length !== 1 ? 's' : ''}
                           </span>
                         </td>
                         <td className="px-5 py-3.5">
@@ -146,15 +167,14 @@ export default function AdminPatients() {
 
       {selected && (
         <Modal title={selected.fullName} onClose={() => setSelected(null)} wide>
-          <PatientDetailModal patient={selected} view={view} setView={setView} />
+          <PatientDetailModal patient={selected} view={view} setView={setView} records={records.filter(r => r.patientId === selected.id)} />
         </Modal>
       )}
     </div>
   );
 }
 
-function PatientDetailModal({ patient, view, setView }: { patient: Patient; view: string; setView: (v: 'info' | 'records') => void }) {
-  const records = MOCK_RECORDS.filter(r => r.patientId === patient.id);
+function PatientDetailModal({ patient, view, setView, records }: { patient: any; view: string; setView: (v: 'info' | 'records') => void; records: any[] }) {
   return (
     <div>
       <div className="flex gap-2 mb-5">
@@ -176,7 +196,7 @@ function PatientDetailModal({ patient, view, setView }: { patient: Patient; view
               ['Phone', patient.phone],
               ['Email', patient.email],
               ['Blood Type', patient.bloodType || '—'],
-              ['Allergies', patient.allergies.length ? patient.allergies.join(', ') : 'None'],
+              ['Allergies', patient.allergies?.length ? patient.allergies.join(', ') : 'None'],
               ['Emergency Contact', `${patient.emergencyContact} · ${patient.emergencyPhone}`],
               ['Address', patient.address],
               ['Registered', fmtDate(patient.registeredAt)],
@@ -205,14 +225,13 @@ function PatientDetailModal({ patient, view, setView }: { patient: Patient; view
   );
 }
 
-function RecordCard({ record }: { record: MedicalRecord }) {
-  const dentist = getDentistById(record.dentistId);
+function RecordCard({ record }: { record: any }) {
   return (
     <div className="border border-sky-100 rounded-xl p-4 space-y-2">
       <div className="flex items-start justify-between">
         <div>
           <div className="font-semibold text-sky-800">{record.procedure}</div>
-          <div className="text-xs text-sky-400">{fmtDate(record.date)} · {dentist?.fullName}</div>
+          <div className="text-xs text-sky-400">{fmtDate(record.date)} · {record.dentistName}</div>
         </div>
         {record.tooth && <span className="text-xs bg-sky-50 text-sky-600 px-2 py-0.5 rounded-full">{record.tooth}</span>}
       </div>
