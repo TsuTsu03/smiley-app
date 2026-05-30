@@ -23,6 +23,9 @@ export default function LoginModal({ role, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const isPatient = role === 'patient';
+  const notFound = isPatient && error.toLowerCase().includes('not found');
+
   const handleLogin = async () => {
     setError('');
     if (!field1 || !field2) {
@@ -30,9 +33,7 @@ export default function LoginModal({ role, onClose }: Props) {
       return;
     }
     setLoading(true);
-
-    const result = await login(field1, field2, role === 'patient');
-
+    const result = await login(field1, field2, isPatient);
     if (result.error) {
       setError(result.error);
       setLoading(false);
@@ -42,7 +43,11 @@ export default function LoginModal({ role, onClose }: Props) {
   };
 
   const roleLabels = { admin: 'Admin', dentist: 'Dentist', patient: 'Patient' };
-  const roleColors = { admin: 'from-sky-600 to-sky-500', dentist: 'from-sky-500 to-sky-500', patient: 'from-sky-500 to-sky-400' };
+  const roleColors = {
+    admin:   'from-sky-600 to-sky-500',
+    dentist: 'from-sky-500 to-sky-500',
+    patient: 'from-sky-500 to-sky-400',
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-sky-950/30 backdrop-blur-sm p-4">
@@ -64,7 +69,7 @@ export default function LoginModal({ role, onClose }: Props) {
           </div>
 
           <div className="space-y-4">
-            {role === 'patient' ? (
+            {isPatient ? (
               <>
                 <div>
                   <label className="block text-sky-800 text-sm font-medium mb-1.5">Full Name</label>
@@ -122,8 +127,17 @@ export default function LoginModal({ role, onClose }: Props) {
           </div>
 
           {error && (
-            <div className="mt-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
-              {error}
+            <div className={`mt-4 text-sm rounded-xl px-4 py-3 border ${notFound ? 'bg-amber-50 border-amber-100 text-amber-800' : 'bg-red-50 border-red-100 text-red-600'}`}>
+              {notFound ? (
+                <>
+                  <p className="font-medium mb-1">Not registered yet</p>
+                  <p className="text-xs leading-relaxed">
+                    Your name and date of birth weren&apos;t found in our records. Please visit the clinic and ask the staff to register you — they&apos;ll set up your patient profile.
+                  </p>
+                </>
+              ) : (
+                error
+              )}
             </div>
           )}
 

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
 import { LogOut, Menu, X, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import clsx from 'clsx';
 
 interface NavItem {
@@ -82,8 +83,8 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
           ))}
         </nav>
 
-        {/* Logout */}
-        <div className="px-3 pb-4 border-t border-sky-50 pt-3">
+        {/* Logout + Legal */}
+        <div className="px-3 pb-4 border-t border-sky-50 pt-3 space-y-1">
           <button
             onClick={logout}
             className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
@@ -91,6 +92,15 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
             <LogOut size={16} />
             Sign Out
           </button>
+          <div className="flex items-center gap-3 px-3.5 pt-1">
+            <Link href="/privacy" target="_blank" className="text-[11px] text-sky-400 hover:text-sky-600 transition-colors">
+              Privacy
+            </Link>
+            <span className="text-sky-200">·</span>
+            <Link href="/terms" target="_blank" className="text-[11px] text-sky-400 hover:text-sky-600 transition-colors">
+              Terms
+            </Link>
+          </div>
         </div>
       </aside>
 

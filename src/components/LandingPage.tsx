@@ -1,16 +1,26 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ChevronRight, Building2, Users, Calendar, Shield, Star } from 'lucide-react';
-import LoginModal from './LoginModal';
-import RegisterClinicModal from './RegisterClinicModal';
+import { useState } from "react";
+import {
+  ChevronRight,
+  Building2,
+  Users,
+  Calendar,
+  Shield,
+  Star
+} from "lucide-react";
+import Link from "next/link";
+import LoginModal from "./LoginModal";
+import RegisterClinicModal from "./RegisterClinicModal";
 
 export default function LandingPage() {
   const [showLogin, setShowLogin] = useState(false);
-  const [loginRole, setLoginRole] = useState<'admin' | 'dentist' | 'patient'>('admin');
+  const [loginRole, setLoginRole] = useState<"admin" | "dentist" | "patient">(
+    "admin"
+  );
   const [showRegister, setShowRegister] = useState(false);
 
-  const openLogin = (role: 'admin' | 'dentist' | 'patient') => {
+  const openLogin = (role: "admin" | "dentist" | "patient") => {
     setLoginRole(role);
     setShowLogin(true);
   };
@@ -18,31 +28,40 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50/40 font-sans">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center shadow-md">
-            <span className="text-white text-lg font-bold leading-none">✦</span>
+      <div className="relative">
+        <div className="absolute inset-x-0 bottom-0 h-px bg-sky-200" />
+        <nav className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 max-w-7xl mx-auto">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center shadow-md">
+              <span className="text-white text-lg font-bold leading-none">
+                ✦
+              </span>
+            </div>
+            <div>
+              <span className="text-sky-800 font-display text-lg font-semibold">
+                Smiley
+              </span>
+              <span className="text-sky-400 text-xs block leading-none -mt-0.5 font-sans">
+                clinic management
+              </span>
+            </div>
           </div>
-          <div>
-            <span className="text-sky-800 font-display text-lg font-semibold">Smiley</span>
-            <span className="text-sky-400 text-xs block leading-none -mt-0.5 font-sans">clinic management</span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowRegister(true)}
+              className="px-4 py-2 text-sky-700 font-medium text-sm hover:text-sky-900 transition-colors"
+            >
+              Register Clinic
+            </button>
+            <button
+              onClick={() => openLogin("admin")}
+              className="px-5 py-2 bg-sky-600 text-white text-sm font-semibold rounded-xl hover:bg-sky-700 transition-colors shadow-soft"
+            >
+              Sign In
+            </button>
           </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowRegister(true)}
-            className="px-4 py-2 text-sky-700 font-medium text-sm hover:text-sky-900 transition-colors"
-          >
-            Register Clinic
-          </button>
-          <button
-            onClick={() => openLogin('admin')}
-            className="px-5 py-2 bg-sky-600 text-white text-sm font-semibold rounded-xl hover:bg-sky-700 transition-colors shadow-soft"
-          >
-            Sign In
-          </button>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Hero */}
       <main className="max-w-7xl mx-auto px-4 sm:px-8 pt-10 sm:pt-16 pb-16 sm:pb-24">
@@ -52,11 +71,13 @@ export default function LandingPage() {
             Built for dental clinics
           </div>
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-sky-900 leading-tight mb-4 sm:mb-5">
-            Manage your clinic<br />
+            Manage your clinic
+            <br />
             <em className="text-teal-500 not-italic">beautifully.</em>
           </h1>
           <p className="text-sky-700/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-xl mx-auto">
-            Patient records, appointments, reminders — all in one place. Each clinic gets its own branded portal.
+            Patient records, appointments, reminders — all in one place. Each
+            clinic gets its own branded portal.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
@@ -68,7 +89,7 @@ export default function LandingPage() {
               <ChevronRight size={16} />
             </button>
             <button
-              onClick={() => openLogin('admin')}
+              onClick={() => openLogin("admin")}
               className="flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 bg-white text-sky-700 font-semibold rounded-2xl border border-sky-100 shadow-soft hover:shadow-card transition-all hover:-translate-y-0.5 text-sm sm:text-base"
             >
               Sign In
@@ -78,19 +99,41 @@ export default function LandingPage() {
 
         {/* Demo login cards */}
         <div className="mt-8 mb-16">
-          <p className="text-center text-sky-600/60 text-sm font-medium mb-5 uppercase tracking-wider">Try the demo</p>
+          <p className="text-center text-sky-600/60 text-sm font-medium mb-5 uppercase tracking-wider">
+            Try the demo
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             {[
-              { role: 'admin' as const,   emoji: '⚙️', label: 'Admin Portal',   desc: 'Manage patients, schedules & reminders', color: 'from-sky-500 to-sky-600' },
-              { role: 'dentist' as const, emoji: '🦷', label: 'Dentist Portal', desc: 'Access records & manage appointments',     color: 'from-sky-500 to-teal-400' },
-              { role: 'patient' as const, emoji: '😊', label: 'Patient Portal', desc: 'View records & book appointments',          color: 'from-teal-400 to-teal-500' },
+              {
+                role: "admin" as const,
+                emoji: "⚙️",
+                label: "Admin Portal",
+                desc: "Manage patients, schedules & reminders",
+                color: "from-sky-500 to-sky-600"
+              },
+              {
+                role: "dentist" as const,
+                emoji: "🦷",
+                label: "Dentist Portal",
+                desc: "Access records & manage appointments",
+                color: "from-sky-500 to-teal-400"
+              },
+              {
+                role: "patient" as const,
+                emoji: "😊",
+                label: "Patient Portal",
+                desc: "View records & book appointments",
+                color: "from-teal-400 to-teal-500"
+              }
             ].map(({ role, emoji, label, desc, color }) => (
               <button
                 key={role}
                 onClick={() => openLogin(role)}
                 className="group relative bg-white rounded-2xl p-5 border border-sky-50 shadow-soft hover:shadow-card transition-all hover:-translate-y-1 text-left card-hover overflow-hidden"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-5 transition-opacity`} />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-5 transition-opacity`}
+                />
                 <div className="text-3xl mb-3">{emoji}</div>
                 <div className="font-semibold text-sky-800 mb-1">{label}</div>
                 <div className="text-sm text-sky-600/60">{desc}</div>
@@ -105,28 +148,87 @@ export default function LandingPage() {
         {/* Features */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
           {[
-            { icon: <Users size={20} />,    title: 'Patient Records', desc: 'Complete medical history across all clinic dentists', accent: false },
-            { icon: <Calendar size={20} />, title: 'Smart Booking',   desc: 'Book by date or by dentist — easy for everyone',      accent: true  },
-            { icon: <Shield size={20} />,   title: 'Reminders',       desc: 'Auto SMS & email reminders for adjustments',           accent: false },
-            { icon: <Star size={20} />,     title: 'Clinic Branding', desc: 'Your own subdomain — brightsmile.dentaflow.app',       accent: true  },
+            {
+              icon: <Users size={20} />,
+              title: "Patient Records",
+              desc: "Complete medical history across all clinic dentists",
+              accent: false
+            },
+            {
+              icon: <Calendar size={20} />,
+              title: "Smart Booking",
+              desc: "Book by date or by dentist — easy for everyone",
+              accent: true
+            },
+            {
+              icon: <Shield size={20} />,
+              title: "Reminders",
+              desc: "Auto SMS & email reminders for adjustments",
+              accent: false
+            },
+            {
+              icon: <Star size={20} />,
+              title: "Clinic Branding",
+              desc: "Your own subdomain — brightsmile.dentaflow.app",
+              accent: true
+            }
           ].map(({ icon, title, desc, accent }) => (
-            <div key={title} className="bg-white rounded-2xl p-5 border border-sky-50 shadow-soft">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${accent ? 'bg-teal-50 text-teal-600' : 'bg-sky-50 text-sky-600'}`}>
+            <div
+              key={title}
+              className="bg-white rounded-2xl p-5 border border-sky-50 shadow-soft"
+            >
+              <div
+                className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${accent ? "bg-teal-50 text-teal-600" : "bg-sky-50 text-sky-600"}`}
+              >
                 {icon}
               </div>
-              <div className="font-semibold text-sky-800 text-sm mb-1">{title}</div>
-              <div className="text-xs text-sky-600/60 leading-relaxed">{desc}</div>
+              <div className="font-semibold text-sky-800 text-sm mb-1">
+                {title}
+              </div>
+              <div className="text-xs text-sky-600/60 leading-relaxed">
+                {desc}
+              </div>
             </div>
           ))}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-gradient-to-r from-sky-700 to-sky-600  border-t border-sky-100 py-6 px-4 sm:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white">
+          <span>
+            © {new Date().getFullYear()} Smiley / DentaFlow. All rights
+            reserved.
+          </span>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/privacy"
+              className="hover:text-sky-700 transition-colors underline underline-offset-2"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="hover:text-sky-700 transition-colors underline underline-offset-2"
+            >
+              Terms of Service
+            </Link>
+          </div>
+        </div>
+      </footer>
 
       {/* Modals */}
       {showLogin && (
         <LoginModal role={loginRole} onClose={() => setShowLogin(false)} />
       )}
       {showRegister && (
-        <RegisterClinicModal onClose={() => setShowRegister(false)} onSuccess={() => { setShowRegister(false); openLogin('admin'); }} />
+        <RegisterClinicModal
+          onClose={() => setShowRegister(false)}
+          onSuccess={() => {
+            setShowRegister(false);
+            openLogin("admin");
+          }}
+        />
       )}
     </div>
   );

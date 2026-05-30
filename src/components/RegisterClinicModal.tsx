@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { X, CheckCircle2, Loader, Building2 } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
   onClose: () => void;
@@ -11,6 +12,7 @@ interface Props {
 export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [form, setForm] = useState({
     clinicName: '',
     slug: '',
@@ -138,13 +140,33 @@ export default function RegisterClinicModal({ onClose, onSuccess }: Props) {
                     className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 text-sm focus:border-sky-400 focus:bg-white transition-colors" />
                 </div>
               </div>
-              <div className="flex gap-3 mt-5">
+              {/* Consent checkbox */}
+              <label className="flex items-start gap-3 mt-5 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={agreedToTerms}
+                  onChange={e => setAgreedToTerms(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-sky-300 text-sky-600 accent-sky-600 flex-shrink-0"
+                />
+                <span className="text-xs text-sky-700/80 leading-relaxed">
+                  I have read and agree to Smiley&apos;s{' '}
+                  <Link href="/terms" target="_blank" className="text-sky-600 underline hover:text-sky-800">
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link href="/privacy" target="_blank" className="text-sky-600 underline hover:text-sky-800">
+                    Privacy Policy
+                  </Link>
+                  . I understand that patient dental records are sensitive personal information protected under the Philippine Data Privacy Act (RA 10173) and I am responsible for obtaining patient consent before entering their data.
+                </span>
+              </label>
+              <div className="flex gap-3 mt-4">
                 <button onClick={() => setStep(1)} className="flex-1 py-3.5 bg-sky-50 text-sky-700 font-semibold rounded-xl hover:bg-sky-100 transition-colors">
                   Back
                 </button>
                 <button
                   onClick={handleSubmit}
-                  disabled={loading || !form.adminName || !form.adminEmail || !form.password}
+                  disabled={loading || !form.adminName || !form.adminEmail || !form.password || !agreedToTerms}
                   className="flex-1 py-3.5 bg-gradient-to-r from-sky-700 to-sky-600 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
                 >
                   {loading ? <><Loader size={15} className="animate-spin" /> Creating…</> : 'Create Clinic'}

@@ -13,7 +13,17 @@
       "Bash(sed -i 's/to-amber-500/to-teal-500/g; s/from-amber-500/from-teal-500/g' src/components/SidebarLayout.tsx)",
       "Bash(sed -i 's/from-sky-700 to-amber-500/from-sky-600 to-teal-500/g' src/components/RegisterClinicModal.tsx)",
       "Bash(sed -i 's/from-sky-600 to-amber-500/from-sky-600 to-teal-500/g; s/bg-amber-500 text-white flex items-center justify-center hover:bg-amber-600/bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600/g' src/components/patient/PatientChatbot.tsx)",
-      "Bash(sed -i 's/from-sky-600 to-amber-500/from-sky-600 to-teal-500/g' src/components/patient/PatientOverview.tsx)"
+      "Bash(sed -i 's/from-sky-600 to-amber-500/from-sky-600 to-teal-500/g' src/components/patient/PatientOverview.tsx)",
+      "Bash(npm install *)",
+      "Bash(mkdir -p \"C:\\\\CodingProjects\\\\dentalapp\\\\src\\\\app\\\\api\\\\patients\\\\[id]\")",
+      "Bash(mkdir -p \"C:\\\\CodingProjects\\\\dentalapp\\\\src\\\\app\\\\api\\\\dentists\\\\[id]\")",
+      "Bash(mkdir -p \"C:\\\\CodingProjects\\\\dentalapp\\\\src\\\\app\\\\api\\\\appointments\\\\[id]\")",
+      "Bash(mkdir -p \"C:\\\\CodingProjects\\\\dentalapp\\\\src\\\\app\\\\api\\\\records\\\\[id]\")",
+      "Bash(npx tsc *)",
+      "Bash(Start-Sleep -Seconds 5)",
+      "Bash(Get-Content \"C:\\\\Users\\\\JANSEN~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--CodingProjects-dentalapp\\\\fe4d419d-5820-46e2-b4e9-9d68cf147b25\\\\tasks\\\\b6tu5edk1.output\" -Tail 20)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\CodingProjects\\\\dentalapp\" -Force | Format-Table Name, @{N=\"Type\";E={if\\($_.PSIsContainer\\){\"Folder\"}else{\"File\"}}} -AutoSize)"
     ]
   }
 }
