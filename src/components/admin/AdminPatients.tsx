@@ -3,24 +3,28 @@
 import { useState } from 'react';
 import { Users, Search, Eye, FileText } from 'lucide-react';
 import { Card, Badge, SectionHeader, Modal, EmptyState } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
 import {
   MOCK_PATIENTS, MOCK_RECORDS, MOCK_APPOINTMENTS,
   getDentistById, fmtDate, fmtShortDate, calcAge, Patient, MedicalRecord
 } from '@/lib/data';
 
 export default function AdminPatients() {
+  const { user } = useAuth();
+  const cid = user?.clinicId;
   const [search, setSearch]       = useState('');
   const [selected, setSelected]   = useState<Patient | null>(null);
   const [view, setView]           = useState<'info' | 'records'>('info');
 
-  const patients = MOCK_PATIENTS.filter(p =>
+  const allPatients = MOCK_PATIENTS.filter(p => p.clinicId === cid);
+  const patients = allPatients.filter(p =>
     !search || p.fullName.toLowerCase().includes(search.toLowerCase()) ||
     p.phone.includes(search) || p.email.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="space-y-6">
-      <SectionHeader title="Patients" sub={`${MOCK_PATIENTS.length} registered patients`} />
+      <SectionHeader title="Patients" sub={`${allPatients.length} registered patients`} />
 
       <Card className="p-4">
         <div className="relative">
@@ -86,7 +90,7 @@ export default function AdminPatients() {
                 </thead>
                 <tbody>
                   {patients.map((p, i) => {
-                    const records   = MOCK_RECORDS.filter(r => r.patientId === p.id);
+                    const records   = MOCK_RECORDS.filter(r => r.patientId === p.id && r.clinicId === cid);
                     const daysLeft  = p.nextAdjustmentDate
                       ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
                       : null;

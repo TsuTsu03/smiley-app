@@ -3,14 +3,18 @@
 import { useState } from 'react';
 import { Search, ChevronDown, ChevronUp, FileText, FilePlus, X, CheckCircle2, Loader } from 'lucide-react';
 import { Card, Badge, SectionHeader, EmptyState } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
 import { MOCK_PATIENTS, MOCK_RECORDS, getDentistById, fmtDate, fmtShortDate, calcAge, Patient, MedicalRecord, PROCEDURE_TYPES } from '@/lib/data';
 
 export default function DentistPatients() {
+  const { user } = useAuth();
+  const cid = user?.clinicId;
   const [search, setSearch]     = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
   const [addFor, setAddFor]     = useState<Patient | null>(null);
 
-  const patients = MOCK_PATIENTS.filter(p =>
+  const clinicPatients = MOCK_PATIENTS.filter(p => p.clinicId === cid);
+  const patients = clinicPatients.filter(p =>
     !search || p.fullName.toLowerCase().includes(search.toLowerCase()) || p.phone.includes(search)
   );
 
@@ -31,7 +35,7 @@ export default function DentistPatients() {
         {patients.length === 0 ? (
           <EmptyState icon={<FileText size={28} />} title="No patients found" desc="Adjust the search term." />
         ) : patients.map(patient => {
-          const records = MOCK_RECORDS.filter(r => r.patientId === patient.id);
+          const records = MOCK_RECORDS.filter(r => r.patientId === patient.id && r.clinicId === cid);
           const isOpen  = expanded === patient.id;
           return (
             <Card key={patient.id} className="overflow-hidden">

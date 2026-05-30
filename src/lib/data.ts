@@ -91,10 +91,10 @@ export interface Notification {
   status: 'sent' | 'pending' | 'failed';
 }
 
-// ─── Mock Clinic ────────────────────────────────────────────────────────────
+// ─── Mock Clinics ────────────────────────────────────────────────────────────
 
 export const MOCK_CLINIC: Clinic = {
-  id: 'clinic-1',
+  id: '00000000-0000-0000-0000-000000000001',
   name: 'BrightSmile Dental Clinic',
   slug: 'brightsmile',
   address: '123 Mabini St., Makati City',
@@ -102,16 +102,26 @@ export const MOCK_CLINIC: Clinic = {
   email: 'hello@brightsmile.com',
 };
 
+export const MOCK_CLINIC_2: Clinic = {
+  id: '00000000-0000-0000-0000-000000000002',
+  name: 'PearlWhite Dental Center',
+  slug: 'pearlwhite',
+  address: '88 Osmeña Blvd., Cebu City',
+  phone: '(032) 255-8899',
+  email: 'hello@pearlwhite.com',
+};
+
 // ─── Mock Dentists ───────────────────────────────────────────────────────────
 
 export const MOCK_DENTISTS: Dentist[] = [
+  // BrightSmile
   {
-    id: 'dent-1',
+    id: '00000000-0000-0000-0001-000000000001',
     fullName: 'Dr. Maria Santos',
     specialization: 'General Dentistry & Orthodontics',
     email: 'maria@brightsmile.com',
     phone: '0917-123-4567',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     schedule: [
       { day: 'Monday', startTime: '09:00', endTime: '17:00' },
       { day: 'Wednesday', startTime: '09:00', endTime: '17:00' },
@@ -119,12 +129,12 @@ export const MOCK_DENTISTS: Dentist[] = [
     ],
   },
   {
-    id: 'dent-2',
+    id: '00000000-0000-0000-0001-000000000002',
     fullName: 'Dr. Jose Reyes',
     specialization: 'Oral Surgery & Implantology',
     email: 'jose@brightsmile.com',
     phone: '0918-765-4321',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     schedule: [
       { day: 'Tuesday', startTime: '10:00', endTime: '18:00' },
       { day: 'Thursday', startTime: '10:00', endTime: '18:00' },
@@ -132,16 +142,43 @@ export const MOCK_DENTISTS: Dentist[] = [
     ],
   },
   {
-    id: 'dent-3',
+    id: '00000000-0000-0000-0001-000000000003',
     fullName: 'Dr. Ana Cruz',
     specialization: 'Pediatric Dentistry',
     email: 'ana@brightsmile.com',
     phone: '0919-222-3333',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     schedule: [
       { day: 'Monday', startTime: '13:00', endTime: '18:00' },
       { day: 'Wednesday', startTime: '13:00', endTime: '18:00' },
       { day: 'Saturday', startTime: '10:00', endTime: '15:00' },
+    ],
+  },
+  // PearlWhite
+  {
+    id: '00000000-0000-0000-0001-000000000004',
+    fullName: 'Dr. Sofia Villanueva',
+    specialization: 'Cosmetic Dentistry & Veneers',
+    email: 'sofia@pearlwhite.com',
+    phone: '0932-100-2000',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    schedule: [
+      { day: 'Monday', startTime: '08:00', endTime: '16:00' },
+      { day: 'Wednesday', startTime: '08:00', endTime: '16:00' },
+      { day: 'Friday', startTime: '08:00', endTime: '13:00' },
+    ],
+  },
+  {
+    id: '00000000-0000-0000-0001-000000000005',
+    fullName: 'Dr. Mark Torres',
+    specialization: 'Endodontics & Root Canal',
+    email: 'mark@pearlwhite.com',
+    phone: '0933-300-4000',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    schedule: [
+      { day: 'Tuesday', startTime: '09:00', endTime: '17:00' },
+      { day: 'Thursday', startTime: '09:00', endTime: '17:00' },
+      { day: 'Saturday', startTime: '08:00', endTime: '12:00' },
     ],
   },
 ];
@@ -149,8 +186,9 @@ export const MOCK_DENTISTS: Dentist[] = [
 // ─── Mock Patients ───────────────────────────────────────────────────────────
 
 export const MOCK_PATIENTS: Patient[] = [
+  // BrightSmile
   {
-    id: 'pat-1',
+    id: '00000000-0000-0000-0002-000000000001',
     fullName: 'Juan dela Cruz',
     dateOfBirth: '1990-03-15',
     gender: 'male',
@@ -161,12 +199,12 @@ export const MOCK_PATIENTS: Patient[] = [
     allergies: ['Penicillin'],
     emergencyContact: 'Maria dela Cruz',
     emergencyPhone: '0920-333-4444',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     registeredAt: '2023-01-10',
     nextAdjustmentDate: '2026-05-28',
   },
   {
-    id: 'pat-2',
+    id: '00000000-0000-0000-0002-000000000002',
     fullName: 'Rosa Magtanggol',
     dateOfBirth: '1985-07-22',
     gender: 'female',
@@ -177,12 +215,12 @@ export const MOCK_PATIENTS: Patient[] = [
     allergies: [],
     emergencyContact: 'Pedro Magtanggol',
     emergencyPhone: '0921-777-8888',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     registeredAt: '2023-03-05',
     nextAdjustmentDate: '2026-05-30',
   },
   {
-    id: 'pat-3',
+    id: '00000000-0000-0000-0002-000000000003',
     fullName: 'Carlos Bautista',
     dateOfBirth: '2000-11-08',
     gender: 'male',
@@ -193,12 +231,12 @@ export const MOCK_PATIENTS: Patient[] = [
     allergies: ['Latex', 'Ibuprofen'],
     emergencyContact: 'Luz Bautista',
     emergencyPhone: '0922-111-0000',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     registeredAt: '2024-06-20',
     nextAdjustmentDate: '2026-06-10',
   },
   {
-    id: 'pat-4',
+    id: '00000000-0000-0000-0002-000000000004',
     fullName: 'Liza Montano',
     dateOfBirth: '1995-04-30',
     gender: 'female',
@@ -209,33 +247,106 @@ export const MOCK_PATIENTS: Patient[] = [
     allergies: [],
     emergencyContact: 'Tony Montano',
     emergencyPhone: '0923-444-5555',
-    clinicId: 'clinic-1',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     registeredAt: '2024-09-14',
     nextAdjustmentDate: '2026-06-03',
+  },
+  // PearlWhite
+  {
+    id: '00000000-0000-0000-0002-000000000005',
+    fullName: 'Marisol Fernandez',
+    dateOfBirth: '1988-05-20',
+    gender: 'female',
+    phone: '0932-111-2222',
+    email: 'marisol@example.com',
+    address: 'Cebu City',
+    bloodType: 'A+',
+    allergies: [],
+    emergencyContact: 'Roberto Fernandez',
+    emergencyPhone: '0932-333-4444',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    registeredAt: '2024-01-15',
+    nextAdjustmentDate: '2026-06-05',
+  },
+  {
+    id: '00000000-0000-0000-0002-000000000006',
+    fullName: 'Andrei Pascual',
+    dateOfBirth: '1993-09-14',
+    gender: 'male',
+    phone: '0933-555-6666',
+    email: 'andrei@example.com',
+    address: 'Mandaue City',
+    bloodType: 'B+',
+    allergies: ['Aspirin'],
+    emergencyContact: 'Clara Pascual',
+    emergencyPhone: '0933-777-8888',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    registeredAt: '2024-03-22',
+  },
+  {
+    id: '00000000-0000-0000-0002-000000000007',
+    fullName: 'Cynthia Garcia',
+    dateOfBirth: '1979-02-28',
+    gender: 'female',
+    phone: '0934-999-0000',
+    email: 'cynthia@example.com',
+    address: 'Lapu-Lapu City',
+    bloodType: 'O-',
+    allergies: [],
+    emergencyContact: 'Noel Garcia',
+    emergencyPhone: '0934-111-2222',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    registeredAt: '2023-11-08',
+    nextAdjustmentDate: '2026-06-18',
+  },
+  {
+    id: '00000000-0000-0000-0002-000000000008',
+    fullName: 'Ben Ramos',
+    dateOfBirth: '2001-12-03',
+    gender: 'male',
+    phone: '0935-333-4444',
+    email: 'ben@example.com',
+    address: 'Talisay City',
+    bloodType: 'AB+',
+    allergies: ['Penicillin'],
+    emergencyContact: 'Gloria Ramos',
+    emergencyPhone: '0935-555-6666',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    registeredAt: '2025-02-10',
   },
 ];
 
 // ─── Mock Appointments ───────────────────────────────────────────────────────
 
 export const MOCK_APPOINTMENTS: Appointment[] = [
-  { id: 'apt-1', patientId: 'pat-1', dentistId: 'dent-1', clinicId: 'clinic-1', date: '2026-05-21', time: '09:00', type: 'Orthodontic Adjustment', status: 'confirmed', notes: 'Monthly wire tightening', createdAt: '2026-05-10' },
-  { id: 'apt-2', patientId: 'pat-2', dentistId: 'dent-1', clinicId: 'clinic-1', date: '2026-05-21', time: '10:30', type: 'Cleaning', status: 'confirmed', createdAt: '2026-05-12' },
-  { id: 'apt-3', patientId: 'pat-3', dentistId: 'dent-2', clinicId: 'clinic-1', date: '2026-05-22', time: '11:00', type: 'Tooth Extraction', status: 'pending', createdAt: '2026-05-15' },
-  { id: 'apt-4', patientId: 'pat-4', dentistId: 'dent-2', clinicId: 'clinic-1', date: '2026-05-22', time: '14:00', type: 'Consultation', status: 'confirmed', createdAt: '2026-05-14' },
-  { id: 'apt-5', patientId: 'pat-1', dentistId: 'dent-1', clinicId: 'clinic-1', date: '2026-05-28', time: '09:00', type: 'Orthodontic Adjustment', status: 'pending', createdAt: '2026-05-21' },
-  { id: 'apt-6', patientId: 'pat-3', dentistId: 'dent-3', clinicId: 'clinic-1', date: '2026-05-24', time: '13:00', type: 'Fluoride Treatment', status: 'confirmed', createdAt: '2026-05-16' },
-  { id: 'apt-7', patientId: 'pat-2', dentistId: 'dent-1', clinicId: 'clinic-1', date: '2026-04-10', time: '09:30', type: 'Orthodontic Adjustment', status: 'completed', notes: 'Completed successfully', createdAt: '2026-04-01' },
-  { id: 'apt-8', patientId: 'pat-1', dentistId: 'dent-1', clinicId: 'clinic-1', date: '2026-04-05', time: '10:00', type: 'Cleaning', status: 'completed', createdAt: '2026-03-28' },
+  // BrightSmile
+  { id: '00000000-0000-0000-0003-000000000001', patientId: '00000000-0000-0000-0002-000000000001', dentistId: '00000000-0000-0000-0001-000000000001', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-05-21', time: '09:00', type: 'Orthodontic Adjustment', status: 'confirmed', notes: 'Monthly wire tightening', createdAt: '2026-05-10' },
+  { id: '00000000-0000-0000-0003-000000000002', patientId: '00000000-0000-0000-0002-000000000002', dentistId: '00000000-0000-0000-0001-000000000001', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-05-21', time: '10:30', type: 'Cleaning', status: 'confirmed', createdAt: '2026-05-12' },
+  { id: '00000000-0000-0000-0003-000000000003', patientId: '00000000-0000-0000-0002-000000000003', dentistId: '00000000-0000-0000-0001-000000000002', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-05-22', time: '11:00', type: 'Tooth Extraction', status: 'pending', createdAt: '2026-05-15' },
+  { id: '00000000-0000-0000-0003-000000000004', patientId: '00000000-0000-0000-0002-000000000004', dentistId: '00000000-0000-0000-0001-000000000002', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-05-22', time: '14:00', type: 'Consultation', status: 'confirmed', createdAt: '2026-05-14' },
+  { id: '00000000-0000-0000-0003-000000000005', patientId: '00000000-0000-0000-0002-000000000001', dentistId: '00000000-0000-0000-0001-000000000001', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-05-28', time: '09:00', type: 'Orthodontic Adjustment', status: 'pending', createdAt: '2026-05-21' },
+  { id: '00000000-0000-0000-0003-000000000006', patientId: '00000000-0000-0000-0002-000000000003', dentistId: '00000000-0000-0000-0001-000000000003', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-05-24', time: '13:00', type: 'Fluoride Treatment', status: 'confirmed', createdAt: '2026-05-16' },
+  { id: '00000000-0000-0000-0003-000000000007', patientId: '00000000-0000-0000-0002-000000000002', dentistId: '00000000-0000-0000-0001-000000000001', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-04-10', time: '09:30', type: 'Orthodontic Adjustment', status: 'completed', notes: 'Completed successfully', createdAt: '2026-04-01' },
+  { id: '00000000-0000-0000-0003-000000000008', patientId: '00000000-0000-0000-0002-000000000001', dentistId: '00000000-0000-0000-0001-000000000001', clinicId: '00000000-0000-0000-0000-000000000001', date: '2026-04-05', time: '10:00', type: 'Cleaning', status: 'completed', createdAt: '2026-03-28' },
+  // PearlWhite
+  { id: '00000000-0000-0000-0003-000000000009',  patientId: '00000000-0000-0000-0002-000000000005', dentistId: '00000000-0000-0000-0001-000000000004', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-05-26', time: '08:30', type: 'Veneer Consultation',    status: 'confirmed',  notes: 'Initial consult for upper 6 veneers', createdAt: '2026-05-15' },
+  { id: '00000000-0000-0000-0003-000000000010', patientId: '00000000-0000-0000-0002-000000000006', dentistId: '00000000-0000-0000-0001-000000000005', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-05-27', time: '10:00', type: 'Root Canal Treatment',  status: 'pending',    createdAt: '2026-05-18' },
+  { id: '00000000-0000-0000-0003-000000000011', patientId: '00000000-0000-0000-0002-000000000007', dentistId: '00000000-0000-0000-0001-000000000004', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-05-28', time: '09:00', type: 'Teeth Whitening',        status: 'confirmed',  createdAt: '2026-05-20' },
+  { id: '00000000-0000-0000-0003-000000000012', patientId: '00000000-0000-0000-0002-000000000008', dentistId: '00000000-0000-0000-0001-000000000005', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-05-29', time: '11:00', type: 'Consultation',           status: 'confirmed',  createdAt: '2026-05-22' },
+  { id: '00000000-0000-0000-0003-000000000013', patientId: '00000000-0000-0000-0002-000000000005', dentistId: '00000000-0000-0000-0001-000000000004', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-06-05', time: '08:30', type: 'Orthodontic Adjustment', status: 'pending',    createdAt: '2026-05-26' },
+  { id: '00000000-0000-0000-0003-000000000014', patientId: '00000000-0000-0000-0002-000000000006', dentistId: '00000000-0000-0000-0001-000000000005', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-04-15', time: '10:00', type: 'Root Canal Treatment',  status: 'completed', notes: 'First session completed', createdAt: '2026-04-10' },
+  { id: '00000000-0000-0000-0003-000000000015', patientId: '00000000-0000-0000-0002-000000000007', dentistId: '00000000-0000-0000-0001-000000000004', clinicId: '00000000-0000-0000-0000-000000000002', date: '2026-03-20', time: '09:00', type: 'Composite Filling',      status: 'completed', createdAt: '2026-03-15' },
 ];
 
 // ─── Mock Medical Records ────────────────────────────────────────────────────
 
 export const MOCK_RECORDS: MedicalRecord[] = [
+  // BrightSmile
   {
-    id: 'rec-1',
-    patientId: 'pat-1',
-    dentistId: 'dent-1',
-    clinicId: 'clinic-1',
+    id: '00000000-0000-0000-0004-000000000001',
+    patientId: '00000000-0000-0000-0002-000000000001',
+    dentistId: '00000000-0000-0000-0001-000000000001',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     date: '2026-04-05',
     procedure: 'Prophylaxis (Teeth Cleaning)',
     tooth: 'Full mouth',
@@ -245,10 +356,10 @@ export const MOCK_RECORDS: MedicalRecord[] = [
     nextVisit: '2026-07-05',
   },
   {
-    id: 'rec-2',
-    patientId: 'pat-1',
-    dentistId: 'dent-1',
-    clinicId: 'clinic-1',
+    id: '00000000-0000-0000-0004-000000000002',
+    patientId: '00000000-0000-0000-0002-000000000001',
+    dentistId: '00000000-0000-0000-0001-000000000001',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     date: '2026-01-10',
     procedure: 'Orthodontic Adjustment',
     tooth: 'Full arch',
@@ -257,10 +368,10 @@ export const MOCK_RECORDS: MedicalRecord[] = [
     nextVisit: '2026-04-10',
   },
   {
-    id: 'rec-3',
-    patientId: 'pat-2',
-    dentistId: 'dent-1',
-    clinicId: 'clinic-1',
+    id: '00000000-0000-0000-0004-000000000003',
+    patientId: '00000000-0000-0000-0002-000000000002',
+    dentistId: '00000000-0000-0000-0001-000000000001',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     date: '2026-04-10',
     procedure: 'Orthodontic Adjustment',
     tooth: 'Full arch',
@@ -270,10 +381,10 @@ export const MOCK_RECORDS: MedicalRecord[] = [
     nextVisit: '2026-07-10',
   },
   {
-    id: 'rec-4',
-    patientId: 'pat-3',
-    dentistId: 'dent-2',
-    clinicId: 'clinic-1',
+    id: '00000000-0000-0000-0004-000000000004',
+    patientId: '00000000-0000-0000-0002-000000000003',
+    dentistId: '00000000-0000-0000-0001-000000000002',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     date: '2026-03-15',
     procedure: 'Tooth Extraction',
     tooth: '#38 (Lower Left Wisdom Tooth)',
@@ -283,16 +394,66 @@ export const MOCK_RECORDS: MedicalRecord[] = [
     nextVisit: '2026-03-22',
   },
   {
-    id: 'rec-5',
-    patientId: 'pat-4',
-    dentistId: 'dent-2',
-    clinicId: 'clinic-1',
+    id: '00000000-0000-0000-0004-000000000005',
+    patientId: '00000000-0000-0000-0002-000000000004',
+    dentistId: '00000000-0000-0000-0001-000000000002',
+    clinicId: '00000000-0000-0000-0000-000000000001',
     date: '2026-02-20',
     procedure: 'Composite Filling',
     tooth: '#16 (Upper Right First Molar)',
     notes: 'Tooth-colored composite restoration placed. Patient satisfied with aesthetics.',
     diagnosis: 'Class II caries, dentin involvement',
     nextVisit: '2026-08-20',
+  },
+  // PearlWhite
+  {
+    id: '00000000-0000-0000-0004-000000000006',
+    patientId: '00000000-0000-0000-0002-000000000005',
+    dentistId: '00000000-0000-0000-0001-000000000004',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    date: '2026-03-10',
+    procedure: 'Orthodontic Consultation',
+    tooth: 'Full arch',
+    notes: 'Patient interested in ceramic braces. Photos and X-rays taken.',
+    diagnosis: 'Mild crowding upper anterior, suitable for orthodontic treatment',
+    nextVisit: '2026-06-05',
+  },
+  {
+    id: '00000000-0000-0000-0004-000000000007',
+    patientId: '00000000-0000-0000-0002-000000000006',
+    dentistId: '00000000-0000-0000-0001-000000000005',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    date: '2026-04-15',
+    procedure: 'Root Canal Treatment',
+    tooth: '#26 (Upper Left First Molar)',
+    notes: 'Pulp extirpation completed. Canal preparation and irrigation done.',
+    diagnosis: 'Irreversible pulpitis, periapical abscess',
+    prescription: 'Amoxicillin 500mg TID x 5 days, Mefenamic Acid 500mg PRN',
+    nextVisit: '2026-05-27',
+  },
+  {
+    id: '00000000-0000-0000-0004-000000000008',
+    patientId: '00000000-0000-0000-0002-000000000007',
+    dentistId: '00000000-0000-0000-0001-000000000004',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    date: '2026-03-20',
+    procedure: 'Composite Filling',
+    tooth: '#21 (Upper Left Central Incisor)',
+    notes: 'Tooth-colored composite placed. Shade matched perfectly.',
+    diagnosis: 'Class IV fracture, enamel-dentin involvement',
+    nextVisit: '2026-09-20',
+  },
+  {
+    id: '00000000-0000-0000-0004-000000000009',
+    patientId: '00000000-0000-0000-0002-000000000008',
+    dentistId: '00000000-0000-0000-0001-000000000005',
+    clinicId: '00000000-0000-0000-0000-000000000002',
+    date: '2026-02-05',
+    procedure: 'Dental X-Ray',
+    tooth: 'Full mouth',
+    notes: 'Panoramic radiograph taken. No significant pathology detected.',
+    diagnosis: 'Routine radiographic screening — WNL',
+    nextVisit: '2026-08-05',
   },
 ];
 

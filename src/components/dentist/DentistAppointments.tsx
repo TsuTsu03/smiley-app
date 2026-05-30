@@ -8,12 +8,13 @@ import { MOCK_APPOINTMENTS, getPatientById, fmtDate, Appointment } from '@/lib/d
 import { Modal } from '@/components/ui';
 
 export default function DentistAppointments() {
-  const { userId } = useAuth();
+  const { user } = useAuth();
+  const cid = user?.clinicId;
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [filter, setFilter] = useState('upcoming');
 
   const today = new Date().toISOString().split('T')[0];
-  const myApts = MOCK_APPOINTMENTS.filter(a => a.dentistId === userId);
+  const myApts = MOCK_APPOINTMENTS.filter(a => a.clinicId === cid);
 
   const filtered = myApts.filter(a => {
     if (filter === 'upcoming') return a.date >= today && a.status !== 'cancelled';

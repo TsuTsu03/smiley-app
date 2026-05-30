@@ -9,10 +9,12 @@ import {
 } from '@/lib/data';
 
 export default function DentistOverview({ onNav }: { onNav: (k: string) => void }) {
-  const { userId } = useAuth();
-  const dentist  = MOCK_DENTISTS.find(d => d.id === userId);
-  const myApts   = MOCK_APPOINTMENTS.filter(a => a.dentistId === userId);
-  const today    = new Date().toISOString().split('T')[0];
+  const { user } = useAuth();
+  const cid      = user?.clinicId;
+  // In demo, show all clinic appointments (dentist-specific filtering requires Phase 1 auth)
+  const myApts    = MOCK_APPOINTMENTS.filter(a => a.clinicId === cid);
+  const dentist   = MOCK_DENTISTS.filter(d => d.clinicId === cid)[0]; // first dentist for schedule display
+  const today     = new Date().toISOString().split('T')[0];
   const todayApts = myApts.filter(a => a.date === today);
   const upcoming  = myApts.filter(a => a.date > today && (a.status === 'confirmed' || a.status === 'pending'));
   const myPatients = Array.from(new Set(myApts.map(a => a.patientId)));

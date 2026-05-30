@@ -9,16 +9,26 @@ interface Props {
   onClose: () => void;
 }
 
-const DEMO_CREDS = {
-  admin:   { hint: 'Email: admin@brightsmile.com  •  Password: admin123' },
-  dentist: { hint: 'Email: maria@brightsmile.com  •  Password: dentist123' },
-  patient: { hint: 'Full name: Juan dela Cruz  •  Date of Birth: 1990-03-15' },
+const DEMO_CLINICS = {
+  brightsmile: {
+    label: 'BrightSmile',
+    admin:   { email: 'admin@brightsmile.com', password: 'admin123' },
+    dentist: { email: 'maria@brightsmile.com', password: 'dentist123' },
+    patient: { name: 'Juan dela Cruz', dob: '1990-03-15' },
+  },
+  pearlwhite: {
+    label: 'PearlWhite',
+    admin:   { email: 'ramon@pearlwhite.com',  password: 'admin123' },
+    dentist: { email: 'sofia@pearlwhite.com',  password: 'dentist123' },
+    patient: { name: 'Marisol Fernandez', dob: '1988-05-20' },
+  },
 };
 
 export default function LoginModal({ role, onClose }: Props) {
   const { login } = useAuth();
   const [field1, setField1] = useState('');
   const [field2, setField2] = useState('');
+  const [demoClinic, setDemoClinic] = useState<'brightsmile' | 'pearlwhite'>('brightsmile');
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -63,9 +73,28 @@ export default function LoginModal({ role, onClose }: Props) {
         </div>
 
         <div className="p-7">
-          {/* Demo hint */}
-          <div className="bg-sky-50 border border-sky-100 rounded-xl px-4 py-3 text-xs text-sky-700 mb-5 font-mono">
-            {DEMO_CREDS[role].hint}
+          {/* Demo clinic switcher */}
+          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 mb-5">
+            <div className="flex items-center gap-1.5 mb-2.5">
+              <div className="flex gap-1">
+                {(['brightsmile', 'pearlwhite'] as const).map(c => (
+                  <button
+                    key={c}
+                    onClick={() => setDemoClinic(c)}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${demoClinic === c ? 'bg-sky-600 text-white' : 'bg-white text-sky-600 border border-sky-200 hover:bg-sky-100'}`}
+                  >
+                    {DEMO_CLINICS[c].label}
+                  </button>
+                ))}
+              </div>
+              <span className="text-xs text-sky-400 ml-1">demo clinic</span>
+            </div>
+            <div className="font-mono text-xs text-sky-700 leading-relaxed">
+              {role === 'patient'
+                ? <>Name: {DEMO_CLINICS[demoClinic].patient.name}  •  DOB: {DEMO_CLINICS[demoClinic].patient.dob}</>
+                : <>Email: {DEMO_CLINICS[demoClinic][role].email}  •  Password: {DEMO_CLINICS[demoClinic][role].password}</>
+              }
+            </div>
           </div>
 
           <div className="space-y-4">

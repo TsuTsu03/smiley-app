@@ -3,18 +3,23 @@
 import { useState } from 'react';
 import { Stethoscope, Clock, Calendar } from 'lucide-react';
 import { Card, SectionHeader, Modal, Badge } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
 import { MOCK_DENTISTS, MOCK_APPOINTMENTS, getPatientById, fmtDate, Dentist } from '@/lib/data';
 
 export default function AdminDentists() {
+  const { user } = useAuth();
+  const cid = user?.clinicId;
   const [selected, setSelected] = useState<Dentist | null>(null);
+  const clinicDentists = MOCK_DENTISTS.filter(d => d.clinicId === cid);
+  const clinicApts     = MOCK_APPOINTMENTS.filter(a => a.clinicId === cid);
 
   return (
     <div className="space-y-6">
       <SectionHeader title="Dentists & Schedules" sub="Clinic staff roster and availability" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {MOCK_DENTISTS.map(d => {
-          const apts     = MOCK_APPOINTMENTS.filter(a => a.dentistId === d.id);
+        {clinicDentists.map(d => {
+          const apts = clinicApts.filter(a => a.dentistId === d.id);
           const upcoming = apts.filter(a => a.status === 'confirmed' || a.status === 'pending');
           return (
             <Card key={d.id} className="p-5 cursor-pointer card-hover" onClick={() => setSelected(d)}>
@@ -63,7 +68,7 @@ export default function AdminDentists() {
 }
 
 function DentistDetail({ dentist }: { dentist: Dentist }) {
-  const apts = MOCK_APPOINTMENTS.filter(a => a.dentistId === dentist.id)
+  const apts = MOCK_APPOINTMENTS.filter(a => a.dentistId === dentist.id && a.clinicId === dentist.clinicId)
     .sort((a, b) => a.date.localeCompare(b.date));
 
   return (

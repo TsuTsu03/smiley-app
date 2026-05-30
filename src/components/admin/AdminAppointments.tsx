@@ -3,19 +3,23 @@
 import { useState } from 'react';
 import { Calendar, Plus, Search } from 'lucide-react';
 import { Card, Badge, SectionHeader, Modal, Input, Select, Btn, EmptyState } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
 import {
   MOCK_APPOINTMENTS, MOCK_PATIENTS, MOCK_DENTISTS,
   getPatientById, getDentistById, fmtDate, PROCEDURE_TYPES, Appointment
 } from '@/lib/data';
 
 export default function AdminAppointments() {
+  const { user } = useAuth();
+  const cid = user?.clinicId;
   const [filter, setFilter]     = useState('all');
   const [search, setSearch]     = useState('');
   const [showAdd, setShowAdd]   = useState(false);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [dateFilter, setDateFilter] = useState('');
 
-  const appointments = MOCK_APPOINTMENTS.filter(a => {
+  const clinicApts = MOCK_APPOINTMENTS.filter(a => a.clinicId === cid);
+  const appointments = clinicApts.filter(a => {
     const patient = getPatientById(a.patientId);
     const dentist = getDentistById(a.dentistId);
     const matchSearch = !search || patient?.fullName.toLowerCase().includes(search.toLowerCase()) || dentist?.fullName.toLowerCase().includes(search.toLowerCase());
@@ -28,7 +32,7 @@ export default function AdminAppointments() {
     <div className="space-y-6">
       <SectionHeader
         title="Appointments"
-        sub={`${MOCK_APPOINTMENTS.length} total records`}
+        sub={`${clinicApts.length} total records`}
         action={<Btn onClick={() => setShowAdd(true)}><Plus size={15} /> New Appointment</Btn>}
       />
 
@@ -173,6 +177,10 @@ function AppointmentDetail({ apt }: { apt: Appointment }) {
 }
 
 function AddAppointmentModal({ onClose }: { onClose: () => void }) {
+  const { user } = useAuth();
+  const cid = user?.clinicId;
+  const clinicPatients = MOCK_PATIENTS.filter(p => p.clinicId === cid);
+  const clinicDentists = MOCK_DENTISTS.filter(d => d.clinicId === cid);
   const [form, setForm] = useState({ patientId: '', dentistId: '', date: '', time: '', type: '', notes: '' });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
   return (
@@ -180,11 +188,11 @@ function AddAppointmentModal({ onClose }: { onClose: () => void }) {
       <div className="space-y-4">
         <Select label="Patient" value={form.patientId} onChange={e => set('patientId', e.target.value)}>
           <option value="">Select patient...</option>
-          {MOCK_PATIENTS.map(p => <option key={p.id} value={p.id}>{p.fullName}</option>)}
+          {clinicPatients.map(p => <option key={p.id} value={p.id}>{p.fullName}</option>)}
         </Select>
         <Select label="Dentist" value={form.dentistId} onChange={e => set('dentistId', e.target.value)}>
           <option value="">Select dentist...</option>
-          {MOCK_DENTISTS.map(d => <option key={d.id} value={d.id}>{d.fullName}</option>)}
+          {clinicDentists.map(d => <option key={d.id} value={d.id}>{d.fullName}</option>)}
         </Select>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Input label="Date" type="date" value={form.date} onChange={e => set('date', e.target.value)} />
