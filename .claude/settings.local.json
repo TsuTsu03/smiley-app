@@ -25,7 +25,8 @@
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "PowerShell(Get-ChildItem -Path \"C:\\\\CodingProjects\\\\dentalapp\" -Force | Format-Table Name, @{N=\"Type\";E={if\\($_.PSIsContainer\\){\"Folder\"}else{\"File\"}}} -AutoSize)",
       "Bash(git checkout *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(git rm *)"
     ]
   }
 }
