@@ -13,6 +13,9 @@
 # production
 /build
 
+# Claude Code worktrees (never commit)
+.claude/worktrees/
+
 # misc
 .DS_Store
 *.pem
