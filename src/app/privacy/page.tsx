@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
 
           <Section title="1. Who We Are (Personal Information Controller)">
             <p>
-              <strong>Smiley</strong> (operating under the brand name "DentaFlow") is the Personal Information Controller (PIC) as defined under Republic Act No. 10173, the <em>Data Privacy Act of 2012</em> (DPA), and its Implementing Rules and Regulations (IRR).
+              <strong>Smiley</strong> (operating under the brand name &ldquo;DentaFlow&rdquo;) is the Personal Information Controller (PIC) as defined under Republic Act No. 10173, the <em>Data Privacy Act of 2012</em> (DPA), and its Implementing Rules and Regulations (IRR).
             </p>
             <p className="mt-3">
               <strong>Contact — Data Privacy Officer (DPO):</strong><br />
@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
             <ul className="space-y-2 list-none">
               <Li>All data is encrypted in transit (TLS 1.2+) and at rest (AES-256)</Li>
               <Li>Passwords are hashed and never stored in plain text</Li>
-              <Li>Role-based access control — dentists can only access their clinic's patients</Li>
+              <Li>Role-based access control — dentists can only access their clinic&apos;s patients</Li>
               <Li>Regular security reviews and vulnerability assessments</Li>
               <Li>Supabase infrastructure complies with SOC 2 Type II standards</Li>
             </ul>
