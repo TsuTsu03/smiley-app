@@ -7,7 +7,11 @@ import {
   Users,
   Calendar,
   Shield,
-  Star
+  Star,
+  LayoutDashboard,
+  Stethoscope,
+  HeartPulse,
+  SmilePlus
 } from "lucide-react";
 import Link from "next/link";
 import LoginModal from "./LoginModal";
@@ -33,9 +37,7 @@ export default function LandingPage() {
         <nav className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 max-w-7xl mx-auto">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center shadow-md">
-              <span className="text-white text-lg font-bold leading-none">
-                ✦
-              </span>
+              <SmilePlus size={20} className="text-white" strokeWidth={2} />
             </div>
             <div>
               <span className="text-sky-800 font-display text-lg font-semibold">
@@ -68,16 +70,16 @@ export default function LandingPage() {
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 page-enter">
           <div className="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 px-4 py-1.5 rounded-full text-teal-700 text-sm font-medium mb-5 sm:mb-6">
             <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-            Built for dental clinics
+            Trusted by dental clinics
           </div>
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-sky-900 leading-tight mb-4 sm:mb-5">
-            Manage your clinic
+            Your clinic, running
             <br />
-            <em className="text-teal-500 not-italic">beautifully.</em>
+            <em className="text-teal-500 not-italic">at its best.</em>
           </h1>
           <p className="text-sky-700/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-xl mx-auto">
-            Patient records, appointments, reminders — all in one place. Each
-            clinic gets its own branded portal.
+            From appointments to patient records — Smiley keeps everything
+            organized so you can focus on what matters most: your patients.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
@@ -106,26 +108,32 @@ export default function LandingPage() {
             {[
               {
                 role: "admin" as const,
-                emoji: "⚙️",
+                Icon: LayoutDashboard,
+                iconBg: "bg-sky-100",
+                iconColor: "text-sky-500",
                 label: "Admin Portal",
                 desc: "Manage patients, schedules & reminders",
                 color: "from-sky-500 to-sky-600"
               },
               {
                 role: "dentist" as const,
-                emoji: "🦷",
+                Icon: Stethoscope,
+                iconBg: "bg-teal-100",
+                iconColor: "text-teal-500",
                 label: "Dentist Portal",
                 desc: "Access records & manage appointments",
                 color: "from-sky-500 to-teal-400"
               },
               {
                 role: "patient" as const,
-                emoji: "😊",
+                Icon: HeartPulse,
+                iconBg: "bg-teal-100",
+                iconColor: "text-teal-600",
                 label: "Patient Portal",
                 desc: "View records & book appointments",
                 color: "from-teal-400 to-teal-500"
               }
-            ].map(({ role, emoji, label, desc, color }) => (
+            ].map(({ role, Icon, iconBg, iconColor, label, desc, color }) => (
               <button
                 key={role}
                 onClick={() => openLogin(role)}
@@ -134,7 +142,9 @@ export default function LandingPage() {
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-5 transition-opacity`}
                 />
-                <div className="text-3xl mb-3">{emoji}</div>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 ${iconBg}`}>
+                  <Icon size={24} className={iconColor} strokeWidth={1.75} />
+                </div>
                 <div className="font-semibold text-sky-800 mb-1">{label}</div>
                 <div className="text-sm text-sky-600/60">{desc}</div>
                 <div className="mt-3 flex items-center gap-1 text-teal-500 text-sm font-medium">

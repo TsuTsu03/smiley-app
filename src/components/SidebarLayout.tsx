@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
-import { LogOut, Menu, X, ChevronRight } from 'lucide-react';
+import { LogOut, Menu, X, ChevronRight, SmilePlus } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 
@@ -45,7 +45,7 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
         <div className="px-5 py-5 border-b border-sky-50">
           <div className="flex items-center gap-2.5">
             <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center shadow-sm`}>
-              <span className="text-white text-sm font-bold">✦</span>
+              <SmilePlus size={16} className="text-white" strokeWidth={2} />
             </div>
             <div className="min-w-0">
               <div className="text-[11px] font-medium text-sky-400 uppercase tracking-wide leading-none mb-0.5">Smiley</div>
