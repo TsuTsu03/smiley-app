@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient();
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const supabase = await createClient();
   const body = await request.json();
 
   const { error } = await supabase
@@ -16,15 +17,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       prescription: body.prescription ?? null,
       next_visit: body.nextVisit ?? null,
     })
-    .eq('id', params.id);
+    .eq('id', id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient();
-  const { error } = await supabase.from('medical_records').delete().eq('id', params.id);
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { error } = await supabase.from('medical_records').delete().eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }

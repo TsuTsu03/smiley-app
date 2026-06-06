@@ -1,12 +1,13 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient();
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('patients')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single();
 
   if (error || !data) return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -29,8 +30,9 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
   });
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient();
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const supabase = await createClient();
   const body = await request.json();
 
   const { error } = await supabase
@@ -48,15 +50,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       emergency_phone: body.emergencyPhone,
       next_adjustment_date: body.nextAdjustmentDate ?? null,
     })
-    .eq('id', params.id);
+    .eq('id', id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient();
-  const { error } = await supabase.from('patients').delete().eq('id', params.id);
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { error } = await supabase.from('patients').delete().eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }
