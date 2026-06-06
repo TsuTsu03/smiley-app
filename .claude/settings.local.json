@@ -25,7 +25,11 @@
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "PowerShell(Get-ChildItem -Path \"C:\\\\CodingProjects\\\\dentalapp\" -Force | Format-Table Name, @{N=\"Type\";E={if\\($_.PSIsContainer\\){\"Folder\"}else{\"File\"}}} -AutoSize)",
       "Bash(npx next *)",
-      "Bash(git cherry-pick *)"
+      "Bash(git cherry-pick *)",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__computer",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__Claude_in_Chrome__find"
     ]
   }
 }
