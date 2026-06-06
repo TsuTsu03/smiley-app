@@ -1,232 +1,259 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChevronRight,
-  Building2,
-  Users,
-  Calendar,
-  Shield,
-  Star
-} from "lucide-react";
+import { Eye, EyeOff, Loader, UserCog, Stethoscope, SmilePlus } from "lucide-react";
 import Link from "next/link";
-import LoginModal from "./LoginModal";
+import { useAuth } from "@/lib/auth";
 import RegisterClinicModal from "./RegisterClinicModal";
 
+const ROLES = [
+  { key: "admin" as const, label: "Admin", icon: UserCog, color: "from-sky-600 to-sky-500" },
+  { key: "dentist" as const, label: "Dentist", icon: Stethoscope, color: "from-sky-500 to-teal-500" },
+  { key: "patient" as const, label: "Patient", icon: SmilePlus, color: "from-teal-500 to-teal-400" },
+];
+
 export default function LandingPage() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [loginRole, setLoginRole] = useState<"admin" | "dentist" | "patient">(
-    "admin"
-  );
+  const { login } = useAuth();
+  const [role, setRole] = useState<"admin" | "dentist" | "patient">("admin");
+  const [field1, setField1] = useState("");
+  const [field2, setField2] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [showRegister, setShowRegister] = useState(false);
 
-  const openLogin = (role: "admin" | "dentist" | "patient") => {
-    setLoginRole(role);
-    setShowLogin(true);
+  const isPatient = role === "patient";
+  const notFound = isPatient && error.toLowerCase().includes("not found");
+  const activeRole = ROLES.find((r) => r.key === role)!;
+
+  const handleLogin = async () => {
+    setError("");
+    if (!field1 || !field2) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    setLoading(true);
+    const result = await login(field1, field2, isPatient);
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setField1("");
+    setField2("");
+    setError("");
+    setShowPwd(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50/40 font-sans">
-      {/* Nav */}
-      <div className="relative">
-        <div className="absolute inset-x-0 bottom-0 h-px bg-sky-200" />
-        <nav className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center shadow-md">
-              <span className="text-white text-lg font-bold leading-none">
-                ✦
-              </span>
-            </div>
-            <div>
-              <span className="text-sky-800 font-display text-lg font-semibold">
-                Smiley
-              </span>
-              <span className="text-sky-400 text-xs block leading-none -mt-0.5 font-sans">
-                clinic management
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowRegister(true)}
-              className="px-4 py-2 text-sky-700 font-medium text-sm hover:text-sky-900 transition-colors"
-            >
-              Register Clinic
-            </button>
-            <button
-              onClick={() => openLogin("admin")}
-              className="px-5 py-2 bg-sky-600 text-white text-sm font-semibold rounded-xl hover:bg-sky-700 transition-colors shadow-soft"
-            >
-              Sign In
-            </button>
-          </div>
-        </nav>
-      </div>
-
-      {/* Hero */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-8 pt-10 sm:pt-16 pb-16 sm:pb-24">
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 page-enter">
-          <div className="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 px-4 py-1.5 rounded-full text-teal-700 text-sm font-medium mb-5 sm:mb-6">
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-            Built for dental clinics
-          </div>
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-sky-900 leading-tight mb-4 sm:mb-5">
-            Manage your clinic
-            <br />
-            <em className="text-teal-500 not-italic">beautifully.</em>
-          </h1>
-          <p className="text-sky-700/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-xl mx-auto">
-            Patient records, appointments, reminders — all in one place. Each
-            clinic gets its own branded portal.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <button
-              onClick={() => setShowRegister(true)}
-              className="flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-sky-700 to-sky-600 text-white font-semibold rounded-2xl shadow-soft hover:shadow-hover transition-all hover:-translate-y-0.5 text-sm sm:text-base"
-            >
-              <Building2 size={18} />
-              Register Your Clinic
-              <ChevronRight size={16} />
-            </button>
-            <button
-              onClick={() => openLogin("admin")}
-              className="flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 bg-white text-sky-700 font-semibold rounded-2xl border border-sky-100 shadow-soft hover:shadow-card transition-all hover:-translate-y-0.5 text-sm sm:text-base"
-            >
-              Sign In
-            </button>
-          </div>
-        </div>
-
-        {/* Portal login cards */}
-        <div className="mt-8 mb-16">
-          <p className="text-center text-sky-600/60 text-sm font-medium mb-5 uppercase tracking-wider">
-            Sign in to your portal
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {[
-              {
-                role: "admin" as const,
-                emoji: "⚙️",
-                label: "Admin Portal",
-                desc: "Manage patients, schedules & reminders",
-                color: "from-sky-500 to-sky-600"
-              },
-              {
-                role: "dentist" as const,
-                emoji: "🦷",
-                label: "Dentist Portal",
-                desc: "Access records & manage appointments",
-                color: "from-sky-500 to-teal-400"
-              },
-              {
-                role: "patient" as const,
-                emoji: "😊",
-                label: "Patient Portal",
-                desc: "View records & book appointments",
-                color: "from-teal-400 to-teal-500"
-              }
-            ].map(({ role, emoji, label, desc, color }) => (
-              <button
-                key={role}
-                onClick={() => openLogin(role)}
-                className="group relative bg-white rounded-2xl p-5 border border-sky-50 shadow-soft hover:shadow-card transition-all hover:-translate-y-1 text-left card-hover overflow-hidden"
-              >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-5 transition-opacity`}
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50/40 font-sans flex flex-col">
+      <div className="flex-1 flex items-center justify-center px-4 py-10">
+        <div className="w-full max-w-md page-enter">
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-teal-500 shadow-lg mb-4">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                <path
+                  d="M16 4C10.5 4 7 8 7 12c0 2.5.8 4.5 2 6l2.5 8c.4 1.2 1.5 2 2.7 2h3.6c1.2 0 2.3-.8 2.7-2L21 18c1.2-1.5 2-3.5 2-6 0-4-3.5-8-7-8z"
+                  fill="white"
+                  fillOpacity="0.9"
                 />
-                <div className="text-3xl mb-3">{emoji}</div>
-                <div className="font-semibold text-sky-800 mb-1">{label}</div>
-                <div className="text-sm text-sky-600/60">{desc}</div>
-                <div className="mt-3 flex items-center gap-1 text-teal-500 text-sm font-medium">
-                  Sign in <ChevronRight size={14} />
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
-          {[
-            {
-              icon: <Users size={20} />,
-              title: "Patient Records",
-              desc: "Complete medical history across all clinic dentists",
-              accent: false
-            },
-            {
-              icon: <Calendar size={20} />,
-              title: "Smart Booking",
-              desc: "Book by date or by dentist — easy for everyone",
-              accent: true
-            },
-            {
-              icon: <Shield size={20} />,
-              title: "Reminders",
-              desc: "Auto SMS & email reminders for adjustments",
-              accent: false
-            },
-            {
-              icon: <Star size={20} />,
-              title: "Clinic Branding",
-              desc: "Your own subdomain — brightsmile.dentaflow.app",
-              accent: true
-            }
-          ].map(({ icon, title, desc, accent }) => (
-            <div
-              key={title}
-              className="bg-white rounded-2xl p-5 border border-sky-50 shadow-soft"
-            >
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${accent ? "bg-teal-50 text-teal-600" : "bg-sky-50 text-sky-600"}`}
-              >
-                {icon}
-              </div>
-              <div className="font-semibold text-sky-800 text-sm mb-1">
-                {title}
-              </div>
-              <div className="text-xs text-sky-600/60 leading-relaxed">
-                {desc}
-              </div>
+                <circle cx="13" cy="12" r="1.5" fill="rgba(14,165,233,0.5)" />
+                <circle cx="19" cy="12" r="1.5" fill="rgba(14,165,233,0.5)" />
+              </svg>
             </div>
-          ))}
-        </div>
-      </main>
+            <h1 className="font-display text-2xl text-sky-900 font-bold tracking-tight">
+              Smiley
+            </h1>
+            <p className="text-sky-400 text-sm mt-0.5">Smart Clinic Management</p>
+          </div>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-sky-700 to-sky-600  border-t border-sky-100 py-6 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white">
-          <span>
-            © {new Date().getFullYear()} Smiley / DentaFlow. All rights
-            reserved.
-          </span>
-          <div className="flex items-center gap-4">
+          {/* Card */}
+          <div className="bg-white rounded-3xl shadow-hover border border-sky-100/60 overflow-hidden">
+            {/* Role tabs */}
+            <div className="flex border-b border-sky-100">
+              {ROLES.map((r) => {
+                const Icon = r.icon;
+                const active = role === r.key;
+                return (
+                  <button
+                    key={r.key}
+                    onClick={() => {
+                      setRole(r.key);
+                      resetForm();
+                    }}
+                    className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-all relative ${
+                      active
+                        ? "text-sky-700"
+                        : "text-sky-400 hover:text-sky-600"
+                    }`}
+                  >
+                    <Icon size={16} />
+                    {r.label}
+                    {active && (
+                      <div className={`absolute bottom-0 inset-x-4 h-0.5 rounded-full bg-gradient-to-r ${r.color}`} />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Form */}
+            <div className="p-7">
+              <h2 className="text-lg font-display font-semibold text-sky-900 mb-1">
+                {activeRole.label} Sign In
+              </h2>
+              <p className="text-sm text-sky-400 mb-6">
+                {isPatient
+                  ? "Enter the name and date of birth registered by your clinic."
+                  : "Sign in with your clinic email and password."}
+              </p>
+
+              <div className="space-y-4">
+                {isPatient ? (
+                  <>
+                    <div>
+                      <label className="block text-sky-800 text-sm font-medium mb-1.5">
+                        Full Name
+                      </label>
+                      <input
+                        value={field1}
+                        onChange={(e) => setField1(e.target.value)}
+                        placeholder="Juan dela Cruz"
+                        className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sky-800 text-sm font-medium mb-1.5">
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        value={field2}
+                        onChange={(e) => setField2(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                        className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sky-800 text-sm font-medium mb-1.5">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        value={field1}
+                        onChange={(e) => setField1(e.target.value)}
+                        placeholder="you@clinic.com"
+                        className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sky-800 text-sm font-medium mb-1.5">
+                        Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPwd ? "text" : "password"}
+                          value={field2}
+                          onChange={(e) => setField2(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                          placeholder="••••••••"
+                          className="w-full px-4 py-3 pr-11 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPwd(!showPwd)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-400 hover:text-sky-600"
+                        >
+                          {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {error && (
+                <div
+                  className={`mt-4 text-sm rounded-xl px-4 py-3 border ${
+                    notFound
+                      ? "bg-amber-50 border-amber-100 text-amber-800"
+                      : "bg-red-50 border-red-100 text-red-600"
+                  }`}
+                >
+                  {notFound ? (
+                    <>
+                      <p className="font-medium mb-1">Not registered yet</p>
+                      <p className="text-xs leading-relaxed">
+                        Your name and date of birth weren&apos;t found in our
+                        records. Please visit the clinic and ask the staff to
+                        register you.
+                      </p>
+                    </>
+                  ) : (
+                    error
+                  )}
+                </div>
+              )}
+
+              <button
+                onClick={handleLogin}
+                disabled={loading}
+                className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r ${activeRole.color} hover:opacity-90 transition-opacity shadow-soft disabled:opacity-60 flex items-center justify-center gap-2`}
+              >
+                {loading ? (
+                  <>
+                    <Loader size={16} className="animate-spin" /> Signing in…
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Register link */}
+          <div className="text-center mt-6">
+            <p className="text-sm text-sky-500">
+              New clinic?{" "}
+              <button
+                onClick={() => setShowRegister(true)}
+                className="text-sky-700 font-semibold hover:text-sky-900 transition-colors underline underline-offset-2"
+              >
+                Register your clinic
+              </button>
+            </p>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-8 text-xs text-sky-400 space-x-4">
+            <span>&copy; {new Date().getFullYear()} Smiley</span>
             <Link
               href="/privacy"
-              className="hover:text-sky-700 transition-colors underline underline-offset-2"
+              className="hover:text-sky-600 transition-colors underline underline-offset-2"
             >
-              Privacy Policy
+              Privacy
             </Link>
             <Link
               href="/terms"
-              className="hover:text-sky-700 transition-colors underline underline-offset-2"
+              className="hover:text-sky-600 transition-colors underline underline-offset-2"
             >
-              Terms of Service
+              Terms
             </Link>
           </div>
         </div>
-      </footer>
+      </div>
 
-      {/* Modals */}
-      {showLogin && (
-        <LoginModal role={loginRole} onClose={() => setShowLogin(false)} />
-      )}
       {showRegister && (
         <RegisterClinicModal
           onClose={() => setShowRegister(false)}
           onSuccess={() => {
             setShowRegister(false);
-            openLogin("admin");
           }}
         />
       )}
