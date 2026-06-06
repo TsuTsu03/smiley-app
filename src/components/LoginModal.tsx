@@ -9,12 +9,6 @@ interface Props {
   onClose: () => void;
 }
 
-const DEMO_CREDS = {
-  admin:   { hint: 'Email: admin@brightsmile.com  •  Password: admin123' },
-  dentist: { hint: 'Email: maria@brightsmile.com  •  Password: dentist123' },
-  patient: { hint: 'Full name: Juan dela Cruz  •  Date of Birth: 1990-03-15' },
-};
-
 export default function LoginModal({ role, onClose }: Props) {
   const { login } = useAuth();
   const [field1, setField1] = useState('');
@@ -59,15 +53,10 @@ export default function LoginModal({ role, onClose }: Props) {
           </button>
           <div className="text-xs font-medium uppercase tracking-wider text-white/70 mb-1">Smiley</div>
           <h2 className="font-display text-2xl">{roleLabels[role]} Sign In</h2>
-          <p className="text-white/70 text-sm mt-1">BrightSmile Dental Clinic</p>
+          <p className="text-white/70 text-sm mt-1">Smiley Clinic Management</p>
         </div>
 
         <div className="p-7">
-          {/* Demo hint */}
-          <div className="bg-sky-50 border border-sky-100 rounded-xl px-4 py-3 text-xs text-sky-700 mb-5 font-mono">
-            {DEMO_CREDS[role].hint}
-          </div>
-
           <div className="space-y-4">
             {isPatient ? (
               <>

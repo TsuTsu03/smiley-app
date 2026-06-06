@@ -44,17 +44,17 @@ export default function TermsOfServicePage() {
 
           <Section title="1. Definitions">
             <ul className="space-y-2 list-none">
-              <Li><strong>"Smiley" / "DentaFlow" / "we" / "us"</strong> — the operator of this clinic management platform.</Li>
-              <Li><strong>"Clinic"</strong> — a dental clinic that registers and subscribes to the platform.</Li>
-              <Li><strong>"Authorized User"</strong> — an admin or dentist account created under a registered Clinic.</Li>
-              <Li><strong>"Patient"</strong> — an individual whose dental records are managed through the platform.</Li>
-              <Li><strong>"Service"</strong> — all features accessible through Smiley, including patient records, appointment scheduling, reminders, and dashboards.</Li>
+              <Li><strong>&ldquo;Smiley&rdquo; / &ldquo;DentaFlow&rdquo; / &ldquo;we&rdquo; / &ldquo;us&rdquo;</strong> — the operator of this clinic management platform.</Li>
+              <Li><strong>&ldquo;Clinic&rdquo;</strong> — a dental clinic that registers and subscribes to the platform.</Li>
+              <Li><strong>&ldquo;Authorized User&rdquo;</strong> — an admin or dentist account created under a registered Clinic.</Li>
+              <Li><strong>&ldquo;Patient&rdquo;</strong> — an individual whose dental records are managed through the platform.</Li>
+              <Li><strong>&ldquo;Service&rdquo;</strong> — all features accessible through Smiley, including patient records, appointment scheduling, reminders, and dashboards.</Li>
             </ul>
           </Section>
 
           <Section title="2. Acceptance of Terms">
             <p>
-              By clicking "Create Clinic," "Sign In," or otherwise accessing or using the Service, you represent that:
+              By clicking &ldquo;Create Clinic,&rdquo; &ldquo;Sign In,&rdquo; or otherwise accessing or using the Service, you represent that:
             </p>
             <ul className="space-y-2 list-none mt-3">
               <Li>You are at least 18 years old and legally capable of entering into a binding contract under Philippine law (Civil Code, Article 1327).</Li>
@@ -65,7 +65,7 @@ export default function TermsOfServicePage() {
 
           <Section title="3. Service Description and License">
             <p>
-              Smiley provides a web-based dental clinic management system allowing clinics to manage patient records, appointments, and communications. Subject to these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Service solely for your clinic's internal business operations.
+              Smiley provides a web-based dental clinic management system allowing clinics to manage patient records, appointments, and communications. Subject to these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Service solely for your clinic&apos;s internal business operations.
             </p>
             <p className="mt-3">
               Each clinic receives a unique subdomain (e.g., <code className="bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">yourclinic.dentaflow.app</code>) and is solely responsible for all activity occurring under that subdomain.
@@ -81,7 +81,7 @@ export default function TermsOfServicePage() {
               <Li>Upload or transmit malware, viruses, or any malicious code.</Li>
               <Li>Impersonate any person or entity, or misrepresent your affiliation with any person or entity.</Li>
               <Li>Use automated tools (scrapers, bots) to extract data from the platform without our prior written consent.</Li>
-              <Li>Share account credentials with unauthorized individuals outside your clinic's registered users.</Li>
+              <Li>Share account credentials with unauthorized individuals outside your clinic&apos;s registered users.</Li>
               <Li>Use patient health data for any purpose other than the direct provision of dental care services.</Li>
             </ul>
           </Section>
@@ -95,10 +95,10 @@ export default function TermsOfServicePage() {
               <Li>Ensuring that patient records entered are accurate and up to date.</Li>
               <Li>Maintaining the confidentiality of admin and dentist login credentials.</Li>
               <Li>Complying with all applicable laws, including the DPA, the Philippine Medical Act (RA 2382), and DOH regulations on medical record retention.</Li>
-              <Li>Notifying Smiley promptly of any unauthorized access or suspected breach involving your clinic's account.</Li>
+              <Li>Notifying Smiley promptly of any unauthorized access or suspected breach involving your clinic&apos;s account.</Li>
             </ul>
             <p className="mt-4 text-sm text-sky-600/80">
-              Smiley acts as a Personal Information Processor on behalf of each clinic for the patient data stored within that clinic's account. Smiley's own processing of platform-level data (accounts, usage) is governed by our Privacy Policy.
+              Smiley acts as a Personal Information Processor on behalf of each clinic for the patient data stored within that clinic&apos;s account. Smiley&apos;s own processing of platform-level data (accounts, usage) is governed by our Privacy Policy.
             </p>
           </Section>
 
@@ -116,7 +116,7 @@ export default function TermsOfServicePage() {
               Certain features of Smiley may require a paid subscription. Pricing, billing cycles, and payment terms will be communicated at the time of subscription. All fees are in Philippine Peso (PHP) unless otherwise stated.
             </p>
             <p className="mt-3">
-              Under RA 7394 (Consumer Act of the Philippines), you are entitled to clear and accurate information about pricing before you are charged. We will not change subscription pricing without at least 30 days' prior notice.
+              Under RA 7394 (Consumer Act of the Philippines), you are entitled to clear and accurate information about pricing before you are charged. We will not change subscription pricing without at least 30 days&apos; prior notice.
             </p>
           </Section>
 
@@ -125,7 +125,7 @@ export default function TermsOfServicePage() {
               To the maximum extent permitted by Philippine law:
             </p>
             <ul className="space-y-2 list-none">
-              <Li>Smiley provides the Service on an "as is" and "as available" basis without warranties of any kind, whether express or implied.</Li>
+              <Li>Smiley provides the Service on an &ldquo;as is&rdquo; and &ldquo;as available&rdquo; basis without warranties of any kind, whether express or implied.</Li>
               <Li>We do not warrant that the Service will be uninterrupted, error-free, or completely secure.</Li>
               <Li>Smiley shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the Service.</Li>
               <Li>Our total liability to you for any claims arising from these Terms or the Service shall not exceed the amount you paid to us in the three (3) months preceding the claim.</Li>
@@ -141,7 +141,7 @@ export default function TermsOfServicePage() {
             </p>
             <ul className="space-y-2 list-none mt-3">
               <Li>Your violation of these Terms or applicable law;</Li>
-              <Li>Your clinic's failure to comply with the Data Privacy Act or other data protection obligations;</Li>
+              <Li>Your clinic&apos;s failure to comply with the Data Privacy Act or other data protection obligations;</Li>
               <Li>Any claim by a third party (including patients) arising from your use of the Service.</Li>
             </ul>
           </Section>
@@ -186,7 +186,7 @@ export default function TermsOfServicePage() {
 
           <Section title="13. Modifications to the Service and Terms">
             <p>
-              We reserve the right to modify or discontinue the Service (or any part thereof) at any time. We will provide at least <strong>30 days' notice</strong> for material changes via email or in-app notification.
+              We reserve the right to modify or discontinue the Service (or any part thereof) at any time. We will provide at least <strong>30 days&apos; notice</strong> for material changes via email or in-app notification.
             </p>
             <p className="mt-3">
               Continued use of the Service after the effective date of any amendment constitutes your acceptance of the revised Terms. If you do not agree, you must stop using the Service and may request data deletion.

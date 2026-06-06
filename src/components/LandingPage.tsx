@@ -97,10 +97,10 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Demo login cards */}
+        {/* Portal login cards */}
         <div className="mt-8 mb-16">
           <p className="text-center text-sky-600/60 text-sm font-medium mb-5 uppercase tracking-wider">
-            Try the demo
+            Sign in to your portal
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             {[
@@ -138,7 +138,7 @@ export default function LandingPage() {
                 <div className="font-semibold text-sky-800 mb-1">{label}</div>
                 <div className="text-sm text-sky-600/60">{desc}</div>
                 <div className="mt-3 flex items-center gap-1 text-teal-500 text-sm font-medium">
-                  Enter demo <ChevronRight size={14} />
+                  Sign in <ChevronRight size={14} />
                 </div>
               </button>
             ))}
