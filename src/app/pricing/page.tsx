@@ -89,7 +89,7 @@ const COMPARISON = [
 const FAQS = [
   { q: "Can I try Smiley before committing?", a: "Yes! All plans come with a 14-day free trial. No credit card required to start." },
   { q: "Can I switch plans later?", a: "Absolutely. Upgrade or downgrade at any time. Changes take effect at your next billing cycle." },
-  { q: "What payment methods do you accept?", a: "We accept all major credit and debit cards through our secure payment partner, Stripe." },
+  { q: "What payment methods do you accept?", a: "We accept GCash, Maya, GrabPay, and major credit and debit cards through our secure Philippine payment partner, PayMongo." },
   { q: "Is my data secure?", a: "Yes. All data is encrypted at rest and in transit. We use Supabase (built on PostgreSQL) with row-level security and regular backups." },
   { q: "Do you offer refunds?", a: "If you cancel within 14 days of a paid billing cycle, we offer a full refund. No questions asked." },
 ];

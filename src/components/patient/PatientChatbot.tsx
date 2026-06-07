@@ -156,18 +156,39 @@ export default function PatientChatbot() {
     }
   }, [open]);
 
-  const send = () => {
+  const send = async () => {
     const text = input.trim();
     if (!text) return;
+    const history = messages.map(m => ({
+      role: m.role === 'bot' ? ('assistant' as const) : ('user' as const),
+      content: m.text,
+    }));
     setMessages(prev => [...prev, { id: `u-${Date.now()}`, role: 'user', text }]);
     setInput('');
     setTyping(true);
-    setTimeout(() => {
-      const reply = getBotResponse(text, userId);
-      setMessages(prev => [...prev, { id: `b-${Date.now()}`, role: 'bot', text: reply }]);
-      setTyping(false);
-      if (!open) setHasUnread(true);
-    }, 500 + Math.random() * 400);
+
+    let reply: string | null = null;
+    try {
+      // Try the real AI assistant (grounded in live clinic data)
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.configured && json.reply) reply = json.reply as string;
+      }
+    } catch {
+      /* fall through to local rules */
+    }
+
+    // Graceful fallback: built-in rule-based replies when AI isn't configured
+    if (!reply) reply = getBotResponse(text, userId);
+
+    setMessages(prev => [...prev, { id: `b-${Date.now()}`, role: 'bot', text: reply! }]);
+    setTyping(false);
+    if (!open) setHasUnread(true);
   };
 
   const renderText = (text: string) =>

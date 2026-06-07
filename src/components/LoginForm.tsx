@@ -1,27 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Eye, EyeOff, Loader, UserCog, Stethoscope, SmilePlus } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import type { Role } from "@/lib/data";
 
-const ROLES = [
-  { key: "admin" as const, label: "Admin", icon: UserCog, color: "from-sky-600 to-sky-500" },
-  { key: "dentist" as const, label: "Dentist", icon: Stethoscope, color: "from-sky-500 to-teal-500" },
-  { key: "patient" as const, label: "Patient", icon: SmilePlus, color: "from-teal-500 to-teal-400" },
-];
+const ROLE_CONFIG = {
+  admin: { label: "Admin", icon: UserCog, color: "from-sky-600 to-sky-500", route: "/login/admin" },
+  dentist: { label: "Dentist", icon: Stethoscope, color: "from-sky-500 to-teal-500", route: "/login/dentist" },
+  patient: { label: "Patient", icon: SmilePlus, color: "from-teal-500 to-teal-400", route: "/login/patient" },
+} as const;
 
-export default function LoginForm() {
+/**
+ * Single-role login card. Each route (/login/admin, /login/dentist,
+ * /login/patient) renders this with a fixed `role`. Admin & dentist use the
+ * same email+password flow (the real role comes from the DB); patient uses
+ * name + date of birth.
+ */
+export default function LoginForm({ role }: { role: Role }) {
   const { login } = useAuth();
-  const [role, setRole] = useState<"admin" | "dentist" | "patient">("admin");
   const [field1, setField1] = useState("");
   const [field2, setField2] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const cfg = ROLE_CONFIG[role];
+  const Icon = cfg.icon;
   const isPatient = role === "patient";
   const notFound = isPatient && error.toLowerCase().includes("not found");
-  const activeRole = ROLES.find((r) => r.key === role)!;
+  const otherRoles = (Object.keys(ROLE_CONFIG) as Role[]).filter((r) => r !== role);
 
   const handleLogin = async () => {
     setError("");
@@ -37,43 +46,16 @@ export default function LoginForm() {
     }
   };
 
-  const resetForm = () => {
-    setField1("");
-    setField2("");
-    setError("");
-    setShowPwd(false);
-  };
-
   return (
     <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 overflow-hidden w-full max-w-md">
-      {/* Role tabs */}
-      <div className="flex border-b border-sky-100/60">
-        {ROLES.map((r) => {
-          const Icon = r.icon;
-          const active = role === r.key;
-          return (
-            <button
-              key={r.key}
-              onClick={() => { setRole(r.key); resetForm(); }}
-              className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-all relative ${
-                active ? "text-sky-700" : "text-sky-400 hover:text-sky-600"
-              }`}
-            >
-              <Icon size={16} />
-              {r.label}
-              {active && (
-                <div className={`absolute bottom-0 inset-x-4 h-0.5 rounded-full bg-gradient-to-r ${r.color}`} />
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Form */}
       <div className="p-7">
-        <h2 className="text-lg font-display font-semibold text-sky-900 mb-1">
-          {activeRole.label} Sign In
-        </h2>
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-1">
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cfg.color} flex items-center justify-center shadow-md`}>
+            <Icon size={18} className="text-white" />
+          </div>
+          <h2 className="text-lg font-display font-semibold text-sky-900">{cfg.label} Sign In</h2>
+        </div>
         <p className="text-sm text-sky-400 mb-6">
           {isPatient
             ? "Enter the name and date of birth registered by your clinic."
@@ -162,7 +144,7 @@ export default function LoginForm() {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r ${activeRole.color} hover:opacity-90 transition-opacity shadow-soft disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer`}
+          className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r ${cfg.color} hover:opacity-90 transition-opacity shadow-soft disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer`}
         >
           {loading ? (
             <><Loader size={16} className="animate-spin" /> Signing in…</>
@@ -170,6 +152,19 @@ export default function LoginForm() {
             "Sign In"
           )}
         </button>
+
+        {/* Switch role */}
+        <div className="mt-5 pt-4 border-t border-sky-100/70 text-center text-xs text-sky-400">
+          Not {role === "admin" ? "an admin" : `a ${cfg.label.toLowerCase()}`}?{" "}
+          {otherRoles.map((r, i) => (
+            <span key={r}>
+              {i > 0 && <span className="mx-1">·</span>}
+              <Link href={ROLE_CONFIG[r].route} className="text-sky-600 font-medium hover:text-sky-800 underline underline-offset-2">
+                Sign in as {ROLE_CONFIG[r].label}
+              </Link>
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

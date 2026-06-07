@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { logAudit } from '@/lib/audit';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -42,6 +43,32 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const body = await request.json();
 
+  if (!body.dentistId || !body.date || !body.time || !body.patientId) {
+    return NextResponse.json(
+      { error: 'Missing required fields (patient, dentist, date, time).' },
+      { status: 400 }
+    );
+  }
+
+  // ── Conflict detection: a dentist cannot have two active appointments at the
+  //    same date & time. Backs the "no double-bookings, ever" promise.
+  const { data: clash, error: clashError } = await supabase
+    .from('appointments')
+    .select('id')
+    .eq('dentist_id', body.dentistId)
+    .eq('date', body.date)
+    .eq('time', body.time)
+    .neq('status', 'cancelled')
+    .limit(1);
+
+  if (clashError) return NextResponse.json({ error: clashError.message }, { status: 500 });
+  if (clash && clash.length > 0) {
+    return NextResponse.json(
+      { error: 'That time slot is already booked for this dentist. Please choose another.' },
+      { status: 409 }
+    );
+  }
+
   const { data, error } = await supabase
     .from('appointments')
     .insert({
@@ -58,5 +85,17 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  const { data: { user } } = await supabase.auth.getUser();
+  await logAudit({
+    clinicId: body.clinicId,
+    actorId: user?.id,
+    actorEmail: user?.email,
+    action: 'create',
+    entity: 'appointment',
+    entityId: data.id,
+    details: { date: body.date, time: body.time, type: body.type },
+  });
+
   return NextResponse.json({ id: data.id }, { status: 201 });
 }

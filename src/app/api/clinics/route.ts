@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin';
+import { logAudit } from '@/lib/audit';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -53,6 +54,16 @@ export async function POST(request: NextRequest) {
     await adminClient.from('clinics').delete().eq('id', clinic.id);
     return NextResponse.json({ error: profileError.message }, { status: 500 });
   }
+
+  await logAudit({
+    clinicId: clinic.id,
+    actorId: authData.user.id,
+    actorEmail: adminEmail,
+    action: 'create',
+    entity: 'clinic',
+    entityId: clinic.id,
+    details: { name: clinic.name, slug: clinic.slug },
+  });
 
   return NextResponse.json({ clinic: { name: clinic.name, slug: clinic.slug } }, { status: 201 });
 }

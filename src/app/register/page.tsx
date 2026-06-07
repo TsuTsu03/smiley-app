@@ -297,11 +297,11 @@ function RegisterFlow() {
               </motion.div>
             )}
 
-            {/* Step 4: Payment (placeholder for Stripe) */}
+            {/* Step 4: Payment (placeholder for PayMongo) */}
             {step === 4 && (
               <motion.div key="payment" {...fadeSlide} className="text-center">
                 <h2 className="font-display text-2xl text-sky-950 mb-2">Payment</h2>
-                <p className="text-sky-500 text-sm mb-8">Stripe checkout will open here</p>
+                <p className="text-sky-500 text-sm mb-8">Secure PayMongo checkout (card, GCash, Maya) will open here</p>
                 <div className="bg-white rounded-2xl border border-sky-100/60 p-10 shadow-sm">
                   <Loader size={32} className="text-sky-400 animate-spin mx-auto mb-4" />
                   <p className="text-sky-600 text-sm">Redirecting to secure payment...</p>
