@@ -1,8 +1,13 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/audit';
+import { enforceRateLimit } from '@/lib/rateLimit';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  // Anti-spam: clinic signups create auth users — cap at 5 / 10 min per IP
+  const limited = await enforceRateLimit(request, 'signup', { limit: 5, windowSec: 600 });
+  if (limited) return limited;
+
   const { clinicName, slug, address, phone, email, adminName, adminEmail, password } = await request.json();
 
   const adminClient = createAdminClient();

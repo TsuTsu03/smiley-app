@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { scoreNoShowRisk, type NoShowApptRow } from '@/lib/noShow';
 
 /**
  * No-show risk scoring for upcoming appointments. Staff-only.
@@ -30,43 +31,18 @@ export async function GET(request: NextRequest) {
     .eq('clinic_id', profile.clinic_id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  const rows = (all ?? []) as any[];
+  const rows: NoShowApptRow[] = ((all ?? []) as any[]).map((a) => ({
+    id: a.id,
+    patient_id: a.patient_id,
+    date: a.date,
+    time: a.time,
+    type: a.type,
+    status: a.status,
+    reminder_sent_at: a.reminder_sent_at,
+    patientName: a.patients?.full_name ?? null,
+  }));
 
-  // Build per-patient history from PAST appointments
-  const hist: Record<string, { cancelled: number; completed: number; total: number }> = {};
-  for (const a of rows) {
-    if (a.date >= today) continue;
-    const h = (hist[a.patient_id] ||= { cancelled: 0, completed: 0, total: 0 });
-    h.total++;
-    if (a.status === 'cancelled') h.cancelled++;
-    if (a.status === 'completed') h.completed++;
-  }
-
-  const upcoming = rows
-    .filter((a) => a.date >= today && a.status !== 'cancelled' && a.status !== 'completed')
-    .map((a) => {
-      const h = hist[a.patient_id];
-      let score: number;
-      if (!h || h.total === 0) {
-        score = 35; // new patient — unknown, slightly elevated
-      } else {
-        const cancelRate = h.cancelled / h.total;
-        score = Math.round(15 + cancelRate * 70); // 15–85 from history
-      }
-      if (!a.reminder_sent_at) score += 8; // no reminder sent yet → higher risk
-      score = Math.max(5, Math.min(95, score));
-      const level = score >= 65 ? 'High' : score >= 40 ? 'Medium' : 'Low';
-      return {
-        appointmentId: a.id,
-        patientName: a.patients?.full_name ?? 'Unknown',
-        date: a.date,
-        time: a.time,
-        type: a.type,
-        riskPct: score,
-        level,
-      };
-    })
-    .sort((a, b) => b.riskPct - a.riskPct);
+  const upcoming = scoreNoShowRisk(rows, today);
 
   return NextResponse.json({ count: upcoming.length, appointments: upcoming });
 }

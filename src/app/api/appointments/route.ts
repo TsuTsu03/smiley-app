@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
+import { enforceRateLimit } from '@/lib/rateLimit';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -40,6 +41,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // Anti-spam on booking creation: 15 / minute per IP
+  const limited = await enforceRateLimit(request, 'booking', { limit: 15, windowSec: 60 });
+  if (limited) return limited;
+
   const supabase = await createClient();
   const body = await request.json();
 

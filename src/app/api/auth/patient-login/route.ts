@@ -1,7 +1,12 @@
 import { createClient } from '@/lib/supabase/server';
+import { enforceRateLimit } from '@/lib/rateLimit';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  // Brute-force protection on name+DOB guessing: 10 attempts / minute per IP
+  const limited = await enforceRateLimit(request, 'patient-login', { limit: 10, windowSec: 60 });
+  if (limited) return limited;
+
   const { fullName, dateOfBirth } = await request.json();
 
   const supabase = await createClient();

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { askAI, aiConfigured } from '@/lib/ai';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 /**
  * Patient-facing AI assistant. Grounds the model in the caller's real clinic
@@ -9,6 +10,10 @@ import { askAI, aiConfigured } from '@/lib/ai';
  * so the client can fall back to its built-in rule-based replies.
  */
 export async function POST(request: NextRequest) {
+  // Protect the (free) Groq quota from abuse: 20 messages / minute per IP
+  const limited = await enforceRateLimit(request, 'ai-chat', { limit: 20, windowSec: 60 });
+  if (limited) return limited;
+
   if (!aiConfigured()) {
     return NextResponse.json({ configured: false });
   }

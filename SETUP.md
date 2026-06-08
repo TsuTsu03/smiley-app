@@ -132,6 +132,24 @@ dashboard, at ang "charting scribe" / "ask-your-data" ay marketing pa lang.
 
 ---
 
+## 5b. Rate limiting (Upstash Redis — free)
+
+🟦 **YOUR PART**
+1. Libreng Redis sa https://console.upstash.com → **Create Database** (Global) →
+   **REST API** → kopyahin ang URL at TOKEN:
+   - `UPSTASH_REDIS_REST_URL`
+   - `UPSTASH_REDIS_REST_TOKEN`
+
+✅ **Ang ginawa ko:** rate limiting (`src/lib/rateLimit.ts`) sa mga sensitibong
+endpoints — **login** (10/min), **patient login** (10/min), **signup** (5/10min),
+**AI chat** (20/min, pinoprotektahan ang Groq quota), **booking** (15/min).
+Lahat per-IP, nagbabalik ng **429** kapag lumampas.
+
+⚠️ **Importante:** kung wala ang Upstash env, may **in-memory fallback** (ok sa
+dev) pero **hindi shared across Vercel serverless instances** — kaya **itakda ang
+Upstash sa production** para totoong epektibo ang proteksyon. Huwag gumamit ng
+traditional Redis sa Vercel serverless.
+
 ## 6. Deploy (Vercel)
 
 🟦 **YOUR PART**
