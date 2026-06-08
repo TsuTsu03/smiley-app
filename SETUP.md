@@ -75,17 +75,24 @@ sabihin mo lang.
 
 ---
 
-## 3. Email reminders (Resend)
+## 3. Email reminders (Brevo — free, walang domain)
 
 🟦 **YOUR PART**
-1. Account sa https://resend.com → **API Keys** → `RESEND_API_KEY`.
-2. **Domains** → i-verify ang domain mo (DNS records). Tapos itakda ang
-   `RESEND_FROM`, hal. `Smiley <reminders@yourclinic.com>`.
-   (Pwedeng `onboarding@resend.dev` muna para sa testing.)
+1. Account sa https://www.brevo.com (libre, 300 email/araw).
+2. **SMTP & API → API Keys** → gumawa → `BREVO_API_KEY`.
+3. **Senders & IP → Senders** → idagdag ang sender email mo (hal. gmail mo) →
+   i-confirm ang link na ipapadala sa email na 'yon. **Hindi kailangan ng
+   domain** para makapagsimula. Itakda: `BREVO_SENDER_EMAIL=you@gmail.com`,
+   `BREVO_SENDER_NAME=Smiley`.
 
-✅ **Ang ginawa ko:** email sender (`src/lib/email.ts`), branded reminder
-template, at ang cron job na nagpapadala ng reminder para sa appointments
-**bukas**, minarkahan para hindi ma-doble.
+⚠️ **Deliverability:** kung gmail/yahoo ang sender, baka mapunta sa spam ng
+ilang recipients (DMARC). Para mas reliable + matanggal ang "Brevo" branding,
+mag-verify ng sariling domain balang araw. Pero ok na ito para mag-umpisa.
+
+✅ **Ang ginawa ko:** email sender (`src/lib/email.ts`, Brevo), branded
+reminder template, at cron job na nagpapadala para sa appointments **bukas**
+(minarkahan para hindi ma-doble). **Per clinic:** ang pangalan ng clinic ang
+lalabas na sender, at ang reply ay dumidiretso sa email ng clinic.
 
 ---
 
@@ -103,12 +110,15 @@ template, at ang cron job na nagpapadala ng reminder para sa appointments
 
 ---
 
-## 5. AI assistant (Claude)
+## 5. AI assistant (Groq — free)
 
 🟦 **YOUR PART**
-1. API key sa https://console.anthropic.com → `ANTHROPIC_API_KEY`.
-2. (Optional) `ANTHROPIC_MODEL` kung gusto mong palitan ang default
-   (`claude-3-5-haiku-latest` — mabilis at mura).
+1. **Libreng** API key sa https://console.groq.com (walang credit card) →
+   `GROQ_API_KEY`.
+2. (Optional) `GROQ_MODEL` kung gusto mong palitan ang default
+   (`llama-3.3-70b-versatile`). Para sa mas mabilis: `llama-3.1-8b-instant`.
+3. Tandaan: may **rate limits** ang free tier (ilang requests/min) — sapat na
+   para sa clinic chatbot, pero hindi unlimited.
 
 ✅ **Ang ginawa ko:**
 - `/api/ai/chat` — totoong AI assistant na naka-ground sa **live clinic data**
@@ -141,9 +151,9 @@ dashboard, at ang "charting scribe" / "ask-your-data" ay marketing pa lang.
 | Walang double-booking | ✅ |
 | Audit logs (clinic create, booking) | ✅ |
 | Exportable patient records (CSV) | ✅ API (kulang button) |
-| Email reminders + cron | ✅ code (kailangan Resend) |
+| Email reminders + cron | ✅ code (kailangan Brevo — free) |
 | PayMongo subscriptions (GCash/Maya/card) | ✅ API (kulang Subscribe button) |
-| AI chatbot (real, grounded) | ✅ (kailangan Anthropic key) |
+| AI chatbot (real, grounded) | ✅ (kailangan Groq key — free) |
 | No-show predictor | ✅ API (kulang dashboard widget) |
 | Email verification / password reset | 🟦 i-on sa Supabase |
 | Production deploy + domain | 🟦 Vercel |

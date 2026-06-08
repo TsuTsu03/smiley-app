@@ -1,28 +1,57 @@
 /**
- * Minimal email sender built on Resend's REST API (no SDK dependency).
- * Set RESEND_API_KEY and RESEND_FROM (e.g. "Smiley <reminders@yourdomain.com>").
+ * Email sender built on Brevo's transactional API (no SDK dependency).
+ * Brevo's free tier (300 emails/day) lets you send by validating a single
+ * sender email — no custom domain required to get started.
+ *
+ * Env:
+ *   - BREVO_API_KEY      — from Brevo → SMTP & API → API Keys
+ *   - BREVO_SENDER_EMAIL — a validated sender address (confirm via Brevo email)
+ *   - BREVO_SENDER_NAME  — optional default display name (e.g. "Smiley")
+ *
+ * To make a message appear to come from a clinic, pass:
+ *   - fromName: the clinic's name  → becomes the sender display name
+ *   - replyTo:  the clinic's email → patient replies go straight to the clinic
+ * The actual sending address stays your validated BREVO_SENDER_EMAIL.
  */
 export async function sendEmail(opts: {
   to: string;
   subject: string;
   html: string;
+  fromName?: string; // display name override, e.g. the clinic's name
+  replyTo?: string;  // e.g. the clinic's registered email
 }): Promise<{ ok: boolean; error?: string }> {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM;
-  if (!key || !from) return { ok: false, error: 'Email not configured (RESEND_API_KEY/RESEND_FROM)' };
+  const key = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.BREVO_SENDER_EMAIL;
+  if (!key || !senderEmail) {
+    return { ok: false, error: 'Email not configured (BREVO_API_KEY/BREVO_SENDER_EMAIL)' };
+  }
+
+  const senderName =
+    opts.fromName?.replace(/["<>\r\n]/g, '').trim() ||
+    process.env.BREVO_SENDER_NAME ||
+    'Smiley';
+
+  const body: Record<string, unknown> = {
+    sender: { email: senderEmail, name: senderName },
+    to: [{ email: opts.to }],
+    subject: opts.subject,
+    htmlContent: opts.html,
+  };
+  if (opts.replyTo) body.replyTo = { email: opts.replyTo };
 
   try {
-    const res = await fetch('https://api.resend.com/emails', {
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
+        'api-key': key,
+        'content-type': 'application/json',
+        accept: 'application/json',
       },
-      body: JSON.stringify({ from, to: opts.to, subject: opts.subject, html: opts.html }),
+      body: JSON.stringify(body),
     });
     if (!res.ok) {
       const text = await res.text();
-      return { ok: false, error: `Resend ${res.status}: ${text}` };
+      return { ok: false, error: `Brevo ${res.status}: ${text}` };
     }
     return { ok: true };
   } catch (err) {

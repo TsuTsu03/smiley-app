@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
   const { data: appts, error } = await admin
     .from('appointments')
-    .select('id, date, time, type, clinic_id, patient_id, reminder_sent_at, patients(full_name, email), clinics(name)')
+    .select('id, date, time, type, clinic_id, patient_id, reminder_sent_at, patients(full_name, email), clinics(name, email)')
     .eq('date', target)
     .is('reminder_sent_at', null)
     .neq('status', 'cancelled');
@@ -40,12 +40,15 @@ export async function GET(request: NextRequest) {
     const email = a.patients?.email;
     const patientName = a.patients?.full_name ?? 'there';
     const clinicName = a.clinics?.name ?? 'Your dental clinic';
+    const clinicEmail = a.clinics?.email ?? undefined;
     if (!email) continue;
 
     const result = await sendEmail({
       to: email,
       subject: `Reminder: ${a.type} on ${a.date} at ${a.time}`,
       html: reminderEmailHtml({ patientName, clinicName, date: a.date, time: a.time, type: a.type }),
+      fromName: clinicName,   // patient sees the clinic's name as sender
+      replyTo: clinicEmail,   // replies go to the clinic's registered email
     });
 
     if (result.ok) {

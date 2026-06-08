@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { askClaude, aiConfigured } from '@/lib/anthropic';
+import { askAI, aiConfigured } from '@/lib/ai';
 
 /**
- * Patient-facing AI assistant. Grounds Claude in the caller's real clinic
+ * Patient-facing AI assistant. Grounds the model in the caller's real clinic
  * data (dentists, schedules, and the patient's own appointments) so answers
  * are accurate — not generic. Returns { configured:false } when no API key,
  * so the client can fall back to its built-in rule-based replies.
@@ -70,7 +70,7 @@ ${JSON.stringify(context, null, 2)}`;
     { role: 'user' as const, content: message },
   ];
 
-  const result = await askClaude({ system, messages: msgs, maxTokens: 400 });
+  const result = await askAI({ system, messages: msgs, maxTokens: 400 });
   if (!result.ok) {
     return NextResponse.json({ configured: true, error: result.error }, { status: 502 });
   }
