@@ -40,12 +40,12 @@ export async function paymongoFetch(
  */
 export function planAmount(plan: string): { amount: number; name: string } | null {
   const map: Record<string, { amount: number; name: string }> = {
-    starter: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 149900), name: 'Smiley Starter' },
-    basic: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 149900), name: 'Smiley Starter' },
-    growth: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 299900), name: 'Smiley Growth' },
-    pro: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 299900), name: 'Smiley Growth' },
-    'multi-clinic': { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 599900), name: 'Smiley Multi-Clinic' },
-    enterprise: { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 599900), name: 'Smiley Multi-Clinic' },
+    starter: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 150000), name: 'Smiley Starter' },
+    basic: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 150000), name: 'Smiley Starter' },
+    growth: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 300000), name: 'Smiley Growth' },
+    pro: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 300000), name: 'Smiley Growth' },
+    'multi-clinic': { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 600000), name: 'Smiley Multi-Clinic' },
+    enterprise: { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 600000), name: 'Smiley Multi-Clinic' },
   };
   return map[plan.toLowerCase()] ?? null;
 }

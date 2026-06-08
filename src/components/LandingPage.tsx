@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import MarketingNav from "./MarketingNav";
 import MarketingFooter from "./MarketingFooter";
+import { SmileyIcon } from "./Logo";
 
 /* ──────────────────────────────────────────────────────────────
    Motion variants
@@ -219,7 +220,7 @@ function DashboardPreview() {
         {/* sidebar */}
         <div className="hidden sm:flex flex-col w-40 shrink-0 border-r border-sky-50 p-3 gap-1">
           <div className="flex items-center gap-2 px-2 mb-3">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-sky-500 to-teal-500" />
+            <SmileyIcon size={22} />
             <span className="font-display text-sm font-bold text-sky-900">Smiley</span>
           </div>
           {nav.map(({ icon: Icon, label, active }) => (
@@ -733,21 +734,21 @@ const FEATURES = [
 const PLANS = [
   {
     name: "Starter",
-    price: 29,
+    price: 1500,
     desc: "For solo dentists and small clinics",
-    features: ["1 clinic", "Up to 3 dentists", "100 patient records", "Online booking portal", "Basic reports"],
+    features: ["1 clinic", "Up to 3 dentists", "100 patient records", "Online booking portal", "Patient portal", "Basic reports"],
     popular: false,
   },
   {
     name: "Growth",
-    price: 59,
+    price: 3000,
     desc: "For clinics with multiple dentists and staff",
     features: ["1 clinic", "Unlimited dentists", "Unlimited patients", "SMS & email reminders", "Patient portal", "Advanced analytics"],
     popular: true,
   },
   {
     name: "Multi-Clinic",
-    price: 99,
+    price: 6000,
     desc: "For branches and expanding dental groups",
     features: ["Unlimited branches", "Custom branding", "Multi-branch dashboard", "Role-based access", "Audit logs", "Priority support"],
     popular: false,
@@ -1688,7 +1689,7 @@ export default function LandingPage() {
                 <h3 className={`font-semibold text-lg ${popular ? "text-white" : "text-sky-900"}`}>{name}</h3>
                 <p className={`text-sm mt-1 mb-5 ${popular ? "text-sky-300" : "text-sky-500"}`}>{desc}</p>
                 <div className="flex items-baseline gap-1 mb-6">
-                  <span className={`font-display text-5xl ${popular ? "text-white" : "text-sky-950"}`}>${price}</span>
+                  <span className={`font-display text-5xl ${popular ? "text-white" : "text-sky-950"}`}>₱{price.toLocaleString()}</span>
                   <span className={popular ? "text-sky-300 text-sm" : "text-sky-400 text-sm"}>/month</span>
                 </div>
                 <ul className="space-y-3 mb-7">

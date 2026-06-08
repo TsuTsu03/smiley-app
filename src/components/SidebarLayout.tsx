@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth';
 import { LogOut, Menu, X, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { SmileyIcon } from '@/components/Logo';
 
 interface NavItem {
   key: string;
@@ -24,13 +25,6 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
   const { clinicName, role, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const roleColors = {
-    admin:   'from-sky-600 to-sky-700',
-    dentist: 'from-sky-600 to-teal-500',
-    patient: 'from-teal-500 to-sky-500',
-  };
-  const gradient = roleColors[role!] || roleColors.admin;
-
   return (
     <div className="flex h-screen bg-sky-50/30 overflow-hidden">
       {/* Sidebar */}
@@ -44,9 +38,7 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
         {/* Logo */}
         <div className="px-5 py-5 border-b border-sky-50">
           <div className="flex items-center gap-2.5">
-            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center shadow-sm`}>
-              <span className="text-white text-sm font-bold">✦</span>
-            </div>
+            <SmileyIcon size={34} className="shrink-0" />
             <div className="min-w-0">
               <div className="text-[11px] font-medium text-sky-400 uppercase tracking-wide leading-none mb-0.5">Smiley</div>
               <div className="text-sky-800 font-semibold text-sm truncate leading-tight">{clinicName}</div>

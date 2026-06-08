@@ -16,15 +16,16 @@ const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
 
 const PLANS = [
   {
-    name: "Basic",
-    monthlyPrice: 29,
-    annualPrice: 279,
-    desc: "For small clinics getting started",
+    name: "Starter",
+    monthlyPrice: 1500,
+    annualPrice: 15000,
+    desc: "For solo dentists and small clinics",
     features: [
       "1 clinic location",
       "Up to 3 dentists",
       "100 patient records",
-      "Appointment booking",
+      "Online booking portal",
+      "Patient portal",
       "Basic reports & analytics",
       "Email support",
     ],
@@ -32,10 +33,10 @@ const PLANS = [
     popular: false,
   },
   {
-    name: "Pro",
-    monthlyPrice: 59,
-    annualPrice: 569,
-    desc: "For growing clinics that need more",
+    name: "Growth",
+    monthlyPrice: 3000,
+    annualPrice: 30000,
+    desc: "For clinics with multiple dentists and staff",
     features: [
       "1 clinic location",
       "Unlimited dentists",
@@ -50,20 +51,20 @@ const PLANS = [
     popular: true,
   },
   {
-    name: "Enterprise",
-    monthlyPrice: 99,
-    annualPrice: 959,
-    desc: "For multi-branch dental groups",
+    name: "Multi-Clinic",
+    monthlyPrice: 6000,
+    annualPrice: 60000,
+    desc: "For branches and expanding dental groups",
     features: [
       "Unlimited clinic locations",
       "Unlimited dentists",
       "Unlimited patients",
-      "All Pro features",
-      "API access",
+      "All Growth features",
+      "Multi-branch dashboard",
+      "Role-based access",
+      "Audit logs",
       "Dedicated account manager",
-      "HIPAA compliance",
-      "SLA guarantee",
-      "Custom integrations",
+      "Data Privacy Act compliance",
     ],
     cta: "Contact Sales",
     popular: false,
@@ -75,14 +76,14 @@ const COMPARISON = [
   { feature: "Dentist accounts", basic: "3", pro: "Unlimited", enterprise: "Unlimited" },
   { feature: "Patient records", basic: "100", pro: "Unlimited", enterprise: "Unlimited" },
   { feature: "Appointment booking", basic: true, pro: true, enterprise: true },
-  { feature: "Patient portal", basic: false, pro: true, enterprise: true },
+  { feature: "Patient portal", basic: true, pro: true, enterprise: true },
   { feature: "SMS reminders", basic: false, pro: true, enterprise: true },
   { feature: "Email reminders", basic: true, pro: true, enterprise: true },
   { feature: "Basic analytics", basic: true, pro: true, enterprise: true },
   { feature: "Advanced analytics", basic: false, pro: true, enterprise: true },
   { feature: "Custom branding", basic: false, pro: true, enterprise: true },
-  { feature: "API access", basic: false, pro: false, enterprise: true },
-  { feature: "HIPAA compliance", basic: false, pro: false, enterprise: true },
+  { feature: "Multi-branch dashboard", basic: false, pro: false, enterprise: true },
+  { feature: "Audit logs", basic: false, pro: true, enterprise: true },
   { feature: "Dedicated support", basic: false, pro: false, enterprise: true },
 ];
 
@@ -129,7 +130,7 @@ export default function PricingPage() {
                   annual ? "bg-white text-sky-900 shadow-sm" : "text-sky-500 hover:text-sky-700"
                 }`}
               >
-                Annual <span className="text-teal-600 text-xs ml-1">Save 20%</span>
+                Annual <span className="text-teal-600 text-xs ml-1">2 months free</span>
               </button>
             </motion.div>
           </motion.div>
@@ -167,12 +168,12 @@ export default function PricingPage() {
                   <p className="text-sky-500 text-sm mt-1 mb-5">{desc}</p>
 
                   <div className="flex items-baseline gap-1 mb-1">
-                    <span className="font-display text-5xl text-sky-950">${price}</span>
+                    <span className="font-display text-5xl text-sky-950">₱{price.toLocaleString()}</span>
                     <span className="text-sky-400 text-sm">/mo</span>
                   </div>
                   {annual && (
                     <p className="text-teal-600 text-xs mb-5">
-                      ${annualPrice}/year &middot; Save ${monthlyPrice * 12 - annualPrice}
+                      ₱{annualPrice.toLocaleString()}/year &middot; 2 months free (save ₱{(monthlyPrice * 12 - annualPrice).toLocaleString()})
                     </p>
                   )}
                   {!annual && <div className="mb-5" />}
@@ -215,9 +216,9 @@ export default function PricingPage() {
               <thead>
                 <tr className="border-b border-sky-200/60">
                   <th className="text-left py-3 pr-4 text-sky-500 font-medium">Feature</th>
-                  <th className="text-center py-3 px-4 text-sky-700 font-semibold">Basic</th>
-                  <th className="text-center py-3 px-4 text-sky-700 font-semibold">Pro</th>
-                  <th className="text-center py-3 px-4 text-sky-700 font-semibold">Enterprise</th>
+                  <th className="text-center py-3 px-4 text-sky-700 font-semibold">Starter</th>
+                  <th className="text-center py-3 px-4 text-sky-700 font-semibold">Growth</th>
+                  <th className="text-center py-3 px-4 text-sky-700 font-semibold">Multi-Clinic</th>
                 </tr>
               </thead>
               <tbody>

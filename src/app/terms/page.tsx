@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
+import { Logo } from '@/components/Logo';
 
 export const metadata = {
   title: 'Terms of Service — Smiley',
@@ -11,12 +12,7 @@ export default function TermsOfServicePage() {
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50/40 font-sans">
       {/* Nav */}
       <nav className="flex items-center justify-between px-4 sm:px-8 py-4 max-w-4xl mx-auto">
-        <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center shadow-md">
-            <span className="text-white text-base font-bold leading-none">✦</span>
-          </div>
-          <span className="text-sky-800 font-semibold text-base">Smiley</span>
-        </Link>
+        <Logo href="/" size={32} textClassName="text-sky-800 font-semibold text-base" className="hover:opacity-80 transition-opacity" />
         <Link href="/" className="text-sm text-sky-600 hover:text-sky-800 transition-colors">
           ← Back to Home
         </Link>

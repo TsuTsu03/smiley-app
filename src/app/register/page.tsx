@@ -17,9 +17,9 @@ import MarketingFooter from "@/components/MarketingFooter";
 import LoadingScreen from "@/components/LoadingScreen";
 
 const PLANS = [
-  { key: "basic", name: "Basic", price: 29, desc: "1 clinic, 3 dentists, 100 patients" },
-  { key: "pro", name: "Pro", price: 59, desc: "1 clinic, unlimited dentists & patients", popular: true },
-  { key: "enterprise", name: "Enterprise", price: 99, desc: "Unlimited clinics, dedicated support" },
+  { key: "starter", name: "Starter", price: 1500, desc: "Solo dentists & small clinics" },
+  { key: "growth", name: "Growth", price: 3000, desc: "Multiple dentists & staff", popular: true },
+  { key: "multi-clinic", name: "Multi-Clinic", price: 6000, desc: "Branches & dental groups" },
 ];
 
 const fadeSlide = {
@@ -42,7 +42,7 @@ function RegisterFlow() {
   const preselected = searchParams.get("plan") ?? "";
 
   const [step, setStep] = useState(preselected ? 2 : 1);
-  const [selectedPlan, setSelectedPlan] = useState(preselected || "pro");
+  const [selectedPlan, setSelectedPlan] = useState(preselected || "growth");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -165,7 +165,7 @@ function RegisterFlow() {
                       )}
                       <div className="font-semibold text-sky-900">{name}</div>
                       <div className="flex items-baseline gap-0.5 mt-2 mb-2">
-                        <span className="font-display text-2xl text-sky-950">${price}</span>
+                        <span className="font-display text-2xl text-sky-950">₱{price.toLocaleString()}</span>
                         <span className="text-sky-400 text-xs">/mo</span>
                       </div>
                       <div className="text-xs text-sky-500">{desc}</div>
