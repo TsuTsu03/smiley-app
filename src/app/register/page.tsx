@@ -17,9 +17,9 @@ import MarketingFooter from "@/components/MarketingFooter";
 import LoadingScreen from "@/components/LoadingScreen";
 
 const PLANS = [
-  { key: "starter", name: "Starter", price: 1500, desc: "Solo dentists & small clinics" },
-  { key: "growth", name: "Growth", price: 3000, desc: "Multiple dentists & staff", popular: true },
-  { key: "multi-clinic", name: "Multi-Clinic", price: 6000, desc: "Branches & dental groups" },
+  { key: "starter", name: "Starter", price: 1500, unit: "/mo", desc: "Solo dentists & small clinics" },
+  { key: "growth", name: "Growth", price: 3500, unit: "/mo", desc: "Multiple dentists & staff", popular: true },
+  { key: "multi-clinic", name: "Multi-Clinic", price: 3000, unit: "/branch", desc: "Dental groups — per branch" },
 ];
 
 const fadeSlide = {
@@ -148,7 +148,7 @@ function RegisterFlow() {
                 <p className="text-sky-500 text-sm text-center mb-8">All plans include a 14-day free trial</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {PLANS.map(({ key, name, price, desc, popular }) => (
+                  {PLANS.map(({ key, name, price, desc, popular, unit }) => (
                     <button
                       key={key}
                       onClick={() => setSelectedPlan(key)}
@@ -166,7 +166,7 @@ function RegisterFlow() {
                       <div className="font-semibold text-sky-900">{name}</div>
                       <div className="flex items-baseline gap-0.5 mt-2 mb-2">
                         <span className="font-display text-2xl text-sky-950">₱{price.toLocaleString()}</span>
-                        <span className="text-sky-400 text-xs">/mo</span>
+                        <span className="text-sky-400 text-xs">{unit === "/branch" ? "/branch/mo" : "/mo"}</span>
                       </div>
                       <div className="text-xs text-sky-500">{desc}</div>
                     </button>
@@ -201,7 +201,7 @@ function RegisterFlow() {
                   {form.slug && (
                     <div className="flex items-center gap-2 text-xs text-sky-600 bg-sky-50 rounded-lg px-3 py-2">
                       <Building2 size={12} />
-                      Your portal: <span className="font-mono font-semibold">{form.slug}.dentaflow.app</span>
+                      Your portal: <span className="font-mono font-semibold">{form.slug}.smiley.app</span>
                     </div>
                   )}
                   <div>
@@ -318,7 +318,7 @@ function RegisterFlow() {
                 <h2 className="font-display text-3xl text-sky-950 mb-3">You&apos;re all set!</h2>
                 <p className="text-sky-600/70 text-sm mb-3">Your clinic portal is ready at:</p>
                 <div className="inline-block bg-sky-50 border border-sky-100 rounded-xl px-6 py-3 font-mono text-sky-700 text-sm mb-8">
-                  {form.slug || "yourclinic"}.dentaflow.app
+                  {form.slug || "yourclinic"}.smiley.app
                 </div>
                 <div className="flex flex-col gap-3 max-w-xs mx-auto">
                   <button

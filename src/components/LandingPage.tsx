@@ -36,6 +36,7 @@ import {
   Mic,
   BarChart3,
   Send,
+  Receipt,
 } from "lucide-react";
 import MarketingNav from "./MarketingNav";
 import MarketingFooter from "./MarketingFooter";
@@ -473,6 +474,84 @@ const DEMO_SCENES = [
       </div>
     ),
   },
+  {
+    key: "invoice",
+    tag: "Invoice & payment recorded",
+    icon: Receipt,
+    tone: "from-emerald-500 to-teal-500",
+    render: () => (
+      <div className="w-full max-w-sm">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <div className="text-[12px] font-semibold text-sky-900">INV-20260608</div>
+            <div className="text-[10px] text-sky-400">Andrea Cruz</div>
+          </div>
+          <span className="text-[10px] font-bold text-teal-600 bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full">PAID</span>
+        </div>
+        <div className="space-y-1.5 mb-3">
+          {[["Scaling & polishing", "₱1,500"], ["Fluoride treatment", "₱800"]].map(([d, p], i) => (
+            <motion.div
+              key={d}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.15 + i * 0.15 }}
+              className="flex justify-between text-[11px] rounded-lg bg-white border border-sky-100 px-3 py-2"
+            >
+              <span className="text-sky-700">{d}</span>
+              <span className="font-semibold text-sky-900">{p}</span>
+            </motion.div>
+          ))}
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-between items-center rounded-xl bg-gradient-to-r from-sky-600 to-teal-500 text-white px-3.5 py-2.5"
+        >
+          <span className="text-[11px] font-medium">Total paid</span>
+          <span className="font-display text-lg">₱2,300</span>
+        </motion.div>
+      </div>
+    ),
+  },
+  {
+    key: "analytics",
+    tag: "Clinic performance, live",
+    icon: TrendingUp,
+    tone: "from-sky-500 to-purple-500",
+    render: () => (
+      <div className="w-full max-w-sm">
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          {[["New patients", "+18"], ["Revenue", "₱82k"], ["Attendance", "96%"]].map(([l, v], i) => (
+            <motion.div
+              key={l}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.1 }}
+              className="rounded-xl border border-sky-100 bg-white p-2.5 text-center"
+            >
+              <div className="font-display text-base text-sky-950 leading-none">{v}</div>
+              <div className="text-[9px] text-sky-400 mt-1">{l}</div>
+            </motion.div>
+          ))}
+        </div>
+        <div className="rounded-xl border border-sky-100 bg-white p-3">
+          <div className="text-[10px] font-semibold text-sky-500 mb-2">New patients · 6 months</div>
+          <div className="flex items-end justify-between gap-1.5 h-20">
+            {[40, 55, 48, 70, 62, 90].map((h, i) => (
+              <motion.div
+                key={i}
+                initial={{ height: 0 }}
+                animate={{ height: `${h}%` }}
+                transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}
+                className="flex-1 rounded-t bg-gradient-to-t from-sky-500 to-teal-400"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    ),
+  },
 ];
 
 function DemoPlayer({ large = false }: { large?: boolean }) {
@@ -731,6 +810,28 @@ const FEATURES = [
   { icon: SmilePlus, title: "Patient Portal", desc: "Patients view their records, book appointments, and check upcoming visits anytime.", tone: "from-emerald-500 to-emerald-600", preview: FeaturePreviews.portal },
 ];
 
+/* Full "everything included" checklist — available now vs coming soon.
+   `soon: true` items are paid-to-run (SMS) or larger modules still in build. */
+const INCLUDED_FEATURES: { name: string; soon?: boolean }[] = [
+  { name: "Patient management & records" },
+  { name: "Dental charting & treatment notes" },
+  { name: "Appointment scheduling" },
+  { name: "Online booking portal" },
+  { name: "Patient portal" },
+  { name: "Automated email reminders" },
+  { name: "AI assistant & services inquiry" },
+  { name: "Activity logging & audit trail" },
+  { name: "Role-based multi-user access" },
+  { name: "Cloud-based access" },
+  { name: "Analytics & reports" },
+  { name: "Multi-branch support" },
+  { name: "Queue management system" },
+  { name: "Patient consent forms" },
+  { name: "Billing & invoicing" },
+  { name: "Insurance & HMO claims" },
+  { name: "SMS reminders & receipts", soon: true },
+];
+
 const PLANS = [
   {
     name: "Starter",
@@ -741,16 +842,17 @@ const PLANS = [
   },
   {
     name: "Growth",
-    price: 3000,
+    price: 3500,
     desc: "For clinics with multiple dentists and staff",
     features: ["1 clinic", "Unlimited dentists", "Unlimited patients", "SMS & email reminders", "Patient portal", "Advanced analytics"],
     popular: true,
   },
   {
     name: "Multi-Clinic",
-    price: 6000,
-    desc: "For branches and expanding dental groups",
-    features: ["Unlimited branches", "Custom branding", "Multi-branch dashboard", "Role-based access", "Audit logs", "Priority support"],
+    price: 3000,
+    unit: "/branch",
+    desc: "For dental groups — billed per branch",
+    features: ["Everything in Growth", "Per-branch billing", "Multi-branch dashboard", "Centralized records", "Role-based access", "Dedicated support"],
     popular: false,
   },
 ];
@@ -1287,14 +1389,17 @@ export default function LandingPage() {
               Watch a whole visit run itself
             </motion.h2>
             <motion.p variants={fadeUp} className="text-sky-700/65 text-lg leading-relaxed mb-7">
-              From the moment a patient picks a slot to the follow-up six months later, Smiley handles
-              the busywork. Here&apos;s the full loop — booking, reminders, and charting — happening live.
+              From the moment a patient picks a slot to the invoice and clinic insights, Smiley handles
+              the busywork. Here&apos;s the full loop — booking, reminders, charting, billing, and
+              analytics — happening live.
             </motion.p>
             <motion.ul variants={stagger} className="space-y-3.5 mb-8">
               {[
                 { icon: Calendar, text: "Patient self-books in under 30 seconds" },
                 { icon: Bell, text: "Confirmation + reminder fire automatically" },
                 { icon: FileText, text: "Charting syncs straight to the patient portal" },
+                { icon: Receipt, text: "Invoice and payment recorded in one tap" },
+                { icon: TrendingUp, text: "Clinic performance updates in real time" },
               ].map(({ icon: Icon, text }) => (
                 <motion.li key={text} variants={fadeUp} className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white border border-sky-100 shadow-sm flex items-center justify-center shrink-0">
@@ -1377,6 +1482,67 @@ export default function LandingPage() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ EVERYTHING INCLUDED (checklist) ════════════════════ */}
+      <section className="py-20 sm:py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+            className="text-center mb-12 max-w-2xl mx-auto"
+          >
+            <motion.p variants={fadeUp} className="text-teal-600 text-sm font-semibold uppercase tracking-wider mb-3">
+              Everything included
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-5xl text-sky-950 mb-4 tracking-tight">
+              Everything you need to run your clinic
+            </motion.h2>
+            <motion.p variants={fadeUp} className="text-sky-700/60 text-lg">
+              One platform for your whole clinic — with more on the way.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-40px" }}
+            variants={stagger}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3.5"
+          >
+            {INCLUDED_FEATURES.map(({ name, soon }) => (
+              <motion.div key={name} variants={fadeUp} className="flex items-center gap-3">
+                {soon ? (
+                  <span className="w-5 h-5 rounded-full border-2 border-sky-200 flex items-center justify-center shrink-0">
+                    <Clock size={11} className="text-sky-300" />
+                  </span>
+                ) : (
+                  <CheckCircle2 size={20} className="text-teal-500 shrink-0" />
+                )}
+                <span className={`text-sm ${soon ? "text-sky-400" : "text-sky-800 font-medium"}`}>{name}</span>
+                {soon && (
+                  <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200/70 px-1.5 py-0.5 rounded-full shrink-0">
+                    Soon
+                  </span>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-center text-xs text-sky-400 mt-10"
+          >
+            <CheckCircle2 size={12} className="inline text-teal-500 mr-1" /> Available now
+            <span className="mx-3">·</span>
+            <Clock size={11} className="inline text-sky-300 mr-1" /> Coming soon
+          </motion.p>
         </div>
       </section>
 
@@ -1671,7 +1837,7 @@ export default function LandingPage() {
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-start"
           >
-            {PLANS.map(({ name, price, desc, features, popular }) => (
+            {PLANS.map(({ name, price, desc, features, popular, unit }) => (
               <motion.div
                 key={name}
                 variants={fadeUp}
@@ -1690,7 +1856,7 @@ export default function LandingPage() {
                 <p className={`text-sm mt-1 mb-5 ${popular ? "text-sky-300" : "text-sky-500"}`}>{desc}</p>
                 <div className="flex items-baseline gap-1 mb-6">
                   <span className={`font-display text-5xl ${popular ? "text-white" : "text-sky-950"}`}>₱{price.toLocaleString()}</span>
-                  <span className={popular ? "text-sky-300 text-sm" : "text-sky-400 text-sm"}>/month</span>
+                  <span className={popular ? "text-sky-300 text-sm" : "text-sky-400 text-sm"}>{unit ? `${unit}/mo` : "/month"}</span>
                 </div>
                 <ul className="space-y-3 mb-7">
                   {features.map((f) => (

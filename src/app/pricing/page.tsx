@@ -34,8 +34,8 @@ const PLANS = [
   },
   {
     name: "Growth",
-    monthlyPrice: 3000,
-    annualPrice: 30000,
+    monthlyPrice: 3500,
+    annualPrice: 35000,
     desc: "For clinics with multiple dentists and staff",
     features: [
       "1 clinic location",
@@ -52,15 +52,16 @@ const PLANS = [
   },
   {
     name: "Multi-Clinic",
-    monthlyPrice: 6000,
-    annualPrice: 60000,
-    desc: "For branches and expanding dental groups",
+    monthlyPrice: 3000,
+    annualPrice: 30000,
+    unit: "/branch",
+    priceNote: "billed per branch / location",
+    desc: "For dental groups with multiple branches",
     features: [
-      "Unlimited clinic locations",
-      "Unlimited dentists",
-      "Unlimited patients",
-      "All Growth features",
+      "Everything in Growth",
+      "Per-branch billing",
       "Multi-branch dashboard",
+      "Centralized patient records",
       "Role-based access",
       "Audit logs",
       "Dedicated account manager",
@@ -146,7 +147,7 @@ export default function PricingPage() {
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10"
           >
-            {PLANS.map(({ name, monthlyPrice, annualPrice, desc, features, cta, popular }) => {
+            {PLANS.map(({ name, monthlyPrice, annualPrice, desc, features, cta, popular, unit, priceNote }) => {
               const price = annual ? Math.round(annualPrice / 12) : monthlyPrice;
               return (
                 <motion.div
@@ -169,14 +170,15 @@ export default function PricingPage() {
 
                   <div className="flex items-baseline gap-1 mb-1">
                     <span className="font-display text-5xl text-sky-950">₱{price.toLocaleString()}</span>
-                    <span className="text-sky-400 text-sm">/mo</span>
+                    <span className="text-sky-400 text-sm">{unit ?? "/mo"}{unit ? "/mo" : ""}</span>
                   </div>
+                  {priceNote && <p className="text-sky-400 text-xs mb-1">{priceNote}</p>}
                   {annual && (
                     <p className="text-teal-600 text-xs mb-5">
-                      ₱{annualPrice.toLocaleString()}/year &middot; 2 months free (save ₱{(monthlyPrice * 12 - annualPrice).toLocaleString()})
+                      ₱{annualPrice.toLocaleString()}{unit ?? ""}/year &middot; 2 months free (save ₱{(monthlyPrice * 12 - annualPrice).toLocaleString()})
                     </p>
                   )}
-                  {!annual && <div className="mb-5" />}
+                  {!annual && !priceNote && <div className="mb-5" />}
 
                   <ul className="space-y-3 mb-8 flex-1">
                     {features.map((f) => (

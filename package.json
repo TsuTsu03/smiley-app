@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:integration": "node scripts/integration-test.mjs",
     "loadtest": "npx --yes autocannon -c 20 -d 10 http://localhost:3100/"
   },
   "dependencies": {

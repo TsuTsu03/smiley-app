@@ -22,6 +22,8 @@ npm run dev
 2. **SQL Editor → New query**, i-paste at patakbuhin **in order**:
    - `supabase/schema.sql`  ← tables
    - `supabase/02_security_and_features.sql`  ← ✅ security + billing/audit columns
+   - `supabase/03_consent_forms.sql`  ← ✅ patient consent forms table
+   - `supabase/04_billing_insurance.sql`  ← ✅ invoices + HMO claims tables
    - `supabase/seed.sql`  ← (optional) sample data para may makita agad
 3. **Project Settings → API**, kopyahin sa `.env.local`:
    - Project URL → `NEXT_PUBLIC_SUPABASE_URL`

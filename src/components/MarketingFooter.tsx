@@ -8,12 +8,18 @@ export default function MarketingFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="mb-4">
+            <div className="flex items-center gap-2.5 mb-4">
               <Logo size={36} textClassName="font-display text-lg font-bold text-white" />
+              <span className="text-[11px] text-sky-300/60 font-medium border-l border-sky-700/60 pl-2.5">
+                by StackWise
+              </span>
             </div>
             <p className="text-sky-300/70 text-sm leading-relaxed max-w-sm">
               The modern clinic management platform built for dental professionals.
               Manage patients, appointments, and records all in one place.
+            </p>
+            <p className="text-sky-400/60 text-xs mt-3">
+              Smiley is a product of <span className="font-semibold text-sky-300/80">StackWise</span>.
             </p>
           </div>
 
@@ -38,7 +44,7 @@ export default function MarketingFooter() {
         </div>
 
         <div className="border-t border-sky-800/50 pt-6 text-center text-xs text-sky-400/50">
-          &copy; {new Date().getFullYear()} Smiley / DentaFlow. All rights reserved.
+          &copy; {new Date().getFullYear()}{" "}StackWise. All rights reserved. Smiley&trade; is a product of StackWise.
         </div>
       </div>
     </footer>

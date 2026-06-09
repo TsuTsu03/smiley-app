@@ -40,7 +40,7 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
           <div className="flex items-center gap-2.5">
             <SmileyIcon size={34} className="shrink-0" />
             <div className="min-w-0">
-              <div className="text-[11px] font-medium text-sky-400 uppercase tracking-wide leading-none mb-0.5">Smiley</div>
+              <div className="text-[11px] font-medium text-sky-400 uppercase tracking-wide leading-none mb-0.5">Smiley <span className="text-sky-300 normal-case">by StackWise</span></div>
               <div className="text-sky-800 font-semibold text-sm truncate leading-tight">{clinicName}</div>
             </div>
           </div>

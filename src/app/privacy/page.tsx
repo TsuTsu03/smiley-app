@@ -40,11 +40,11 @@ export default function PrivacyPolicyPage() {
 
           <Section title="1. Who We Are (Personal Information Controller)">
             <p>
-              <strong>Smiley</strong> (operating under the brand name &ldquo;DentaFlow&rdquo;) is the Personal Information Controller (PIC) as defined under Republic Act No. 10173, the <em>Data Privacy Act of 2012</em> (DPA), and its Implementing Rules and Regulations (IRR).
+              <strong>StackWise</strong>, the operator of the <strong>Smiley</strong> clinic management platform, is the Personal Information Controller (PIC) as defined under Republic Act No. 10173, the <em>Data Privacy Act of 2012</em> (DPA), and its Implementing Rules and Regulations (IRR).
             </p>
             <p className="mt-3">
               <strong>Contact — Data Privacy Officer (DPO):</strong><br />
-              Email: <a href="mailto:privacy@dentaflow.app" className="text-sky-600 underline">privacy@dentaflow.app</a><br />
+              Email: <a href="mailto:privacy@stackwise.com" className="text-sky-600 underline">privacy@stackwise.com</a><br />
               Address: Philippines
             </p>
             <p className="mt-3 text-sm text-sky-600/80">
@@ -129,7 +129,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="mt-4">
               To exercise these rights, email our DPO at{' '}
-              <a href="mailto:privacy@dentaflow.app" className="text-sky-600 underline">privacy@dentaflow.app</a>.
+              <a href="mailto:privacy@stackwise.com" className="text-sky-600 underline">privacy@stackwise.com</a>.
               We will respond within <strong>15 working days</strong> as required by NPC Circular 16-01.
             </p>
           </Section>

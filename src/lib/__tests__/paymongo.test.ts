@@ -11,19 +11,19 @@ describe('planAmount', () => {
 
   it('returns default centavo amounts for known plans', () => {
     expect(planAmount('starter')).toEqual({ amount: 150000, name: 'Smiley Starter' });
-    expect(planAmount('growth')?.amount).toBe(300000);
-    expect(planAmount('multi-clinic')?.amount).toBe(600000);
+    expect(planAmount('growth')?.amount).toBe(350000);
+    expect(planAmount('multi-clinic')?.amount).toBe(300000); // per branch
   });
 
   it('maps legacy aliases to the new plans', () => {
     expect(planAmount('basic')?.name).toBe('Smiley Starter');
     expect(planAmount('pro')?.name).toBe('Smiley Growth');
-    expect(planAmount('enterprise')?.name).toBe('Smiley Multi-Clinic');
+    expect(planAmount('enterprise')?.name).toBe('Smiley Multi-Clinic (per branch)');
   });
 
   it('is case-insensitive', () => {
     expect(planAmount('STARTER')?.amount).toBe(150000);
-    expect(planAmount('Growth')?.amount).toBe(300000);
+    expect(planAmount('Growth')?.amount).toBe(350000);
   });
 
   it('returns null for an unknown plan', () => {

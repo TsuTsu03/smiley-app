@@ -80,6 +80,9 @@ export default function LoginShell({ children }: { children: ReactNode }) {
               <Link href="/privacy" className="hover:text-sky-600 transition-colors underline underline-offset-2">Privacy</Link>
               <Link href="/terms" className="hover:text-sky-600 transition-colors underline underline-offset-2">Terms</Link>
             </div>
+            <p className="text-center mt-3 text-[11px] text-sky-400/70">
+              Smiley is a product of <span className="font-semibold text-sky-500">StackWise</span>
+            </p>
           </div>
         </div>
       </div>

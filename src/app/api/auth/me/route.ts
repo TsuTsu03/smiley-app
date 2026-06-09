@@ -29,11 +29,29 @@ export async function GET() {
     dentistId = dentist?.id ?? null;
   }
 
+  // Patients are identified by their patients-table id (not the auth uid), so
+  // the portal fetches the right records on reload, same as at login time.
+  let id = profile.id;
+  let fullName = profile.full_name;
+  let email = profile.email;
+  if (profile.role === 'patient') {
+    const { data: patient } = await supabase
+      .from('patients')
+      .select('id, full_name, email')
+      .eq('profile_id', profile.id)
+      .maybeSingle();
+    if (patient) {
+      id = patient.id;
+      fullName = patient.full_name;
+      email = patient.email;
+    }
+  }
+
   return NextResponse.json({
     user: {
-      id: profile.id,
-      fullName: profile.full_name,
-      email: profile.email,
+      id,
+      fullName,
+      email,
       role: profile.role,
       clinicId: profile.clinic_id,
       dentistId,

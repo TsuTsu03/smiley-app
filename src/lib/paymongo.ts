@@ -42,10 +42,10 @@ export function planAmount(plan: string): { amount: number; name: string } | nul
   const map: Record<string, { amount: number; name: string }> = {
     starter: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 150000), name: 'Smiley Starter' },
     basic: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 150000), name: 'Smiley Starter' },
-    growth: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 300000), name: 'Smiley Growth' },
-    pro: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 300000), name: 'Smiley Growth' },
-    'multi-clinic': { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 600000), name: 'Smiley Multi-Clinic' },
-    enterprise: { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 600000), name: 'Smiley Multi-Clinic' },
+    growth: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 350000), name: 'Smiley Growth' },
+    pro: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 350000), name: 'Smiley Growth' },
+    'multi-clinic': { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 300000), name: 'Smiley Multi-Clinic (per branch)' },
+    enterprise: { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 300000), name: 'Smiley Multi-Clinic (per branch)' },
   };
   return map[plan.toLowerCase()] ?? null;
 }

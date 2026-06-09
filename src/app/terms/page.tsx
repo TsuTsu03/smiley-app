@@ -40,7 +40,7 @@ export default function TermsOfServicePage() {
 
           <Section title="1. Definitions">
             <ul className="space-y-2 list-none">
-              <Li><strong>&ldquo;Smiley&rdquo; / &ldquo;DentaFlow&rdquo; / &ldquo;we&rdquo; / &ldquo;us&rdquo;</strong> — the operator of this clinic management platform.</Li>
+              <Li><strong>&ldquo;StackWise&rdquo; / &ldquo;we&rdquo; / &ldquo;us&rdquo;</strong> — StackWise, the operator of the &ldquo;Smiley&rdquo; clinic management platform.</Li>
               <Li><strong>&ldquo;Clinic&rdquo;</strong> — a dental clinic that registers and subscribes to the platform.</Li>
               <Li><strong>&ldquo;Authorized User&rdquo;</strong> — an admin or dentist account created under a registered Clinic.</Li>
               <Li><strong>&ldquo;Patient&rdquo;</strong> — an individual whose dental records are managed through the platform.</Li>
@@ -64,7 +64,7 @@ export default function TermsOfServicePage() {
               Smiley provides a web-based dental clinic management system allowing clinics to manage patient records, appointments, and communications. Subject to these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Service solely for your clinic&apos;s internal business operations.
             </p>
             <p className="mt-3">
-              Each clinic receives a unique subdomain (e.g., <code className="bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">yourclinic.dentaflow.app</code>) and is solely responsible for all activity occurring under that subdomain.
+              Each clinic receives a unique subdomain (e.g., <code className="bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">yourclinic.smiley.app</code>) and is solely responsible for all activity occurring under that subdomain.
             </p>
           </Section>
 
@@ -100,7 +100,7 @@ export default function TermsOfServicePage() {
 
           <Section title="6. Intellectual Property">
             <p>
-              All intellectual property rights in the Smiley platform — including software, designs, trademarks, logos, and content created by us — are and shall remain the exclusive property of Smiley/DentaFlow. Nothing in these Terms grants you any rights to our intellectual property except the limited license in Section 3.
+              All intellectual property rights in the Smiley platform — including software, designs, trademarks, logos, and content created by us — are and shall remain the exclusive property of StackWise. Nothing in these Terms grants you any rights to our intellectual property except the limited license in Section 3.
             </p>
             <p className="mt-3">
               <strong>Your clinic data</strong> (patient records, appointment data, and content you upload) remains your property. You grant us a limited license to process and store this data solely to provide the Service.
@@ -163,7 +163,7 @@ export default function TermsOfServicePage() {
             </p>
             <p className="mt-3">
               <strong>Step 1 — Amicable Resolution:</strong> We encourage you to contact us at{' '}
-              <a href="mailto:support@dentaflow.app" className="text-sky-600 underline">support@dentaflow.app</a>{' '}
+              <a href="mailto:support@stackwise.com" className="text-sky-600 underline">support@stackwise.com</a>{' '}
               first. Most issues can be resolved within 15 business days without formal proceedings.
             </p>
             <p className="mt-3">
@@ -197,9 +197,9 @@ export default function TermsOfServicePage() {
 
           <Section title="15. Contact Us">
             <div className="bg-sky-50 border border-sky-100 rounded-xl p-4 text-sm space-y-1">
-              <p><strong>Smiley / DentaFlow</strong></p>
-              <p>Email: <a href="mailto:support@dentaflow.app" className="text-sky-600 underline">support@dentaflow.app</a></p>
-              <p>Data Privacy Officer: <a href="mailto:privacy@dentaflow.app" className="text-sky-600 underline">privacy@dentaflow.app</a></p>
+              <p><strong>StackWise</strong> — operator of Smiley</p>
+              <p>Email: <a href="mailto:support@stackwise.com" className="text-sky-600 underline">support@stackwise.com</a></p>
+              <p>Data Privacy Officer: <a href="mailto:privacy@stackwise.com" className="text-sky-600 underline">privacy@stackwise.com</a></p>
               <p>Address: Philippines</p>
             </div>
           </Section>
