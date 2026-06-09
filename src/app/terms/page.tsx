@@ -64,7 +64,7 @@ export default function TermsOfServicePage() {
               Smiley provides a web-based dental clinic management system allowing clinics to manage patient records, appointments, and communications. Subject to these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Service solely for your clinic&apos;s internal business operations.
             </p>
             <p className="mt-3">
-              Each clinic receives a unique subdomain (e.g., <code className="bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">yourclinic.smiley.app</code>) and is solely responsible for all activity occurring under that subdomain.
+              Each clinic receives a unique subdomain (e.g., <code className="bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">yourclinic.smileyhq.it.com</code>) and is solely responsible for all activity occurring under that subdomain.
             </p>
           </Section>
 

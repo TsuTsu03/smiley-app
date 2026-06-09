@@ -201,7 +201,7 @@ function RegisterFlow() {
                   {form.slug && (
                     <div className="flex items-center gap-2 text-xs text-sky-600 bg-sky-50 rounded-lg px-3 py-2">
                       <Building2 size={12} />
-                      Your portal: <span className="font-mono font-semibold">{form.slug}.smiley.app</span>
+                      Your portal: <span className="font-mono font-semibold">{form.slug}.smileyhq.it.com</span>
                     </div>
                   )}
                   <div>
@@ -318,7 +318,7 @@ function RegisterFlow() {
                 <h2 className="font-display text-3xl text-sky-950 mb-3">You&apos;re all set!</h2>
                 <p className="text-sky-600/70 text-sm mb-3">Your clinic portal is ready at:</p>
                 <div className="inline-block bg-sky-50 border border-sky-100 rounded-xl px-6 py-3 font-mono text-sky-700 text-sm mb-8">
-                  {form.slug || "yourclinic"}.smiley.app
+                  {form.slug || "yourclinic"}.smileyhq.it.com
                 </div>
                 <div className="flex flex-col gap-3 max-w-xs mx-auto">
                   <button
