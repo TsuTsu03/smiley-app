@@ -40,6 +40,7 @@ import {
 import MarketingNav from "./MarketingNav";
 import MarketingFooter from "./MarketingFooter";
 import ScheduleDemo from "./ScheduleDemo";
+import ComingSoonModal from "./ComingSoonModal";
 import { SmileyIcon } from "./Logo";
 
 /* ──────────────────────────────────────────────────────────────
@@ -1281,6 +1282,7 @@ const AI_FEATURES = [
    ────────────────────────────────────────────────────────────── */
 export default function LandingPage() {
   const [demoOpen, setDemoOpen] = useState(false);
+  const [comingSoon, setComingSoon] = useState(false);
 
   // lock scroll while the demo modal is open
   useEffect(() => {
@@ -2438,16 +2440,16 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href={`/register?plan=${name.toLowerCase()}`}
-                  className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
+                <button
+                  onClick={() => setComingSoon(true)}
+                  className={`block w-full text-center py-3 rounded-xl font-semibold text-sm transition-all ${
                     popular
                       ? "bg-white text-sky-900 hover:bg-sky-50"
                       : "bg-sky-50 text-sky-700 hover:bg-sky-100"
                   }`}
                 >
                   Get Started
-                </Link>
+                </button>
               </motion.div>
             ))}
           </motion.div>
@@ -2534,6 +2536,8 @@ export default function LandingPage() {
       </section>
 
       <MarketingFooter />
+
+      <ComingSoonModal open={comingSoon} onClose={() => setComingSoon(false)} />
 
       {/* ═══ DEMO MODAL ═════════════════════════════════════════ */}
       <AnimatePresence>

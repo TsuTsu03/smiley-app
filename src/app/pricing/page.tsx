@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle2, X, ArrowRight, ChevronDown } from "lucide-react";
 import MarketingNav from "@/components/MarketingNav";
 import MarketingFooter from "@/components/MarketingFooter";
+import ComingSoonModal from "@/components/ComingSoonModal";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -99,6 +99,7 @@ const FAQS = [
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [comingSoon, setComingSoon] = useState(false);
 
   return (
     <div className="min-h-screen bg-white font-sans">
@@ -189,16 +190,16 @@ export default function PricingPage() {
                     ))}
                   </ul>
 
-                  <Link
-                    href={`/register?plan=${name.toLowerCase()}`}
-                    className={`block text-center py-3.5 rounded-xl font-semibold text-sm transition-all ${
+                  <button
+                    onClick={() => setComingSoon(true)}
+                    className={`block w-full text-center py-3.5 rounded-xl font-semibold text-sm transition-all ${
                       popular
                         ? "bg-gradient-to-r from-sky-600 to-sky-500 text-white shadow-soft hover:opacity-90"
                         : "bg-sky-50 text-sky-700 hover:bg-sky-100"
                     }`}
                   >
                     {cta} <ArrowRight size={14} className="inline ml-1" />
-                  </Link>
+                  </button>
                 </motion.div>
               );
             })}
@@ -287,15 +288,17 @@ export default function PricingPage() {
             <p className="text-sky-200/70 mb-8">
               14-day free trial. No credit card required.
             </p>
-            <Link
-              href="/register"
+            <button
+              onClick={() => setComingSoon(true)}
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-sky-800 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
             >
               Start Free Trial <ArrowRight size={18} />
-            </Link>
+            </button>
           </div>
         </div>
       </section>
+
+      <ComingSoonModal open={comingSoon} onClose={() => setComingSoon(false)} />
 
       <MarketingFooter />
     </div>
