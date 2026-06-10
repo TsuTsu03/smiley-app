@@ -59,6 +59,58 @@ export async function sendEmail(opts: {
   }
 }
 
+/** Internal notification sent to the Smiley team when a demo is requested. */
+export function demoRequestNotificationHtml(args: {
+  name: string;
+  email: string;
+  clinicName: string;
+  dentists?: string;
+  phone?: string;
+  message?: string;
+}): string {
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const row = (label: string, value?: string) =>
+    value
+      ? `<tr><td style="padding:6px 0;color:#64748b;font-size:13px;width:120px;vertical-align:top">${label}</td><td style="padding:6px 0;color:#0c4a6e;font-size:14px;font-weight:500">${esc(value)}</td></tr>`
+      : '';
+  return `
+  <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px;margin:0 auto;color:#0c4a6e">
+    <div style="background:linear-gradient(135deg,#0284c7,#14b8a6);padding:24px;border-radius:16px 16px 0 0">
+      <h1 style="color:#fff;margin:0;font-size:20px">New demo request 🦷</h1>
+      <p style="color:#e0f2fe;margin:4px 0 0;font-size:13px">Someone wants to see Smiley</p>
+    </div>
+    <div style="border:1px solid #e0f2fe;border-top:none;border-radius:0 0 16px 16px;padding:24px">
+      <table style="width:100%;border-collapse:collapse">
+        ${row('Name', args.name)}
+        ${row('Email', args.email)}
+        ${row('Clinic', args.clinicName)}
+        ${row('Dentists', args.dentists)}
+        ${row('Phone', args.phone)}
+        ${row('Message', args.message)}
+      </table>
+      <p style="font-size:13px;color:#64748b;margin-top:16px">Reply directly to this email to reach them — it's set as the reply-to address.</p>
+    </div>
+  </div>`;
+}
+
+/** Confirmation sent to the prospect after they request a demo. */
+export function demoRequestConfirmationHtml(args: { name: string }): string {
+  return `
+  <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px;margin:0 auto;color:#0c4a6e">
+    <div style="background:linear-gradient(135deg,#0284c7,#14b8a6);padding:24px;border-radius:16px 16px 0 0">
+      <h1 style="color:#fff;margin:0;font-size:20px">Thanks for your interest in Smiley</h1>
+      <p style="color:#e0f2fe;margin:4px 0 0;font-size:13px">We received your demo request</p>
+    </div>
+    <div style="border:1px solid #e0f2fe;border-top:none;border-radius:0 0 16px 16px;padding:24px">
+      <p style="font-size:15px">Hi ${args.name},</p>
+      <p style="font-size:15px;line-height:1.5">Thanks for reaching out! We'll get in touch shortly to walk you through how Smiley can help run your clinic with less admin work — online booking, automated reminders, patient records, and more.</p>
+      <p style="font-size:15px;line-height:1.5">If you haven't already picked a time, you can grab a slot that works for you from the scheduling page. Talk soon! 🦷</p>
+      <p style="font-size:13px;color:#64748b;margin-top:16px">— The Smiley team</p>
+    </div>
+  </div>`;
+}
+
 /** Branded appointment-reminder email. */
 export function reminderEmailHtml(args: {
   patientName: string;

@@ -21,6 +21,9 @@ export default function MarketingNav() {
           <Link href="/pricing" className="text-sm text-sky-700/70 hover:text-sky-900 transition-colors font-medium">
             Pricing
           </Link>
+          <Link href="/#demo" className="text-sm text-sky-700/70 hover:text-sky-900 transition-colors font-medium">
+            Book a Demo
+          </Link>
           <Link href="/login" className="text-sm text-sky-700 hover:text-sky-900 transition-colors font-semibold">
             Sign In
           </Link>
@@ -46,6 +49,9 @@ export default function MarketingNav() {
           </Link>
           <Link href="/pricing" onClick={() => setOpen(false)} className="block text-sm text-sky-700 font-medium py-2">
             Pricing
+          </Link>
+          <Link href="/#demo" onClick={() => setOpen(false)} className="block text-sm text-sky-700 font-medium py-2">
+            Book a Demo
           </Link>
           <Link href="/login" onClick={() => setOpen(false)} className="block text-sm text-sky-700 font-semibold py-2">
             Sign In
