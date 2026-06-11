@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { requireUser } from '@/lib/apiAuth';
 import { logAudit } from '@/lib/audit';
 import { computeInvoiceTotals, type LineItem } from '@/lib/billing';
 import { NextRequest, NextResponse } from 'next/server';
@@ -21,6 +22,8 @@ const mapInvoice = (i: any) => ({
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
+  const { response } = await requireUser(supabase);
+  if (response) return response;
   const { searchParams } = new URL(request.url);
   const clinicId = searchParams.get('clinicId');
   const patientId = searchParams.get('patientId');

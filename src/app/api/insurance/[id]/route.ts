@@ -1,10 +1,13 @@
 import { createClient } from '@/lib/supabase/server';
+import { requireUser } from '@/lib/apiAuth';
 import { NextRequest, NextResponse } from 'next/server';
 
 /** Update a claim's status / approved amount. */
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
+  const { response } = await requireUser(supabase);
+  if (response) return response;
   const body = await request.json();
 
   const updates: Record<string, unknown> = {};
@@ -20,6 +23,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
+  const { response } = await requireUser(supabase);
+  if (response) return response;
   const { error } = await supabase.from('insurance_claims').delete().eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });

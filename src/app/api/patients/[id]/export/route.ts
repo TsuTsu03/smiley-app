@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { requireUser } from '@/lib/apiAuth';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -13,6 +14,8 @@ function csvEscape(v: unknown): string {
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
+  const { response } = await requireUser(supabase);
+  if (response) return response;
 
   const { data: patient } = await supabase
     .from('patients')

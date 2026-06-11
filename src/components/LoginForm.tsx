@@ -22,6 +22,9 @@ export default function LoginForm({ role }: { role: Role }) {
   const { login } = useAuth();
   const [field1, setField1] = useState("");
   const [field2, setField2] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState<"credentials" | "otp">("credentials");
+  const [maskedEmail, setMaskedEmail] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -40,10 +43,39 @@ export default function LoginForm({ role }: { role: Role }) {
     }
     setLoading(true);
     const result = await login(field1, field2, isPatient);
+    if (result.otpRequired) {
+      // A one-time code was emailed — switch to the code-entry step.
+      setMaskedEmail(result.email ?? "");
+      setStep("otp");
+      setOtp("");
+      setLoading(false);
+      return;
+    }
     if (result.error) {
       setError(result.error);
       setLoading(false);
     }
+  };
+
+  const handleVerifyOtp = async () => {
+    setError("");
+    if (!/^\d{6}$/.test(otp.trim())) {
+      setError("Enter the 6-digit code from your email.");
+      return;
+    }
+    setLoading(true);
+    const result = await login(field1, field2, true, otp.trim());
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+    }
+    // On success, AuthProvider sets the user and the app redirects.
+  };
+
+  const resetToCredentials = () => {
+    setStep("credentials");
+    setOtp("");
+    setError("");
   };
 
   return (
@@ -57,13 +89,36 @@ export default function LoginForm({ role }: { role: Role }) {
           <h2 className="text-lg font-display font-semibold text-sky-900">{cfg.label} Sign In</h2>
         </div>
         <p className="text-sm text-sky-400 mb-6">
-          {isPatient
+          {isPatient && step === "otp"
+            ? `We emailed a 6-digit code${maskedEmail ? ` to ${maskedEmail}` : ""}. Enter it below to finish signing in.`
+            : isPatient
             ? "Enter the name and date of birth registered by your clinic."
             : "Sign in with your clinic email and password."}
         </p>
 
         <div className="space-y-4">
-          {isPatient ? (
+          {isPatient && step === "otp" ? (
+            <div>
+              <label className="block text-sky-800 text-sm font-medium mb-1.5">Sign-in code</label>
+              <input
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                onKeyDown={(e) => e.key === "Enter" && handleVerifyOtp()}
+                placeholder="123456"
+                autoFocus
+                className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-center text-lg tracking-[0.4em] outline-none"
+              />
+              <button
+                type="button"
+                onClick={resetToCredentials}
+                className="mt-2 text-xs text-sky-500 hover:text-sky-700 underline underline-offset-2"
+              >
+                Use a different name or date of birth
+              </button>
+            </div>
+          ) : isPatient ? (
             <>
               <div>
                 <label className="block text-sky-800 text-sm font-medium mb-1.5">Full Name</label>
@@ -142,12 +197,16 @@ export default function LoginForm({ role }: { role: Role }) {
         )}
 
         <button
-          onClick={handleLogin}
+          onClick={isPatient && step === "otp" ? handleVerifyOtp : handleLogin}
           disabled={loading}
           className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r ${cfg.color} hover:opacity-90 transition-opacity shadow-soft disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer`}
         >
           {loading ? (
-            <><Loader size={16} className="animate-spin" /> Signing in…</>
+            <><Loader size={16} className="animate-spin" /> {isPatient && step === "otp" ? "Verifying…" : "Signing in…"}</>
+          ) : isPatient && step === "otp" ? (
+            "Verify & sign in"
+          ) : isPatient ? (
+            "Email me a code"
           ) : (
             "Sign In"
           )}

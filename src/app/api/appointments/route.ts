@@ -1,10 +1,13 @@
 import { createClient } from '@/lib/supabase/server';
+import { requireUser } from '@/lib/apiAuth';
 import { logAudit } from '@/lib/audit';
 import { enforceRateLimit } from '@/lib/rateLimit';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
+  const { response } = await requireUser(supabase);
+  if (response) return response;
   const { searchParams } = new URL(request.url);
   const clinicId = searchParams.get('clinicId');
   const patientId = searchParams.get('patientId');
@@ -46,6 +49,8 @@ export async function POST(request: NextRequest) {
   if (limited) return limited;
 
   const supabase = await createClient();
+  const { response } = await requireUser(supabase);
+  if (response) return response;
   const body = await request.json();
 
   if (!body.dentistId || !body.date || !body.time || !body.patientId) {

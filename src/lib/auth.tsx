@@ -24,7 +24,12 @@ interface AuthContextType {
   trialEndsAt: string | null;
   user: AuthUser | null;
   loading: boolean;
-  login: (emailOrName: string, passwordOrDob: string, asPatient?: boolean) => Promise<{ error?: string }>;
+  login: (
+    emailOrName: string,
+    passwordOrDob: string,
+    asPatient?: boolean,
+    otp?: string
+  ) => Promise<{ error?: string; otpRequired?: boolean; email?: string }>;
   logout: () => Promise<void>;
 }
 
@@ -78,11 +83,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function login(
     emailOrName: string,
     passwordOrDob: string,
-    asPatient = false
-  ): Promise<{ error?: string }> {
+    asPatient = false,
+    otp?: string
+  ): Promise<{ error?: string; otpRequired?: boolean; email?: string }> {
     const endpoint = asPatient ? '/api/auth/patient-login' : '/api/auth/login';
     const body = asPatient
-      ? { fullName: emailOrName, dateOfBirth: passwordOrDob }
+      ? { fullName: emailOrName, dateOfBirth: passwordOrDob, otp }
       : { email: emailOrName, password: passwordOrDob };
 
     const res = await fetch(endpoint, {
@@ -92,6 +98,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     const json = await res.json();
     if (!res.ok) return { error: json.error ?? 'Login failed' };
+    // Patient flow step 1: a code was emailed; the session isn't created yet.
+    if (json.otpRequired) return { otpRequired: true, email: json.email };
     setUser(json.user);
     applyClinic(json.clinic);
     return {};

@@ -146,6 +146,32 @@ export function trialSignupNotificationHtml(args: {
   </div>`;
 }
 
+/** One-time login code emailed to a patient as a second factor. */
+export function patientOtpEmailHtml(args: {
+  patientName: string;
+  clinicName: string;
+  code: string;
+  minutes: number;
+}): string {
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `
+  <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px;margin:0 auto;color:#0c4a6e">
+    <div style="background:linear-gradient(135deg,#0284c7,#14b8a6);padding:24px;border-radius:16px 16px 0 0">
+      <h1 style="color:#fff;margin:0;font-size:20px">${esc(args.clinicName)}</h1>
+      <p style="color:#e0f2fe;margin:4px 0 0;font-size:13px">Your patient sign-in code</p>
+    </div>
+    <div style="border:1px solid #e0f2fe;border-top:none;border-radius:0 0 16px 16px;padding:24px">
+      <p style="font-size:15px">Hi ${esc(args.patientName)},</p>
+      <p style="font-size:15px;line-height:1.5">Use this code to finish signing in to your patient portal:</p>
+      <div style="background:#f0f9ff;border:1px solid #e0f2fe;border-radius:12px;padding:16px;margin:16px 0;text-align:center">
+        <div style="font-size:30px;font-weight:700;letter-spacing:8px;color:#0369a1">${esc(args.code)}</div>
+      </div>
+      <p style="font-size:13px;color:#64748b">This code expires in ${args.minutes} minutes. If you didn't try to sign in, you can safely ignore this email — and let the clinic know.</p>
+    </div>
+  </div>`;
+}
+
 /** Branded appointment-reminder email. */
 export function reminderEmailHtml(args: {
   patientName: string;
