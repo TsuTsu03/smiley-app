@@ -18,7 +18,35 @@ export async function POST(request: NextRequest) {
   const limited = await enforceRateLimit(request, 'signup', { limit: 5, windowSec: 600 });
   if (limited) return limited;
 
-  const { clinicName, slug, address, phone, email, adminName, adminEmail, password } = await request.json();
+  const { clinicName, slug, address, phone, email, adminName, adminEmail, password } =
+    await request.json();
+
+  // ── Server-side validation (never trust the client) ────────────────────────
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
+
+  if (!str(clinicName) || !str(slug) || !str(adminName) || !str(adminEmail) || !str(password)) {
+    return NextResponse.json(
+      { error: 'Clinic name, portal slug, admin name, admin email, and password are required.' },
+      { status: 400 }
+    );
+  }
+  if (!EMAIL_RE.test(str(adminEmail)) || (str(email) && !EMAIL_RE.test(str(email)))) {
+    return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 });
+  }
+  if (!SLUG_RE.test(str(slug))) {
+    return NextResponse.json(
+      { error: 'Portal slug may only contain lowercase letters, numbers, and hyphens.' },
+      { status: 400 }
+    );
+  }
+  if (String(password).length < 8) {
+    return NextResponse.json(
+      { error: 'Password must be at least 8 characters.' },
+      { status: 400 }
+    );
+  }
 
   const adminClient = createAdminClient();
 

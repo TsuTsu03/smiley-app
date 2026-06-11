@@ -7,7 +7,10 @@ import { NextRequest, NextResponse } from 'next/server';
  * RLS ensures the caller can only export patients in their own clinic.
  */
 function csvEscape(v: unknown): string {
-  const s = v == null ? '' : String(v);
+  let s = v == null ? '' : String(v);
+  // Neutralize CSV/formula injection: a leading =, +, -, @, tab or CR makes
+  // spreadsheet apps execute the cell as a formula. Prefix with an apostrophe.
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 

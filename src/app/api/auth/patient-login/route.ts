@@ -63,12 +63,21 @@ function maskEmail(email: string): string {
 
 type Admin = ReturnType<typeof createAdminClient>;
 
+/**
+ * Escape PostgREST LIKE/ILIKE wildcards so a value like "%" or "_" is matched
+ * literally instead of acting as a pattern (otherwise "%" would match every
+ * patient and turn name+DOB into an enumeration oracle).
+ */
+function escapeLike(input: string): string {
+  return input.replace(/[\\%_]/g, (ch) => `\\${ch}`);
+}
+
 /** Look up the patient by name + DOB (the identifier, not the credential). */
 async function findPatient(admin: Admin, fullName: string, dateOfBirth: string) {
   const { data } = await admin
     .from('patients')
     .select('*, clinics(name, slug)')
-    .ilike('full_name', fullName.trim())
+    .ilike('full_name', escapeLike(fullName.trim()))
     .eq('date_of_birth', dateOfBirth)
     .maybeSingle();
   return data;
