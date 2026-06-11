@@ -79,6 +79,46 @@ async function run() {
   const me = await a('/api/auth/me');
   ok('Session persists (/api/auth/me)', me.status === 200 && me.body?.user?.clinicId === clinicA);
 
+  // 3b) Subscription gating — all the states a clinic can be in.
+  // Fresh signup → on a 14-day trial → has access.
+  ok('Fresh clinic is on an active trial (subscriptionActive=true)', me.body?.clinic?.subscriptionActive === true,
+    `got ${me.body?.clinic?.subscriptionActive}`);
+
+  // Expired trial → access revoked.
+  await admin.from('clinics').update({
+    subscription_status: 'trialing',
+    trial_ends_at: new Date(Date.now() - 86_400_000).toISOString(),
+    current_period_end: null,
+  }).eq('id', clinicA);
+  const meExpired = await a('/api/auth/me');
+  ok('Expired trial revokes access (subscriptionActive=false)', meExpired.body?.clinic?.subscriptionActive === false,
+    `got ${meExpired.body?.clinic?.subscriptionActive}`);
+
+  // Paid & active with a future period → access restored (simulates a successful payment).
+  await admin.from('clinics').update({
+    subscription_status: 'active',
+    current_period_end: new Date(Date.now() + 30 * 86_400_000).toISOString(),
+  }).eq('id', clinicA);
+  const mePaid = await a('/api/auth/me');
+  ok('Active paid plan restores access (subscriptionActive=true)', mePaid.body?.clinic?.subscriptionActive === true,
+    `got ${mePaid.body?.clinic?.subscriptionActive}`);
+
+  // Lapsed paid period → access revoked again.
+  await admin.from('clinics').update({
+    subscription_status: 'active',
+    current_period_end: new Date(Date.now() - 86_400_000).toISOString(),
+  }).eq('id', clinicA);
+  const meLapsed = await a('/api/auth/me');
+  ok('Lapsed paid period revokes access (subscriptionActive=false)', meLapsed.body?.clinic?.subscriptionActive === false,
+    `got ${meLapsed.body?.clinic?.subscriptionActive}`);
+
+  // Restore the trial so the remaining steps run against a clinic with access.
+  await admin.from('clinics').update({
+    subscription_status: 'trialing',
+    trial_ends_at: new Date(Date.now() + 14 * 86_400_000).toISOString(),
+    current_period_end: null,
+  }).eq('id', clinicA);
+
   // 4) Create patient
   const pat = await a('/api/patients', { method: 'POST', body: JSON.stringify({
     fullName: `ITest Patient ${ts}`, dateOfBirth: '1990-01-01', gender: 'male', phone: '0917', email: 'p@x.com',

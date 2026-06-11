@@ -1,7 +1,17 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/audit';
 import { enforceRateLimit } from '@/lib/rateLimit';
+import { sendEmail, trialSignupNotificationHtml } from '@/lib/email';
 import { NextRequest, NextResponse } from 'next/server';
+
+/** Where new free-trial signups are announced. */
+function signupNotifyEmail(): string {
+  return (
+    process.env.SIGNUP_NOTIFY_EMAIL ||
+    process.env.DEMO_NOTIFY_EMAIL ||
+    'jansen.dev03@gmail.com'
+  );
+}
 
 export async function POST(request: NextRequest) {
   // Anti-spam: clinic signups create auth users — cap at 5 / 10 min per IP
@@ -69,6 +79,26 @@ export async function POST(request: NextRequest) {
     entityId: clinic.id,
     details: { name: clinic.name, slug: clinic.slug },
   });
+
+  // Notify the team that a new clinic started a free trial — best-effort,
+  // never block or fail the signup if the email can't be sent.
+  try {
+    await sendEmail({
+      to: signupNotifyEmail(),
+      subject: `New free trial — ${clinic.name}`,
+      html: trialSignupNotificationHtml({
+        clinicName: clinic.name,
+        slug: clinic.slug,
+        adminName,
+        adminEmail,
+        phone,
+        clinicEmail: email,
+      }),
+      replyTo: adminEmail,
+    });
+  } catch {
+    // ignore — signup already succeeded
+  }
 
   return NextResponse.json({ clinic: { name: clinic.name, slug: clinic.slug } }, { status: 201 });
 }

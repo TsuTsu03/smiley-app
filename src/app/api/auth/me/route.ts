@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { isSubscriptionActive } from '@/lib/billing';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -11,7 +12,7 @@ export async function GET() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*, clinics(name, slug)')
+    .select('*, clinics(name, slug, subscription_status, trial_ends_at, current_period_end)')
     .eq('id', user.id)
     .single();
 
@@ -47,6 +48,16 @@ export async function GET() {
     }
   }
 
+  // Compute whether the clinic still has access. Only staff (admin/dentist) are
+  // gated by billing — patients keep using their portal regardless.
+  const status = profile.clinics?.subscription_status ?? 'trialing';
+  const trialEndsAt = profile.clinics?.trial_ends_at as string | null;
+  const subscriptionActive = isSubscriptionActive({
+    subscriptionStatus: status,
+    trialEndsAt,
+    currentPeriodEnd: profile.clinics?.current_period_end as string | null,
+  });
+
   return NextResponse.json({
     user: {
       id,
@@ -59,6 +70,9 @@ export async function GET() {
     clinic: {
       name: profile.clinics?.name ?? '',
       slug: profile.clinics?.slug ?? '',
+      subscriptionStatus: status,
+      trialEndsAt,
+      subscriptionActive,
     },
   });
 }

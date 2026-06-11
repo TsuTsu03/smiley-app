@@ -111,6 +111,41 @@ export function demoRequestConfirmationHtml(args: { name: string }): string {
   </div>`;
 }
 
+/** Internal notification sent to the team when a clinic starts a free trial. */
+export function trialSignupNotificationHtml(args: {
+  clinicName: string;
+  slug: string;
+  adminName: string;
+  adminEmail: string;
+  phone?: string;
+  clinicEmail?: string;
+}): string {
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const row = (label: string, value?: string) =>
+    value
+      ? `<tr><td style="padding:6px 0;color:#64748b;font-size:13px;width:120px;vertical-align:top">${label}</td><td style="padding:6px 0;color:#0c4a6e;font-size:14px;font-weight:500">${esc(value)}</td></tr>`
+      : '';
+  return `
+  <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px;margin:0 auto;color:#0c4a6e">
+    <div style="background:linear-gradient(135deg,#0284c7,#14b8a6);padding:24px;border-radius:16px 16px 0 0">
+      <h1 style="color:#fff;margin:0;font-size:20px">New free trial started 🎉</h1>
+      <p style="color:#e0f2fe;margin:4px 0 0;font-size:13px">A clinic just signed up for the 14-day trial</p>
+    </div>
+    <div style="border:1px solid #e0f2fe;border-top:none;border-radius:0 0 16px 16px;padding:24px">
+      <table style="width:100%;border-collapse:collapse">
+        ${row('Clinic', args.clinicName)}
+        ${row('Portal', args.slug)}
+        ${row('Admin', args.adminName)}
+        ${row('Admin email', args.adminEmail)}
+        ${row('Clinic email', args.clinicEmail)}
+        ${row('Phone', args.phone)}
+      </table>
+      <p style="font-size:13px;color:#64748b;margin-top:16px">Their trial runs for 14 days. Reply to this email to reach the admin directly.</p>
+    </div>
+  </div>`;
+}
+
 /** Branded appointment-reminder email. */
 export function reminderEmailHtml(args: {
   patientName: string;

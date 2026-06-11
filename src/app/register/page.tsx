@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,6 +40,22 @@ function RegisterFlow() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const preselected = searchParams.get("plan") ?? "";
+
+  // Demo gate — before starting a trial we ask whether they've already had a
+  // live demo/walkthrough. If not, we send them to the "Schedule a demo"
+  // section. Answer is remembered for the session so it only asks once.
+  const [demoConfirmed, setDemoConfirmed] = useState(true); // assume true until mounted
+  useEffect(() => {
+    const ok =
+      typeof window !== "undefined" &&
+      sessionStorage.getItem("smiley_demo_confirmed") === "1";
+    setDemoConfirmed(ok);
+  }, []);
+
+  const confirmDemo = () => {
+    sessionStorage.setItem("smiley_demo_confirmed", "1");
+    setDemoConfirmed(true);
+  };
 
   const [step, setStep] = useState(preselected ? 2 : 1);
   const [selectedPlan, setSelectedPlan] = useState(preselected || "growth");
@@ -115,6 +131,51 @@ function RegisterFlow() {
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-teal-50/30 font-sans flex flex-col">
       <MarketingNav />
 
+      {/* Demo gate — shown until the visitor confirms they've had a demo */}
+      <AnimatePresence>
+        {!demoConfirmed && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-sky-950/40 backdrop-blur-sm px-5"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.96 }}
+              className="w-full max-w-md rounded-2xl bg-white p-7 shadow-2xl text-center"
+            >
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center mx-auto mb-5 shadow-lg">
+                <Sparkles size={26} className="text-white" />
+              </div>
+              <h2 className="font-display text-2xl text-sky-950 mb-2">
+                Before you get started
+              </h2>
+              <p className="text-sky-600 text-sm mb-7 leading-relaxed">
+                Have you already attended a live demo or walkthrough of Smiley
+                with our team? We&apos;d like to show you how it works for your
+                clinic first, so you can make the most of your trial.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={confirmDemo}
+                  className="w-full py-3 bg-gradient-to-r from-sky-600 to-sky-500 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity text-sm"
+                >
+                  Yes, I&apos;ve seen the demo — continue
+                </button>
+                <button
+                  onClick={() => router.push("/#demo")}
+                  className="w-full py-3 text-sky-600 font-medium rounded-xl border border-sky-200 hover:bg-sky-50 transition-colors text-sm"
+                >
+                  Not yet — book a demo
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex-1 pt-28 pb-16 px-5 sm:px-8">
         <div className="max-w-2xl mx-auto">
           {/* Progress */}
@@ -183,6 +244,20 @@ function RegisterFlow() {
                   >
                     Continue <ArrowRight size={14} />
                   </button>
+                </div>
+
+                {/* Plan choice isn't required to start — they can decide later. */}
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setStep(2)}
+                    className="text-sm font-medium text-sky-600 hover:text-sky-800 underline-offset-2 hover:underline"
+                  >
+                    Continue with my free trial — choose a plan later
+                  </button>
+                  <p className="mt-1.5 text-xs text-sky-400">
+                    Your 14-day free trial starts right away. No payment needed
+                    now.
+                  </p>
                 </div>
               </motion.div>
             )}
