@@ -66,6 +66,7 @@ export async function GET() {
       role: profile.role,
       clinicId: profile.clinic_id,
       dentistId,
+      onboardedAt: profile.onboarded_at ?? null,
     },
     clinic: {
       name: profile.clinics?.name ?? '',

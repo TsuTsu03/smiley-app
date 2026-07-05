@@ -140,7 +140,7 @@ export default function ScheduleDemo() {
             variants={fadeUp}
             className="font-display text-3xl sm:text-5xl text-sky-950 mb-5 tracking-tight leading-tight"
           >
-            See Smiley running your clinic — live
+            See Smiley running your clinic, live
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -162,7 +162,7 @@ export default function ScheduleDemo() {
               },
               {
                 icon: ShieldCheck,
-                text: "No commitment — just see if it's a fit"
+                text: "No commitment, just see if it's a fit"
               }
             ].map(({ icon: Icon, text }) => (
               <motion.li

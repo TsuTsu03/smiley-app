@@ -14,6 +14,7 @@ import AdminAnalytics from './AdminAnalytics';
 import AdminReminders from './AdminReminders';
 import AdminDentists from './AdminDentists';
 import AdminRegisterPatient from './AdminRegisterPatient';
+import StaffChatbot from '@/components/StaffChatbot';
 
 const NAV = [
   { key: 'overview',         label: 'Overview',           icon: <LayoutDashboard size={17} /> },
@@ -32,19 +33,23 @@ const NAV = [
 export default function AdminDashboard() {
   const [active, setActive] = useState('overview');
 
+  // Locked to light until these screens are migrated to tokens (Phase 3).
   return (
-    <SidebarLayout nav={NAV} active={active} onNav={setActive} subtitle="Admin Portal">
-      {active === 'overview'         && <AdminOverview onNav={setActive} />}
-      {active === 'queue'            && <AdminQueue />}
-      {active === 'appointments'     && <AdminAppointments />}
-      {active === 'patients'         && <AdminPatients />}
-      {active === 'register-patient' && <AdminRegisterPatient />}
-      {active === 'billing'          && <AdminBilling />}
-      {active === 'insurance'        && <AdminInsurance />}
-      {active === 'consents'         && <AdminConsents />}
-      {active === 'analytics'        && <AdminAnalytics />}
-      {active === 'dentists'         && <AdminDentists />}
-      {active === 'reminders'        && <AdminReminders />}
-    </SidebarLayout>
+    <div data-theme="light" className="h-screen">
+      <SidebarLayout nav={NAV} active={active} onNav={setActive} subtitle="Admin Portal" lockTheme>
+        {active === 'overview'         && <AdminOverview onNav={setActive} />}
+        {active === 'queue'            && <AdminQueue />}
+        {active === 'appointments'     && <AdminAppointments />}
+        {active === 'patients'         && <AdminPatients />}
+        {active === 'register-patient' && <AdminRegisterPatient />}
+        {active === 'billing'          && <AdminBilling />}
+        {active === 'insurance'        && <AdminInsurance />}
+        {active === 'consents'         && <AdminConsents />}
+        {active === 'analytics'        && <AdminAnalytics />}
+        {active === 'dentists'         && <AdminDentists />}
+        {active === 'reminders'        && <AdminReminders />}
+      </SidebarLayout>
+      <StaffChatbot />
+    </div>
   );
 }

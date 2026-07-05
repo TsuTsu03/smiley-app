@@ -11,6 +11,7 @@ interface AuthUser {
   role: Role;
   clinicId: string;
   dentistId?: string | null;
+  onboardedAt?: string | null;
 }
 
 interface AuthContextType {
@@ -20,10 +21,13 @@ interface AuthContextType {
   clinicName: string;
   clinicSlug: string;
   subscriptionActive: boolean;
+  /** True only when the clinic is on an ACTIVE paid plan (no trial). Gates app access. */
+  paidActive: boolean;
   subscriptionStatus: string;
   trialEndsAt: string | null;
   user: AuthUser | null;
   loading: boolean;
+  needsOnboarding: boolean;
   login: (
     emailOrName: string,
     passwordOrDob: string,
@@ -31,6 +35,7 @@ interface AuthContextType {
     otp?: string
   ) => Promise<{ error?: string; otpRequired?: boolean; email?: string }>;
   logout: () => Promise<void>;
+  completeOnboarding: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -111,6 +116,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     applyClinic(null);
   }
 
+  // One-time product walkthrough gates staff (admin/dentist) on first use —
+  // it replaces the retired free-trial demo. Marks it done and updates state
+  // so the overlay dismisses without a full reload.
+  async function completeOnboarding() {
+    await fetch('/api/auth/onboarded', { method: 'POST' });
+    setUser((u) => (u ? { ...u, onboardedAt: new Date().toISOString() } : u));
+  }
+
+  const needsOnboarding =
+    !!user && (user.role === 'admin' || user.role === 'dentist') && !user.onboardedAt;
+
+  // Access requires an ACTIVE paid subscription — there is no free trial.
+  const paidActive = subscriptionActive && subscriptionStatus === 'active';
+
   return (
     <AuthContext.Provider
       value={{
@@ -120,12 +139,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         clinicName,
         clinicSlug,
         subscriptionActive,
+        paidActive,
         subscriptionStatus,
         trialEndsAt,
         user,
         loading,
+        needsOnboarding,
         login,
         logout,
+        completeOnboarding,
       }}
     >
       {children}

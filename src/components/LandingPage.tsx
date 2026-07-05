@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import MarketingNav from "./MarketingNav";
 import MarketingFooter from "./MarketingFooter";
+import { FAQS } from "@/lib/seo";
 import ScheduleDemo from "./ScheduleDemo";
 import ComingSoonModal from "./ComingSoonModal";
 import { SmileyIcon } from "./Logo";
@@ -1032,14 +1033,14 @@ const FEATURES = [
   {
     icon: Users,
     title: "Patient Records",
-    desc: "Complete medical history, treatment plans, and allergies — all in one secure profile.",
+    desc: "Complete medical history, treatment plans, and allergies, all in one secure profile.",
     tone: "from-sky-500 to-sky-600",
     preview: FeaturePreviews.records
   },
   {
     icon: Calendar,
     title: "Smart Booking",
-    desc: "Let patients choose a dentist, date, and time — without the back-and-forth messages.",
+    desc: "Let patients choose a dentist, date, and time without the back-and-forth messages.",
     tone: "from-teal-500 to-teal-600",
     preview: FeaturePreviews.booking
   },
@@ -1128,7 +1129,7 @@ const PLANS = [
     name: "Multi-Clinic",
     price: 3000,
     unit: "/branch",
-    desc: "For dental groups — billed per branch",
+    desc: "For dental groups, billed per branch",
     features: [
       "Everything in Growth",
       "Per-branch billing",
@@ -1148,7 +1149,7 @@ const PAIN_POINTS = [
     text: "Bookings buried in Messenger and text threads"
   },
   { icon: FileText, text: "Records scattered across paper, Excel, and chats" },
-  { icon: Clock, text: "Manual reminders — patients still forget and no-show" },
+  { icon: Clock, text: "Manual reminders, and patients still forget and no-show" },
   { icon: Activity, text: "No clear view of daily clinic performance" },
   { icon: Building2, text: "Hard to manage multiple dentists or branches" }
 ];
@@ -1181,7 +1182,7 @@ const BENEFITS = [
   {
     icon: Clock,
     title: "Save admin hours",
-    desc: "Patients book online without the back-and-forth — your front desk gets time back."
+    desc: "Patients book online without the back-and-forth, so your front desk gets time back."
   },
   {
     icon: SmilePlus,
@@ -1215,7 +1216,7 @@ const ROLES = [
   {
     icon: SmilePlus,
     title: "Patients",
-    desc: "Book online, view appointment history, and get reminders — no calls needed."
+    desc: "Book online, view appointment history, and get reminders without picking up the phone."
   }
 ];
 
@@ -1239,7 +1240,7 @@ const TRUST = [
   {
     icon: Download,
     title: "Exportable records",
-    desc: "Own your data — export patient records anytime."
+    desc: "Own your data. Export patient records anytime."
   },
   {
     icon: ScrollText,
@@ -1263,7 +1264,7 @@ const AI_FEATURES = [
   {
     icon: Mic,
     title: "AI charting scribe",
-    desc: "Speak naturally after a visit — AI turns it into structured, ready-to-save treatment notes."
+    desc: "Speak naturally after a visit, and AI turns it into structured, ready-to-save treatment notes."
   },
   {
     icon: Bot,
@@ -1273,7 +1274,7 @@ const AI_FEATURES = [
   {
     icon: BarChart3,
     title: "Ask-your-data analytics",
-    desc: "Ask in plain words — “Ilang new patients this month?” — and get instant answers and charts."
+    desc: "Ask in plain words, like \"Ilang new patients this month?\", and get instant answers and charts."
   }
 ];
 
@@ -1293,7 +1294,7 @@ export default function LandingPage() {
   }, [demoOpen]);
 
   return (
-    <div className="min-h-screen bg-white font-sans overflow-x-hidden">
+    <div data-theme="light" className="min-h-screen bg-white font-sans overflow-x-hidden">
       <MarketingNav />
 
       {/* ═══ HERO ═══════════════════════════════════════════════ */}
@@ -1338,7 +1339,7 @@ export default function LandingPage() {
               >
                 Stop losing patients to{" "}
                 <span className="relative inline-block">
-                  <span className="bg-gradient-to-r from-sky-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                  <span className="text-teal-600">
                     missed appointments
                   </span>
                   <svg
@@ -1379,11 +1380,11 @@ export default function LandingPage() {
 
               <motion.p
                 variants={fadeUp}
-                className="text-sky-700/70 text-lg leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
+                className="text-slate-600 text-lg leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
               >
                 Smiley helps dental clinics manage online bookings, patient
-                records, automated reminders, dentist schedules, and follow-ups
-                — without spreadsheets or manual chat reminders.
+                records, automated reminders, dentist schedules, and follow-ups,
+                without spreadsheets or manual chat reminders.
               </motion.p>
 
               <motion.div
@@ -1397,7 +1398,7 @@ export default function LandingPage() {
                     background: "linear-gradient(135deg, #0284C7, #14B8A6)"
                   }}
                 >
-                  Try Smiley free for 14 days
+                  Get started with Smiley
                   <ArrowRight
                     size={18}
                     className="group-hover:translate-x-1 transition-transform"
@@ -1415,7 +1416,7 @@ export default function LandingPage() {
               </motion.div>
 
               <motion.p variants={fadeUp} className="text-xs text-sky-500 mt-4">
-                No credit card required · Setup takes less than 10 minutes.
+                Book a free demo · Setup takes less than 10 minutes.
               </motion.p>
 
               {/* value highlights */}
@@ -1787,8 +1788,8 @@ export default function LandingPage() {
               className="text-sky-700/65 text-lg leading-relaxed mb-7"
             >
               From the moment a patient picks a slot to the invoice and clinic
-              insights, Smiley handles the busywork. Here&apos;s the full loop —
-              booking, reminders, charting, billing, and analytics — happening
+              insights, Smiley handles the busywork. Here&apos;s the full loop:
+              booking, reminders, charting, billing, and analytics, happening
               live.
             </motion.p>
             <motion.ul variants={stagger} className="space-y-3.5 mb-8">
@@ -1947,7 +1948,7 @@ export default function LandingPage() {
               Everything you need to run your clinic
             </motion.h2>
             <motion.p variants={fadeUp} className="text-sky-700/60 text-lg">
-              One platform for your whole clinic — with more on the way.
+              One platform for your whole clinic, with more on the way.
             </motion.p>
           </motion.div>
 
@@ -2028,8 +2029,8 @@ export default function LandingPage() {
               Your clinic&apos;s new AI teammate
             </motion.h2>
             <motion.p variants={fadeUp} className="text-sky-200/75 text-lg">
-              Smiley AI quietly handles the busywork — predicting no-shows,
-              writing up visits, and answering patients — so your team can focus
+              Smiley AI quietly handles the busywork: predicting no-shows,
+              writing up visits, and answering patients, so your team can focus
               on care.
             </motion.p>
           </motion.div>
@@ -2084,7 +2085,7 @@ export default function LandingPage() {
             transition={{ delay: 0.3 }}
             className="relative text-center text-sky-300/60 text-xs mt-10"
           >
-            Smiley AI assists your team — every suggestion stays under clinic
+            Smiley AI assists your team. Every suggestion stays under clinic
             review and control.
           </motion.p>
         </div>
@@ -2114,7 +2115,7 @@ export default function LandingPage() {
             </motion.h2>
             <motion.p variants={fadeUp} className="text-sky-700/60 text-lg">
               From the owner&apos;s office to the front desk to the
-              patient&apos;s phone — each role gets exactly what they need.
+              patient&apos;s phone, each role gets exactly what they need.
             </motion.p>
           </motion.div>
 
@@ -2172,7 +2173,7 @@ export default function LandingPage() {
               variants={fadeUp}
               className="font-display text-3xl sm:text-4xl text-sky-950 mb-5 tracking-tight leading-tight"
             >
-              Let patients book themselves — around the clock
+              Let patients book themselves, around the clock
             </motion.h2>
             <motion.p
               variants={fadeUp}
@@ -2180,7 +2181,7 @@ export default function LandingPage() {
             >
               Your branded booking page lets patients pick a dentist, date, and
               time that works for them. Smiley handles conflicts, confirmations,
-              and reminders — so your front desk doesn&apos;t have to.
+              and reminders, so your front desk doesn&apos;t have to.
             </motion.p>
             <motion.ul variants={stagger} className="space-y-3.5">
               {[
@@ -2269,7 +2270,7 @@ export default function LandingPage() {
               {
                 step: "03",
                 title: "Go live",
-                desc: "Your branded portal is ready. Patients book, you manage — instantly."
+                desc: "Your branded portal is ready. Patients book, you manage, instantly."
               }
             ].map(({ step, title, desc }) => (
               <motion.div
@@ -2371,8 +2372,8 @@ export default function LandingPage() {
               Simple, transparent pricing
             </motion.h2>
             <motion.p variants={fadeUp} className="text-sky-700/60 text-lg">
-              Start with a free trial, upgrade when you&apos;re ready. No hidden
-              fees.
+              Pick a plan and activate anytime. Cancel whenever you want. No
+              hidden fees.
             </motion.p>
           </motion.div>
 
@@ -2468,6 +2469,36 @@ export default function LandingPage() {
       {/* ═══ SCHEDULE A DEMO ════════════════════════════════════ */}
       <ScheduleDemo />
 
+      {/* ═══ FAQ (visible + matches FAQPage JSON-LD for AEO) ═════ */}
+      <section id="faq" className="py-20 sm:py-28 bg-gradient-to-b from-white to-sky-50/50">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-3xl sm:text-4xl text-sky-950 tracking-tight mb-3">
+              Frequently asked questions
+            </h2>
+            <p className="text-sky-700/80">
+              Everything you need to know about Smiley dental clinic software.
+            </p>
+          </div>
+          <dl className="space-y-4">
+            {FAQS.map((f) => (
+              <details
+                key={f.q}
+                className="group rounded-2xl border border-sky-100 bg-white p-5 shadow-sm open:shadow-md transition-shadow"
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 list-none">
+                  <dt className="font-semibold text-sky-950">{f.q}</dt>
+                  <span className="text-sky-400 transition-transform group-open:rotate-45 text-xl leading-none">
+                    +
+                  </span>
+                </summary>
+                <dd className="mt-3 text-sky-700 leading-relaxed">{f.a}</dd>
+              </details>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {/* ═══ CTA ════════════════════════════════════════════════ */}
       <section className="py-20 sm:py-28">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
@@ -2508,7 +2539,7 @@ export default function LandingPage() {
             >
               Launch your booking portal, automate reminders, and organize
               patient records in one place. Setup takes less than 10 minutes —
-              no credit card needed.
+              book a free demo to see it live.
             </motion.p>
             <motion.div
               variants={fadeUp}
@@ -2518,7 +2549,7 @@ export default function LandingPage() {
                 href="/register"
                 className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-sky-900 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 text-base"
               >
-                Start Free Trial
+                Get Started
                 <ArrowRight
                   size={18}
                   className="group-hover:translate-x-1 transition-transform"
@@ -2573,7 +2604,7 @@ export default function LandingPage() {
                   href="/register"
                   className="font-semibold text-white underline underline-offset-2"
                 >
-                  Start your free trial →
+                  Get started →
                 </Link>
               </p>
             </motion.div>

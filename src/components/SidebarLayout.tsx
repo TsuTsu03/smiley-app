@@ -6,6 +6,7 @@ import { LogOut, Menu, X, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { SmileyIcon } from '@/components/Logo';
+import { ThemeToggle } from '@/components/ui';
 
 interface NavItem {
   key: string;
@@ -19,39 +20,42 @@ interface Props {
   onNav: (key: string) => void;
   children: React.ReactNode;
   subtitle?: string;
+  /** Hide the dark-mode toggle (used on portals still locked to light). */
+  lockTheme?: boolean;
 }
 
-export default function SidebarLayout({ nav, active, onNav, children, subtitle }: Props) {
+export default function SidebarLayout({ nav, active, onNav, children, subtitle, lockTheme = false }: Props) {
   const { clinicName, role, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-sky-50/30 overflow-hidden">
+    <div className="flex h-screen bg-bg overflow-hidden">
       {/* Sidebar */}
       <aside
         className={clsx(
-          'flex-shrink-0 w-64 bg-white border-r border-sky-100 flex flex-col transition-transform duration-300',
+          'flex-shrink-0 w-64 bg-raised border-r border-line flex flex-col transition-transform duration-300 ease-drawer',
           'fixed md:relative inset-y-0 left-0 z-40',
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >
         {/* Logo */}
-        <div className="px-5 py-5 border-b border-sky-50">
+        <div className="px-5 py-5 border-b border-line">
           <div className="flex items-center gap-2.5">
             <SmileyIcon size={34} className="shrink-0" />
             <div className="min-w-0">
-              <div className="text-[11px] font-medium text-sky-400 uppercase tracking-wide leading-none mb-0.5">Smiley <span className="text-sky-300 normal-case">by StackWise</span></div>
-              <div className="text-sky-800 font-semibold text-sm truncate leading-tight">{clinicName}</div>
+              <div className="text-[11px] font-medium text-subtle uppercase tracking-wide leading-none mb-0.5">Smiley <span className="opacity-70 normal-case">by StackWise</span></div>
+              <div className="text-fg font-semibold text-sm truncate leading-tight">{clinicName}</div>
             </div>
           </div>
         </div>
 
-        {/* Role badge */}
+        {/* Role badge + theme */}
         {subtitle && (
-          <div className="px-5 py-3 border-b border-sky-50">
-            <span className="text-xs font-medium text-sky-500 bg-sky-50 px-2.5 py-1 rounded-full capitalize">
+          <div className="px-5 py-3 border-b border-line flex items-center justify-between gap-2">
+            <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full capitalize">
               {role} Portal
             </span>
+            {!lockTheme && <ThemeToggle className="w-8 h-8" />}
           </div>
         )}
 
@@ -61,11 +65,14 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
             <button
               key={item.key}
               onClick={() => { onNav(item.key); setMobileOpen(false); }}
+              aria-current={active === item.key ? 'page' : undefined}
               className={clsx(
-                'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
+                'press w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium',
+                'transition-[background,color,box-shadow] duration-200 ease-out-expo',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70',
                 active === item.key
                   ? 'nav-active'
-                  : 'text-sky-700 hover:bg-sky-50 hover:text-sky-900'
+                  : 'text-muted hover:bg-bg hover:text-fg'
               )}
             >
               <span className="flex-shrink-0">{item.icon}</span>
@@ -76,20 +83,20 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
         </nav>
 
         {/* Logout + Legal */}
-        <div className="px-3 pb-4 border-t border-sky-50 pt-3 space-y-1">
+        <div className="px-3 pb-4 border-t border-line pt-3 space-y-1">
           <button
             onClick={logout}
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
+            className="press w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-muted hover:bg-danger/10 hover:text-danger transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger/40"
           >
             <LogOut size={16} />
             Sign Out
           </button>
           <div className="flex items-center gap-3 px-3.5 pt-1">
-            <Link href="/privacy" target="_blank" className="text-[11px] text-sky-400 hover:text-sky-600 transition-colors">
+            <Link href="/privacy" target="_blank" className="text-[11px] text-subtle hover:text-fg transition-colors">
               Privacy
             </Link>
-            <span className="text-sky-200">·</span>
-            <Link href="/terms" target="_blank" className="text-[11px] text-sky-400 hover:text-sky-600 transition-colors">
+            <span className="text-line-strong">·</span>
+            <Link href="/terms" target="_blank" className="text-[11px] text-subtle hover:text-fg transition-colors">
               Terms
             </Link>
           </div>
@@ -98,21 +105,21 @@ export default function SidebarLayout({ nav, active, onNav, children, subtitle }
 
       {/* Mobile overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 bg-sky-900/20 z-30 md:hidden" onClick={() => setMobileOpen(false)} />
+        <div className="fixed inset-0 bg-[rgb(var(--overlay)/0.30)] z-30 md:hidden animate-fade-in" onClick={() => setMobileOpen(false)} />
       )}
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile topbar */}
-        <div className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3.5 bg-white border-b border-sky-100 shadow-sm">
-          <button onClick={() => setMobileOpen(!mobileOpen)} className="p-1.5 text-sky-600 rounded-lg hover:bg-sky-50">
+        <div className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3.5 bg-raised border-b border-line">
+          <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle navigation" className="press p-1.5 text-muted hover:text-fg rounded-lg hover:bg-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70">
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div className="font-display text-sky-800 text-base">{clinicName}</div>
-          <div className="w-8" />
+          <div className="font-display text-fg text-base truncate">{clinicName}</div>
+          {lockTheme ? <div className="w-8" /> : <ThemeToggle className="w-8 h-8" />}
         </div>
 
-        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-sky-50/40 via-white to-sky-50/30">
+        <main className="flex-1 overflow-y-auto bg-bg">
           <div className="p-6 md:p-8 page-enter">
             {children}
           </div>

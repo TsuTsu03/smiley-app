@@ -200,7 +200,7 @@ export default function PatientChatbot() {
     <>
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-96 flex flex-col bg-white rounded-2xl shadow-2xl border border-sky-100 overflow-hidden animate-slide-up"
+        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-96 flex flex-col bg-surface rounded-2xl shadow-hover border border-line overflow-hidden animate-slide-up"
           style={{ height: 'min(520px, calc(100dvh - 120px))' }}>
 
           {/* Header */}
@@ -227,10 +227,10 @@ export default function PatientChatbot() {
           <div className="flex-1 overflow-y-auto space-y-3 p-3.5 min-h-0">
             {messages.map(msg => (
               <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 ${msg.role === 'bot' ? 'bg-sky-100 text-sky-600' : 'bg-sky-600 text-white'}`}>
+                <div className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 ${msg.role === 'bot' ? 'bg-primary/10 text-primary' : 'bg-primary text-primary-fg'}`}>
                   {msg.role === 'bot' ? <Bot size={12} /> : <User size={12} />}
                 </div>
-                <div className={`max-w-[82%] px-3 py-2.5 rounded-xl text-xs leading-relaxed whitespace-pre-line ${msg.role === 'bot' ? 'bg-sky-50 text-sky-800 rounded-tl-sm' : 'bg-sky-600 text-white rounded-tr-sm'}`}>
+                <div className={`max-w-[82%] px-3 py-2.5 rounded-xl text-xs leading-relaxed whitespace-pre-line ${msg.role === 'bot' ? 'bg-bg text-fg rounded-tl-sm' : 'bg-primary text-primary-fg rounded-tr-sm'}`}>
                   {renderText(msg.text)}
                 </div>
               </div>
@@ -238,14 +238,14 @@ export default function PatientChatbot() {
 
             {typing && (
               <div className="flex gap-2">
-                <div className="w-7 h-7 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
                   <Bot size={12} />
                 </div>
-                <div className="bg-sky-50 px-3 py-2.5 rounded-xl rounded-tl-sm">
+                <div className="bg-bg px-3 py-2.5 rounded-xl rounded-tl-sm">
                   <div className="flex gap-1 items-center h-3.5">
-                    <span className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -260,7 +260,7 @@ export default function PatientChatbot() {
                 <button
                   key={s}
                   onClick={() => { setInput(s); inputRef.current?.focus(); }}
-                  className="text-xs bg-sky-50 text-sky-700 border border-sky-100 px-2.5 py-1 rounded-full hover:bg-sky-100 transition-colors"
+                  className="press text-xs bg-bg text-muted border border-line px-2.5 py-1 rounded-full hover:text-fg hover:border-line-strong transition-colors"
                 >
                   {s}
                 </button>
@@ -269,7 +269,7 @@ export default function PatientChatbot() {
           )}
 
           {/* Input */}
-          <div className="p-3 border-t border-sky-100 flex gap-2 flex-shrink-0 bg-white">
+          <div className="p-3 border-t border-line flex gap-2 flex-shrink-0 bg-surface">
             <input
               ref={inputRef}
               type="text"
@@ -277,12 +277,13 @@ export default function PatientChatbot() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && send()}
               placeholder="Ask a question..."
-              className="flex-1 px-3 py-2 rounded-xl border border-sky-100 bg-sky-50/40 text-sky-900 text-xs focus:border-sky-400 focus:outline-none transition-colors"
+              className="flex-1 px-3 py-2 rounded-xl border border-line bg-bg text-fg placeholder-subtle text-xs focus:border-primary focus:shadow-ring focus:outline-none transition-[border-color,box-shadow]"
             />
             <button
               onClick={send}
               disabled={!input.trim()}
-              className="w-9 h-9 rounded-xl bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+              aria-label="Send message"
+              className="press w-9 h-9 rounded-xl bg-accent text-accent-fg flex items-center justify-center hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity flex-shrink-0"
             >
               <Send size={14} />
             </button>

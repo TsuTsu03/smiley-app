@@ -10,7 +10,7 @@ describe('planAmount', () => {
   });
 
   it('returns default centavo amounts for known plans', () => {
-    expect(planAmount('starter')).toEqual({ amount: 150000, name: 'Smiley Starter' });
+    expect(planAmount('starter')).toEqual({ amount: 200000, name: 'Smiley Starter' });
     expect(planAmount('growth')?.amount).toBe(350000);
     expect(planAmount('multi-clinic')?.amount).toBe(300000); // per branch
   });
@@ -22,7 +22,7 @@ describe('planAmount', () => {
   });
 
   it('is case-insensitive', () => {
-    expect(planAmount('STARTER')?.amount).toBe(150000);
+    expect(planAmount('STARTER')?.amount).toBe(200000);
     expect(planAmount('Growth')?.amount).toBe(350000);
   });
 

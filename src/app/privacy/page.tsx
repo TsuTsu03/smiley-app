@@ -3,8 +3,9 @@ import { Shield } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 
 export const metadata = {
-  title: 'Privacy Policy — Smiley',
+  title: 'Privacy Policy',
   description: 'How Smiley collects, uses, and protects your personal information under Philippine law.',
+  alternates: { canonical: '/privacy' },
 };
 
 export default function PrivacyPolicyPage() {

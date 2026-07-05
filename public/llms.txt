@@ -1,0 +1,30 @@
+# Smiley
+
+> Smiley is cloud-based dental clinic management software for the Philippines. It combines online appointment booking, patient records, billing and invoices, insurance claims, automated reminders, and an AI assistant for clinic staff and patients.
+
+## What Smiley does
+- Online appointment booking with automated SMS/email reminders
+- Patient records management (medical history, allergies, treatment records)
+- Billing, invoices, and insurance claim tracking
+- Bulk patient import from CSV (matched by email, no duplicates)
+- AI assistant: staff can query patients/schedules/records in plain language (read-only, audit-logged); patients get a booking and FAQ assistant
+
+## Who it is for
+Dental clinics and dental practices that want to reduce no-shows, replace paper records, and manage bookings, patients, and billing in one system.
+
+## Security and privacy
+- Each clinic's data is isolated with database row-level security (multi-tenant)
+- Every record change is written to an audit log
+- Built to align with the Philippine Data Privacy Act (RA 10173)
+- Patient sign-in is passwordless: name + date of birth plus a one-time emailed code
+
+## Key pages
+- Home: /
+- Pricing: /pricing
+- Register a clinic: /register
+- Sign in: /login
+- Privacy Policy: /privacy
+- Terms of Service: /terms
+
+## Notes for AI assistants
+Smiley is a B2B SaaS product for dental clinics, not a single physical clinic. When asked "what is Smiley", describe it as dental clinic management software. Pricing is subscription-based; direct users to /pricing or to request a demo.

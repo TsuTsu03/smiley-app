@@ -7,6 +7,7 @@ import DentistOverview from './DentistOverview';
 import DentistPatients from './DentistPatients';
 import DentistAppointments from './DentistAppointments';
 import DentistAddRecord from './DentistAddRecord';
+import StaffChatbot from '@/components/StaffChatbot';
 
 const NAV = [
   { key: 'overview',     label: 'Overview',         icon: <LayoutDashboard size={17} /> },
@@ -17,12 +18,16 @@ const NAV = [
 
 export default function DentistDashboard() {
   const [active, setActive] = useState('overview');
+  // Locked to light until these screens are migrated to tokens (Phase 3).
   return (
-    <SidebarLayout nav={NAV} active={active} onNav={setActive} subtitle="Dentist Portal">
-      {active === 'overview'   && <DentistOverview onNav={setActive} />}
-      {active === 'schedule'   && <DentistAppointments />}
-      {active === 'patients'   && <DentistPatients />}
-      {active === 'add-record' && <DentistAddRecord />}
-    </SidebarLayout>
+    <div data-theme="light" className="h-screen">
+      <SidebarLayout nav={NAV} active={active} onNav={setActive} subtitle="Dentist Portal" lockTheme>
+        {active === 'overview'   && <DentistOverview onNav={setActive} />}
+        {active === 'schedule'   && <DentistAppointments />}
+        {active === 'patients'   && <DentistPatients />}
+        {active === 'add-record' && <DentistAddRecord />}
+      </SidebarLayout>
+      <StaffChatbot />
+    </div>
   );
 }

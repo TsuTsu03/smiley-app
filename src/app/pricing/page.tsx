@@ -17,8 +17,8 @@ const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
 const PLANS = [
   {
     name: "Starter",
-    monthlyPrice: 1500,
-    annualPrice: 15000,
+    monthlyPrice: 2000,
+    annualPrice: 20000,
     desc: "For solo dentists and small clinics",
     features: [
       "1 clinic location",
@@ -89,7 +89,7 @@ const COMPARISON = [
 ];
 
 const FAQS = [
-  { q: "Can I try Smiley before committing?", a: "Yes! All plans come with a 14-day free trial. No credit card required to start." },
+  { q: "Can I try Smiley before committing?", a: "We offer a free live demo and walkthrough with our team so you can see Smiley in action before subscribing. There is no self-serve free trial — you activate a plan with payment when you're ready." },
   { q: "Can I switch plans later?", a: "Absolutely. Upgrade or downgrade at any time. Changes take effect at your next billing cycle." },
   { q: "What payment methods do you accept?", a: "We accept GCash, Maya, GrabPay, and major credit and debit cards through our secure Philippine payment partner, PayMongo." },
   { q: "Is my data secure?", a: "Yes. All data is encrypted at rest and in transit. We use Supabase (built on PostgreSQL) with row-level security and regular backups." },
@@ -113,7 +113,7 @@ export default function PricingPage() {
               Simple, transparent pricing
             </motion.h1>
             <motion.p variants={fadeUp} className="text-sky-700/60 text-lg max-w-xl mx-auto mb-8">
-              Choose the plan that fits your clinic. Start with a 14-day free trial, upgrade anytime.
+              Choose the plan that fits your clinic. Book a guided demo, then upgrade anytime.
             </motion.p>
 
             {/* Toggle */}
@@ -286,13 +286,13 @@ export default function PricingPage() {
               Ready to get started?
             </h2>
             <p className="text-sky-200/70 mb-8">
-              14-day free trial. No credit card required.
+              Book a free demo, then activate your plan. Cancel anytime.
             </p>
             <button
               onClick={() => setComingSoon(true)}
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-sky-800 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
             >
-              Start Free Trial <ArrowRight size={18} />
+              Get Started <ArrowRight size={18} />
             </button>
           </div>
         </div>

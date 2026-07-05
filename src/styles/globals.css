@@ -4,81 +4,207 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ════════════════════════════════════════════════════════════════
+   SMILEY DESIGN SYSTEM — semantic tokens
+   Strategy: components reference semantic tokens (bg-surface, text-fg,
+   border-line, …) that resolve to CSS variables. Theme switches by
+   swapping the variable values under [data-theme]; components never
+   need dark: variants. Raw sky/teal ramps remain for brand gradients.
+   Token channels are space-separated RGB for `rgb(var(--x) / <alpha>)`.
+   ════════════════════════════════════════════════════════════════ */
+:root,
+[data-theme='light'] {
+  /* surfaces */
+  --bg:          240 249 255;  /* sky-50 — airy clinical wash      */
+  --surface:     255 255 255;  /* cards, panels                    */
+  --raised:      255 255 255;  /* sidebar / topbar                 */
+  --overlay:      12  74 110;  /* modal scrim (used at low alpha)  */
+
+  /* text */
+  --fg:           12  74 110;  /* sky-900 — primary ink            */
+  --muted:        71  85 105;  /* slate-600 — AA on surface        */
+  --subtle:      100 116 139;  /* slate-500 — captions / hints     */
+
+  /* lines */
+  --line:        224 242 254;  /* sky-100                          */
+  --line-strong: 186 230 253;  /* sky-200                          */
+
+  /* brand */
+  --primary:       2 132 199;  /* sky-600                          */
+  --primary-hover: 3 105 161;  /* sky-700                          */
+  --primary-fg:  255 255 255;
+  --accent:       13 148 136;  /* teal-600                         */
+  --accent-fg:   255 255 255;
+
+  /* state */
+  --success:      13 148 136;
+  --warning:     217 119   6;
+  --danger:      220  38  38;
+  --ring:         14 165 233;  /* sky-500                          */
+
+  /* elevation — tinted to the brand hue, never pure black */
+  --shadow-soft:  0 1px 2px rgba(2,132,199,0.06), 0 2px 16px -4px rgba(2,132,199,0.10);
+  --shadow-card:  0 2px 4px rgba(2,132,199,0.05), 0 8px 32px -8px rgba(2,132,199,0.14);
+  --shadow-hover: 0 10px 44px -8px rgba(2,132,199,0.20);
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  /* surfaces — deep sky-slate, layered for depth */
+  --bg:            8  15  25;
+  --surface:      17  27  41;
+  --raised:       13  22  35;
+  --overlay:       2   6  12;
+
+  /* text */
+  --fg:          224 242 254;  /* sky-100 near-white               */
+  --muted:       148 163 184;  /* slate-400 — AA on dark surface   */
+  --subtle:      100 116 139;  /* slate-500                        */
+
+  /* lines */
+  --line:         30  45  66;
+  --line-strong:  46  66  92;
+
+  /* brand — brighter so it carries on dark */
+  --primary:      56 189 248;  /* sky-400                          */
+  --primary-hover: 14 165 233; /* sky-500                          */
+  --primary-fg:    4  16  28;  /* dark ink on bright primary       */
+  --accent:       45 212 191;  /* teal-400                         */
+  --accent-fg:     4  20  18;
+
+  /* state */
+  --success:      45 212 191;
+  --warning:     251 191  36;
+  --danger:      248 113 113;
+  --ring:         56 189 248;
+
+  --shadow-soft:  0 1px 2px rgba(0,0,0,0.40), 0 2px 16px -6px rgba(0,0,0,0.50);
+  --shadow-card:  0 2px 6px rgba(0,0,0,0.45), 0 12px 36px -12px rgba(0,0,0,0.60);
+  --shadow-hover: 0 16px 50px -12px rgba(0,0,0,0.70);
+
+  color-scheme: dark;
+}
+
+/* Follow the OS when the app hasn't been explicitly themed */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+    --bg: 8 15 25; --surface: 17 27 41; --raised: 13 22 35; --overlay: 2 6 12;
+    --fg: 224 242 254; --muted: 148 163 184; --subtle: 100 116 139;
+    --line: 30 45 66; --line-strong: 46 66 92;
+    --primary: 56 189 248; --primary-hover: 14 165 233; --primary-fg: 4 16 28;
+    --accent: 45 212 191; --accent-fg: 4 20 18;
+    --success: 45 212 191; --warning: 251 191 36; --danger: 248 113 113; --ring: 56 189 248;
+    --shadow-soft: 0 1px 2px rgba(0,0,0,0.40), 0 2px 16px -6px rgba(0,0,0,0.50);
+    --shadow-card: 0 2px 6px rgba(0,0,0,0.45), 0 12px 36px -12px rgba(0,0,0,0.60);
+    --shadow-hover: 0 16px 50px -12px rgba(0,0,0,0.70);
+    color-scheme: dark;
+  }
+}
+
+/* ─── Motion system (Emil Kowalski curves) ─────────────────────── */
 :root {
   --font-display: 'DM Serif Display', serif;
   --font-body: 'DM Sans', sans-serif;
 
-  --color-primary:       #0284c7;  /* sky-600 */
-  --color-primary-light: #0ea5e9;  /* sky-500 */
-  --color-primary-dark:  #0369a1;  /* sky-700 */
-  --color-accent:        #0d9488;  /* teal-600 — dental freshness */
-  --color-accent-light:  #99f6e4;  /* teal-200 */
-  --color-bg:            #f0f9ff;  /* sky-50 — clean, airy */
-  --color-surface:       #ffffff;
-  --color-text:          #0c4a6e;  /* sky-900 */
-  --color-text-muted:    #64748b;  /* slate-500 */
-  --color-border:        #e0f2fe;  /* sky-100 */
+  --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer:  cubic-bezier(0.32, 0.72, 0, 1);
+
+  --dur-press: 140ms;
+  --dur-fast:  180ms;
+  --dur-base:  220ms;
+  --dur-slow:  320ms;
+
+  --z-sticky: 30; --z-overlay: 40; --z-modal: 50; --z-toast: 60; --z-tooltip: 70;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
   font-family: var(--font-body);
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--dur-base) var(--ease-out);
 }
 
+h1, h2, h3 { text-wrap: balance; }
+p          { text-wrap: pretty; }
+
+::selection { background: rgb(var(--primary) / 0.16); color: rgb(var(--fg)); }
+
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #f0f9ff; }
-::-webkit-scrollbar-thumb { background: #bae6fd; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgb(var(--line-strong)); border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--primary) / 0.6); background-clip: padding-box; }
 
-/* Page transitions */
-.page-enter { animation: fadeIn 0.35s ease forwards; }
+/* ─── Focus: visible keyboard ring only ────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgb(var(--ring));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+input:focus, select:focus, textarea:focus { outline: none; }
 
+/* ─── Page transition ──────────────────────────────────────────── */
+.page-enter { animation: fadeIn var(--dur-slow) var(--ease-out) forwards; }
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Card hover */
+/* ─── Card hover ───────────────────────────────────────────────── */
 .card-hover {
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
 }
 .card-hover:hover {
-  box-shadow: 0 8px 40px rgba(2, 132, 199, 0.14);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgb(var(--line-strong));
+  transform: translateY(-3px);
 }
 
-/* Tooth pulse animation for loading */
-@keyframes toothPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.7; }
-}
-.tooth-pulse { animation: toothPulse 1.4s ease-in-out infinite; }
+/* ─── Pressable feedback ───────────────────────────────────────── */
+.press { transition: transform var(--dur-press) var(--ease-out); }
+.press:active { transform: scale(0.97); }
 
-/* Sidebar nav active — sky blue for clinical trust */
+/* ─── Tooth pulse / skeleton loading ───────────────────────────── */
+@keyframes toothPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
+.tooth-pulse { animation: toothPulse 1.4s var(--ease-in-out) infinite; }
+
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+.skeleton { position: relative; overflow: hidden; background: rgb(var(--line)); }
+.skeleton::after {
+  content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(var(--surface) / 0.65), transparent);
+  animation: shimmer 1.5s var(--ease-in-out) infinite;
+}
+
+/* ─── Sidebar nav active ───────────────────────────────────────── */
 .nav-active {
-  background: linear-gradient(135deg, #0369a1, #0284c7);
-  color: white;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+  background: linear-gradient(135deg, rgb(var(--primary-hover)), rgb(var(--primary)));
+  color: rgb(var(--primary-fg));
+  box-shadow: 0 4px 14px -2px rgb(var(--primary) / 0.40);
 }
 
-/* Status badges */
+/* ─── Status badges (legacy class hooks) ───────────────────────── */
 .badge-confirmed { @apply bg-sky-100 text-sky-700 border border-sky-200; }
 .badge-pending   { @apply bg-amber-50 text-amber-700 border border-amber-200; }
 .badge-cancelled { @apply bg-red-50 text-red-600 border border-red-200; }
 .badge-done      { @apply bg-slate-100 text-slate-600 border border-slate-200; }
 
-/* Input focus ring */
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  ring: none;
+/* ─── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-hover:hover, .press:active { transform: none; }
 }

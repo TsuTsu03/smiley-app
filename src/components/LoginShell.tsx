@@ -24,7 +24,7 @@ export default function LoginShell({ children }: { children: ReactNode }) {
   if (role) return null;
 
   return (
-    <div className="min-h-screen flex">
+    <div data-theme="light" className="min-h-screen flex bg-bg">
       {/* Left — background image (hidden on mobile) */}
       <div className="hidden lg:block relative w-1/2">
         <img
@@ -66,22 +66,22 @@ export default function LoginShell({ children }: { children: ReactNode }) {
 
             {/* Register link */}
             <div className="text-center mt-6">
-              <p className="text-sm text-sky-500">
+              <p className="text-sm text-muted">
                 New clinic?{" "}
-                <Link href="/register" className="text-sky-700 font-semibold hover:text-sky-900 transition-colors underline underline-offset-2">
+                <Link href="/register" className="text-primary font-semibold hover:text-primary-hover transition-colors underline underline-offset-2">
                   Register your clinic
                 </Link>
               </p>
             </div>
 
             {/* Footer */}
-            <div className="text-center mt-6 text-xs text-sky-400 space-x-4">
-              <Link href="/" className="hover:text-sky-600 transition-colors underline underline-offset-2">Back to home</Link>
-              <Link href="/privacy" className="hover:text-sky-600 transition-colors underline underline-offset-2">Privacy</Link>
-              <Link href="/terms" className="hover:text-sky-600 transition-colors underline underline-offset-2">Terms</Link>
+            <div className="text-center mt-6 text-xs text-subtle space-x-4">
+              <Link href="/" className="hover:text-fg transition-colors underline underline-offset-2">Back to home</Link>
+              <Link href="/privacy" className="hover:text-fg transition-colors underline underline-offset-2">Privacy</Link>
+              <Link href="/terms" className="hover:text-fg transition-colors underline underline-offset-2">Terms</Link>
             </div>
-            <p className="text-center mt-3 text-[11px] text-sky-400/70">
-              Smiley is a product of <span className="font-semibold text-sky-500">StackWise</span>
+            <p className="text-center mt-3 text-[11px] text-subtle">
+              Smiley is a product of <span className="font-semibold text-muted">StackWise</span>
             </p>
           </div>
         </div>

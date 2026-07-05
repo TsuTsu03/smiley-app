@@ -19,7 +19,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 const PLANS = [
   { key: "starter", name: "Starter", price: 1500, unit: "/mo", desc: "Solo dentists & small clinics" },
   { key: "growth", name: "Growth", price: 3500, unit: "/mo", desc: "Multiple dentists & staff", popular: true },
-  { key: "multi-clinic", name: "Multi-Clinic", price: 3000, unit: "/branch", desc: "Dental groups — per branch" },
+  { key: "multi-clinic", name: "Multi-Clinic", price: 3000, unit: "/branch", desc: "Dental groups, per branch" },
 ];
 
 const fadeSlide = {
@@ -155,20 +155,20 @@ function RegisterFlow() {
               <p className="text-sky-600 text-sm mb-7 leading-relaxed">
                 Have you already attended a live demo or walkthrough of Smiley
                 with our team? We&apos;d like to show you how it works for your
-                clinic first, so you can make the most of your trial.
+                clinic first, so you get the most out of your subscription.
               </p>
               <div className="flex flex-col gap-3">
                 <button
                   onClick={confirmDemo}
                   className="w-full py-3 bg-gradient-to-r from-sky-600 to-sky-500 text-white font-semibold rounded-xl shadow-soft hover:opacity-90 transition-opacity text-sm"
                 >
-                  Yes, I&apos;ve seen the demo — continue
+                  Yes, I&apos;ve seen the demo, continue
                 </button>
                 <button
                   onClick={() => router.push("/#demo")}
                   className="w-full py-3 text-sky-600 font-medium rounded-xl border border-sky-200 hover:bg-sky-50 transition-colors text-sm"
                 >
-                  Not yet — book a demo
+                  Not yet, book a demo
                 </button>
               </div>
             </motion.div>
@@ -206,7 +206,7 @@ function RegisterFlow() {
             {step === 1 && (
               <motion.div key="plan" {...fadeSlide}>
                 <h2 className="font-display text-2xl text-sky-950 text-center mb-2">Choose your plan</h2>
-                <p className="text-sky-500 text-sm text-center mb-8">All plans include a 14-day free trial</p>
+                <p className="text-sky-500 text-sm text-center mb-8">Pick a plan — activate with secure payment, cancel anytime</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {PLANS.map(({ key, name, price, desc, popular, unit }) => (
@@ -246,19 +246,10 @@ function RegisterFlow() {
                   </button>
                 </div>
 
-                {/* Plan choice isn't required to start — they can decide later. */}
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={() => setStep(2)}
-                    className="text-sm font-medium text-sky-600 hover:text-sky-800 underline-offset-2 hover:underline"
-                  >
-                    Continue with my free trial — choose a plan later
-                  </button>
-                  <p className="mt-1.5 text-xs text-sky-400">
-                    Your 14-day free trial starts right away. No payment needed
-                    now.
-                  </p>
-                </div>
+                <p className="mt-6 text-center text-xs text-sky-400">
+                  You&apos;ll activate your plan with secure payment after setting up
+                  your clinic. No free trial.
+                </p>
               </motion.div>
             )}
 

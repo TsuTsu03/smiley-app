@@ -35,6 +35,12 @@ export default function LoginForm({ role }: { role: Role }) {
   const notFound = isPatient && error.toLowerCase().includes("not found");
   const otherRoles = (Object.keys(ROLE_CONFIG) as Role[]).filter((r) => r !== role);
 
+  // Shared field treatment — readable placeholder + accessible focus ring
+  const fieldCls =
+    "w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/40 text-sky-950 placeholder-slate-400 " +
+    "focus:border-sky-400 focus:bg-white focus:shadow-ring outline-none text-sm " +
+    "transition-[border-color,box-shadow,background-color] duration-200 ease-out-expo";
+
   const handleLogin = async () => {
     setError("");
     if (!field1 || !field2) {
@@ -88,7 +94,7 @@ export default function LoginForm({ role }: { role: Role }) {
           </div>
           <h2 className="text-lg font-display font-semibold text-sky-900">{cfg.label} Sign In</h2>
         </div>
-        <p className="text-sm text-sky-400 mb-6">
+        <p className="text-sm text-slate-500 mb-6">
           {isPatient && step === "otp"
             ? `We emailed a 6-digit code${maskedEmail ? ` to ${maskedEmail}` : ""}. Enter it below to finish signing in.`
             : isPatient
@@ -108,7 +114,7 @@ export default function LoginForm({ role }: { role: Role }) {
                 onKeyDown={(e) => e.key === "Enter" && handleVerifyOtp()}
                 placeholder="123456"
                 autoFocus
-                className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-center text-lg tracking-[0.4em] outline-none"
+                className={`${fieldCls} text-center !text-lg tracking-[0.4em]`}
               />
               <button
                 type="button"
@@ -126,7 +132,7 @@ export default function LoginForm({ role }: { role: Role }) {
                   value={field1}
                   onChange={(e) => setField1(e.target.value)}
                   placeholder="Juan dela Cruz"
-                  className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                  className={fieldCls}
                 />
               </div>
               <div>
@@ -136,7 +142,7 @@ export default function LoginForm({ role }: { role: Role }) {
                   value={field2}
                   onChange={(e) => setField2(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                  className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                  className={`${fieldCls} cursor-pointer`}
                 />
               </div>
             </>
@@ -149,7 +155,7 @@ export default function LoginForm({ role }: { role: Role }) {
                   value={field1}
                   onChange={(e) => setField1(e.target.value)}
                   placeholder="you@clinic.com"
-                  className="w-full px-4 py-3 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                  className={fieldCls}
                 />
               </div>
               <div>
@@ -161,12 +167,13 @@ export default function LoginForm({ role }: { role: Role }) {
                     onChange={(e) => setField2(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                     placeholder="••••••••"
-                    className="w-full px-4 py-3 pr-11 rounded-xl border border-sky-100 bg-sky-50/30 text-sky-900 placeholder-sky-300 focus:border-sky-400 focus:bg-white focus:ring-1 focus:ring-sky-200 transition-all text-sm outline-none"
+                    className={`${fieldCls} pr-11`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPwd(!showPwd)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-400 hover:text-sky-600"
+                    aria-label={showPwd ? "Hide password" : "Show password"}
+                    className="press absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-sky-700 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70"
                   >
                     {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -199,7 +206,7 @@ export default function LoginForm({ role }: { role: Role }) {
         <button
           onClick={isPatient && step === "otp" ? handleVerifyOtp : handleLogin}
           disabled={loading}
-          className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r ${cfg.color} hover:opacity-90 transition-opacity shadow-soft disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer`}
+          className={`press mt-6 w-full py-3.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r ${cfg.color} shadow-soft hover:shadow-[0_8px_24px_-6px_rgba(2,132,199,0.5)] hover:brightness-[1.03] transition-[box-shadow,filter] duration-200 ease-out-expo disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2`}
         >
           {loading ? (
             <><Loader size={16} className="animate-spin" /> {isPatient && step === "otp" ? "Verifying…" : "Signing in…"}</>
@@ -213,7 +220,7 @@ export default function LoginForm({ role }: { role: Role }) {
         </button>
 
         {/* Switch role */}
-        <div className="mt-5 pt-4 border-t border-sky-100/70 text-center text-xs text-sky-400">
+        <div className="mt-5 pt-4 border-t border-sky-100/70 text-center text-xs text-slate-500">
           Not {role === "admin" ? "an admin" : `a ${cfg.label.toLowerCase()}`}?{" "}
           {otherRoles.map((r, i) => (
             <span key={r}>

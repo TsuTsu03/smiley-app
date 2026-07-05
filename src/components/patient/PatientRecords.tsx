@@ -22,7 +22,7 @@ export default function PatientRecords() {
   if (loading) return (
     <div className="space-y-3">
       {[1, 2, 3].map(i => (
-        <div key={i} className="h-16 bg-sky-50 rounded-2xl animate-pulse" />
+        <div key={i} className="skeleton h-16 rounded-2xl" />
       ))}
     </div>
   );
@@ -39,11 +39,11 @@ export default function PatientRecords() {
             <Card key={r.id} className="p-5 space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="font-semibold text-sky-800 text-base">{r.procedure}</h3>
-                  <div className="text-sm text-sky-500 mt-0.5">{fmtDate(r.date)} · {r.dentistName}</div>
+                  <h3 className="font-semibold text-fg text-base">{r.procedure}</h3>
+                  <div className="text-sm text-muted mt-0.5">{fmtDate(r.date)} · {r.dentistName}</div>
                 </div>
                 {r.tooth && (
-                  <span className="text-xs bg-sky-50 text-sky-600 border border-sky-100 px-2.5 py-1 rounded-full flex-shrink-0">
+                  <span className="text-xs bg-primary/10 text-primary border border-primary/20 px-2.5 py-1 rounded-full flex-shrink-0">
                     {r.tooth}
                   </span>
                 )}
@@ -56,15 +56,15 @@ export default function PatientRecords() {
 
               {r.notes && (
                 <div>
-                  <div className="text-xs text-sky-400 mb-1.5 font-medium uppercase tracking-wide">Dentist Notes</div>
-                  <div className="bg-sky-50/60 rounded-xl px-4 py-3 text-sm text-sky-700 leading-relaxed">{r.notes}</div>
+                  <div className="text-xs text-subtle mb-1.5 font-medium uppercase tracking-wide">Dentist Notes</div>
+                  <div className="bg-bg rounded-xl px-4 py-3 text-sm text-muted leading-relaxed">{r.notes}</div>
                 </div>
               )}
 
               {r.prescription && (
                 <div>
-                  <div className="text-xs text-sky-400 mb-1.5 font-medium uppercase tracking-wide">Prescription</div>
-                  <div className="bg-sky-50/60 rounded-xl px-4 py-3 text-sm text-sky-700 font-mono text-xs leading-relaxed border border-sky-100">{r.prescription}</div>
+                  <div className="text-xs text-subtle mb-1.5 font-medium uppercase tracking-wide">Prescription</div>
+                  <div className="bg-bg rounded-xl px-4 py-3 text-sm text-muted font-mono text-xs leading-relaxed border border-line">{r.prescription}</div>
                 </div>
               )}
             </Card>
@@ -77,9 +77,9 @@ export default function PatientRecords() {
 
 function InfoBox({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl p-3.5 ${highlight ? 'bg-sky-50 border border-sky-100' : 'bg-gray-50 border border-gray-100'}`}>
-      <div className="text-xs text-sky-400 mb-0.5 font-medium uppercase tracking-wide">{label}</div>
-      <div className={`text-sm font-medium ${highlight ? 'text-sky-700' : 'text-sky-800'}`}>{value}</div>
+    <div className={`rounded-xl p-3.5 border ${highlight ? 'bg-primary/10 border-primary/20' : 'bg-bg border-line'}`}>
+      <div className="text-xs text-subtle mb-0.5 font-medium uppercase tracking-wide">{label}</div>
+      <div className={`text-sm font-medium ${highlight ? 'text-primary' : 'text-fg'}`}>{value}</div>
     </div>
   );
 }

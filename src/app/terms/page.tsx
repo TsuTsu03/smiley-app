@@ -3,8 +3,9 @@ import { FileText } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 
 export const metadata = {
-  title: 'Terms of Service — Smiley',
+  title: 'Terms of Service',
   description: 'Terms and conditions governing use of the Smiley clinic management platform.',
+  alternates: { canonical: '/terms' },
 };
 
 export default function TermsOfServicePage() {

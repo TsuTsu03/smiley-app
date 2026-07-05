@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Users, Search, Eye } from 'lucide-react';
-import { Card, SectionHeader, Modal, EmptyState } from '@/components/ui';
+import { useState, useEffect, useCallback } from 'react';
+import { Users, Search, Eye, Upload } from 'lucide-react';
+import { Card, SectionHeader, Modal, EmptyState, Btn } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
 import { fmtDate, fmtShortDate, calcAge } from '@/lib/data';
+import PatientImport from './PatientImport';
 
 export default function AdminPatients() {
   const { user } = useAuth();
@@ -14,8 +15,9 @@ export default function AdminPatients() {
   const [patients, setPatients]   = useState<any[]>([]);
   const [records, setRecords]     = useState<any[]>([]);
   const [loading, setLoading]     = useState(true);
+  const [importing, setImporting] = useState(false);
 
-  useEffect(() => {
+  const load = useCallback(() => {
     if (!user?.clinicId) return;
     Promise.all([
       fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
@@ -25,6 +27,8 @@ export default function AdminPatients() {
       setRecords(Array.isArray(r) ? r : []);
     }).finally(() => setLoading(false));
   }, [user?.clinicId]);
+
+  useEffect(() => { load(); }, [load]);
 
   const filtered = patients.filter(p =>
     !search || p.fullName.toLowerCase().includes(search.toLowerCase()) ||
@@ -41,7 +45,15 @@ export default function AdminPatients() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title="Patients" sub={`${patients.length} registered patients`} />
+      <SectionHeader
+        title="Patients"
+        sub={`${patients.length} registered patients`}
+        action={
+          <Btn variant="secondary" size="sm" onClick={() => setImporting(true)}>
+            <Upload size={14} /> Import CSV
+          </Btn>
+        }
+      />
 
       <Card className="p-4">
         <div className="relative">
@@ -169,6 +181,10 @@ export default function AdminPatients() {
         <Modal title={selected.fullName} onClose={() => setSelected(null)} wide>
           <PatientDetailModal patient={selected} view={view} setView={setView} records={records.filter(r => r.patientId === selected.id)} />
         </Modal>
+      )}
+
+      {importing && (
+        <PatientImport onClose={() => setImporting(false)} onImported={load} />
       )}
     </div>
   );
