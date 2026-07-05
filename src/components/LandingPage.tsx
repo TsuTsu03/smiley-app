@@ -40,6 +40,7 @@ import {
 import MarketingNav from "./MarketingNav";
 import MarketingFooter from "./MarketingFooter";
 import { FAQS } from "@/lib/seo";
+import { PLAN_PRICING } from "@/lib/plans";
 import ScheduleDemo from "./ScheduleDemo";
 import ComingSoonModal from "./ComingSoonModal";
 import { SmileyIcon } from "./Logo";
@@ -1098,8 +1099,8 @@ const INCLUDED_FEATURES: { name: string; soon?: boolean }[] = [
 
 const PLANS = [
   {
-    name: "Starter",
-    price: 2000,
+    name: PLAN_PRICING.starter.name,
+    price: PLAN_PRICING.starter.monthly,
     desc: "For solo dentists and small clinics",
     features: [
       "1 clinic",
@@ -1112,8 +1113,8 @@ const PLANS = [
     popular: false
   },
   {
-    name: "Growth",
-    price: 3500,
+    name: PLAN_PRICING.growth.name,
+    price: PLAN_PRICING.growth.monthly,
     desc: "For clinics with multiple dentists and staff",
     features: [
       "1 clinic",
@@ -1126,9 +1127,9 @@ const PLANS = [
     popular: true
   },
   {
-    name: "Multi-Clinic",
-    price: 3000,
-    unit: "/branch",
+    name: PLAN_PRICING["multi-clinic"].name,
+    price: PLAN_PRICING["multi-clinic"].monthly,
+    unit: PLAN_PRICING["multi-clinic"].unit,
     desc: "For dental groups, billed per branch",
     features: [
       "Everything in Growth",

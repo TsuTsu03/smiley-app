@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { PLAN_PRICING } from './plans';
 
 /**
  * Thin PayMongo REST helper (no SDK). Uses HTTP Basic auth with the secret key.
@@ -40,12 +41,12 @@ export async function paymongoFetch(
  */
 export function planAmount(plan: string): { amount: number; name: string } | null {
   const map: Record<string, { amount: number; name: string }> = {
-    starter: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 200000), name: 'Smiley Starter' },
-    basic: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? 200000), name: 'Smiley Starter' },
-    growth: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 350000), name: 'Smiley Growth' },
-    pro: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? 350000), name: 'Smiley Growth' },
-    'multi-clinic': { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 300000), name: 'Smiley Multi-Clinic (per branch)' },
-    enterprise: { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? 300000), name: 'Smiley Multi-Clinic (per branch)' },
+    starter: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? PLAN_PRICING.starter.monthly * 100), name: 'Smiley Starter' },
+    basic: { amount: Number(process.env.PAYMONGO_PRICE_STARTER ?? PLAN_PRICING.starter.monthly * 100), name: 'Smiley Starter' },
+    growth: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? PLAN_PRICING.growth.monthly * 100), name: 'Smiley Growth' },
+    pro: { amount: Number(process.env.PAYMONGO_PRICE_GROWTH ?? PLAN_PRICING.growth.monthly * 100), name: 'Smiley Growth' },
+    'multi-clinic': { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? PLAN_PRICING['multi-clinic'].monthly * 100), name: 'Smiley Multi-Clinic (per branch)' },
+    enterprise: { amount: Number(process.env.PAYMONGO_PRICE_MULTICLINIC ?? PLAN_PRICING['multi-clinic'].monthly * 100), name: 'Smiley Multi-Clinic (per branch)' },
   };
   return map[plan.toLowerCase()] ?? null;
 }

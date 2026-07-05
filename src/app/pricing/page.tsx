@@ -6,6 +6,7 @@ import { CheckCircle2, X, ArrowRight, ChevronDown } from "lucide-react";
 import MarketingNav from "@/components/MarketingNav";
 import MarketingFooter from "@/components/MarketingFooter";
 import ComingSoonModal from "@/components/ComingSoonModal";
+import { PLAN_PRICING } from "@/lib/plans";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -16,9 +17,9 @@ const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
 
 const PLANS = [
   {
-    name: "Starter",
-    monthlyPrice: 2000,
-    annualPrice: 20000,
+    name: PLAN_PRICING.starter.name,
+    monthlyPrice: PLAN_PRICING.starter.monthly,
+    annualPrice: PLAN_PRICING.starter.annual,
     desc: "For solo dentists and small clinics",
     features: [
       "1 clinic location",
@@ -33,9 +34,9 @@ const PLANS = [
     popular: false,
   },
   {
-    name: "Growth",
-    monthlyPrice: 3500,
-    annualPrice: 35000,
+    name: PLAN_PRICING.growth.name,
+    monthlyPrice: PLAN_PRICING.growth.monthly,
+    annualPrice: PLAN_PRICING.growth.annual,
     desc: "For clinics with multiple dentists and staff",
     features: [
       "1 clinic location",
@@ -51,11 +52,11 @@ const PLANS = [
     popular: true,
   },
   {
-    name: "Multi-Clinic",
-    monthlyPrice: 3000,
-    annualPrice: 30000,
-    unit: "/branch",
-    priceNote: "billed per branch / location",
+    name: PLAN_PRICING["multi-clinic"].name,
+    monthlyPrice: PLAN_PRICING["multi-clinic"].monthly,
+    annualPrice: PLAN_PRICING["multi-clinic"].annual,
+    unit: PLAN_PRICING["multi-clinic"].unit,
+    priceNote: PLAN_PRICING["multi-clinic"].priceNote,
     desc: "For dental groups with multiple branches",
     features: [
       "Everything in Growth",

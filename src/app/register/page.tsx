@@ -15,11 +15,12 @@ import {
 import MarketingNav from "@/components/MarketingNav";
 import MarketingFooter from "@/components/MarketingFooter";
 import LoadingScreen from "@/components/LoadingScreen";
+import { PLAN_PRICING } from "@/lib/plans";
 
 const PLANS = [
-  { key: "starter", name: "Starter", price: 2000, unit: "/mo", desc: "Solo dentists & small clinics" },
-  { key: "growth", name: "Growth", price: 3500, unit: "/mo", desc: "Multiple dentists & staff", popular: true },
-  { key: "multi-clinic", name: "Multi-Clinic", price: 3000, unit: "/branch", desc: "Dental groups, per branch" },
+  { key: "starter", name: PLAN_PRICING.starter.name, price: PLAN_PRICING.starter.monthly, unit: "/mo", desc: "Solo dentists & small clinics" },
+  { key: "growth", name: PLAN_PRICING.growth.name, price: PLAN_PRICING.growth.monthly, unit: "/mo", desc: "Multiple dentists & staff", popular: true },
+  { key: "multi-clinic", name: PLAN_PRICING["multi-clinic"].name, price: PLAN_PRICING["multi-clinic"].monthly, unit: PLAN_PRICING["multi-clinic"].unit, desc: "Dental groups, per branch" },
 ];
 
 const fadeSlide = {
@@ -30,7 +31,7 @@ const fadeSlide = {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <Suspense fallback={<LoadingScreen title="Register Your Dental Clinic" subtitle="Setting up Smiley for your clinic" />}>
       <RegisterFlow />
     </Suspense>
   );
@@ -178,6 +179,7 @@ function RegisterFlow() {
 
       <div className="flex-1 pt-28 pb-16 px-5 sm:px-8">
         <div className="max-w-2xl mx-auto">
+          <h1 className="sr-only">Register Your Dental Clinic on Smiley</h1>
           {/* Progress */}
           {step < 5 && (
             <div className="flex items-center justify-center gap-2 mb-10">

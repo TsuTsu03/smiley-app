@@ -32,9 +32,9 @@ export const SITE_KEYWORDS = [
   'dental EMR',
 ];
 
-/** Lowest published plan price — kept in sync with the Starter plan on /pricing. */
-export const PRICE_LOW = 2000;
-export const PRICE_CURRENCY = 'PHP';
+// Plan pricing lives in ./plans.ts (the single source of truth); re-exported
+// here so existing SEO consumers don't need a second import.
+export { PRICE_LOW, PLAN_CURRENCY as PRICE_CURRENCY } from './plans';
 
 export const ORG_LOGO = `${SITE_URL}/icon.svg`;
 export const OG_IMAGE = `${SITE_URL}/opengraph-image`;

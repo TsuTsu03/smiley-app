@@ -2,7 +2,20 @@
 
 import { SmileyIcon } from "@/components/Logo";
 
-export default function LoadingScreen() {
+/**
+ * On statically-prerendered public pages that wrap content in <Suspense> (e.g.
+ * /register, gated on useSearchParams), THIS component's markup is what a
+ * crawler sees if it doesn't wait for hydration, not the real page content.
+ * `title`/`subtitle` let each caller give crawlers something page-relevant
+ * instead of the generic brand splash.
+ */
+export default function LoadingScreen({
+  title = "Smiley",
+  subtitle = "Smart Clinic Management",
+}: {
+  title?: string;
+  subtitle?: string;
+} = {}) {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 to-white">
       {/* Logo mark */}
@@ -14,9 +27,9 @@ export default function LoadingScreen() {
 
       {/* Brand name */}
       <h1 className="text-2xl font-bold text-sky-900 tracking-tight mb-1">
-        Smiley
+        {title}
       </h1>
-      <p className="text-sm text-sky-400 mb-8">Smart Clinic Management</p>
+      <p className="text-sm text-sky-400 mb-8">{subtitle}</p>
 
       {/* Animated dots */}
       <div className="flex items-center gap-1.5">
