@@ -59,7 +59,7 @@ export default function PatientImport({ onClose, onImported }: { onClose: () => 
       }
       return json as ImportResult;
     } catch {
-      setError('Network error — please try again');
+      setError('Network error. Please try again');
       return null;
     } finally {
       setBusy(false);
@@ -113,8 +113,8 @@ export default function PatientImport({ onClose, onImported }: { onClose: () => 
       ) : (
         <div className="space-y-5">
           <p className="text-sm text-muted">
-            Upload a CSV with the required columns. Patients are matched by email — existing
-            records are updated, new ones are added. Need the format?{' '}
+            Upload a CSV with the required columns. Patients are matched by email, so existing
+            records get updated and new ones get added. Need the format?{' '}
             <button onClick={downloadTemplate} className="inline-flex items-center gap-1 font-medium text-primary hover:underline">
               <FileDown size={13} /> Download template
             </button>

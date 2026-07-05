@@ -44,7 +44,7 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
       {/* Page header */}
       <div>
         <h1 className="font-display text-2xl sm:text-3xl text-sky-900">Good morning 👋</h1>
-        <p className="text-sky-500 text-sm mt-1">{fmtDate(today)} — Here&apos;s your clinic at a glance</p>
+        <p className="text-sky-500 text-sm mt-1">{fmtDate(today)}: here&apos;s your clinic at a glance</p>
       </div>
 
       {/* Stats */}
@@ -60,7 +60,7 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
         <Card className="p-5">
           <SectionHeader
             title="Today's Schedule"
-            sub={`${today} — ${todayApts.length} appointment${todayApts.length !== 1 ? 's' : ''}`}
+            sub={`${today}, ${todayApts.length} appointment${todayApts.length !== 1 ? 's' : ''}`}
             action={<Btn variant="ghost" size="sm" onClick={() => onNav('appointments')}>View All</Btn>}
           />
           {todayApts.length === 0 ? (

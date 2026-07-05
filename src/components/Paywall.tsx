@@ -42,7 +42,7 @@ export default function Paywall() {
       }
       setError(json.error ?? 'Could not start checkout. Please try again.');
     } catch {
-      setError('Network error — please try again.');
+      setError('Network error. Please try again.');
     } finally {
       setLoadingPlan(null);
     }
@@ -63,7 +63,7 @@ export default function Paywall() {
           <>
             <p className="text-sm text-slate-500 mb-6">
               Choose a plan to activate your clinic. You&apos;ll be billed monthly and
-              can cancel anytime — there is no free trial.
+              can cancel anytime. There&apos;s no free trial.
             </p>
 
             <div className="space-y-3 text-left">

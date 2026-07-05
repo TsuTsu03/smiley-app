@@ -68,7 +68,7 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
               Orthodontic Adjustment Reminder
             </div>
             <div className="text-sm text-muted">
-              Your next adjustment is on <strong className="text-fg">{fmtDate(patient.nextAdjustmentDate)}</strong> — {daysToAdj} days away.
+              Your next adjustment is on <strong className="text-fg">{fmtDate(patient.nextAdjustmentDate)}</strong>, {daysToAdj} days away.
             </div>
           </div>
           <Btn size="sm" variant="secondary" onClick={() => onNav('book')}>Book Now</Btn>

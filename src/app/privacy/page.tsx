@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <div className="bg-teal-50 border border-teal-200 rounded-2xl px-5 py-4 mb-10 text-sm text-teal-800 leading-relaxed">
-          <strong>Summary:</strong> Smiley is a dental clinic management platform. We collect and process personal and health-related data to run the service. Under Philippine law (Republic Act No. 10173 — the Data Privacy Act of 2012), dental/health records are classified as <strong>sensitive personal information</strong> and are given the highest level of protection. This policy explains what we collect, why, and your rights as a data subject.
+          <strong>Summary:</strong> Smiley is a dental clinic management platform. We collect and process personal and health-related data to run the service. Under Philippine law (Republic Act No. 10173, the Data Privacy Act of 2012), dental/health records are classified as <strong>sensitive personal information</strong> and are given the highest level of protection. This policy explains what we collect, why, and your rights as a data subject.
         </div>
 
         <div className="space-y-10 text-sky-900">
@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
               <strong>StackWise</strong>, the operator of the <strong>Smiley</strong> clinic management platform, is the Personal Information Controller (PIC) as defined under Republic Act No. 10173, the <em>Data Privacy Act of 2012</em> (DPA), and its Implementing Rules and Regulations (IRR).
             </p>
             <p className="mt-3">
-              <strong>Contact — Data Privacy Officer (DPO):</strong><br />
+              <strong>Contact: Data Privacy Officer (DPO)</strong><br />
               Email: <a href="mailto:privacy@stackwise.com" className="text-sky-600 underline">privacy@stackwise.com</a><br />
               Address: Philippines
             </p>
@@ -71,10 +71,10 @@ export default function PrivacyPolicyPage() {
           <Section title="3. Legal Bases for Processing">
             <p className="mb-3">Under Section 12 and 13 of the DPA, we process your data on the following lawful grounds:</p>
             <ul className="space-y-2 list-none">
-              <Li><strong>Consent</strong> — You actively agree to this Privacy Policy when registering a clinic or using the platform as a patient.</Li>
-              <Li><strong>Performance of Contract</strong> — Processing is necessary to deliver the clinic management services you subscribed to (Section 12[b]).</Li>
-              <Li><strong>Legitimate Interest</strong> — We process minimal usage data to keep the platform secure and functional.</Li>
-              <Li><strong>Compliance with Legal Obligation</strong> — Philippine health regulations may require retention of certain medical records.</Li>
+              <Li><strong>Consent</strong>: You actively agree to this Privacy Policy when registering a clinic or using the platform as a patient.</Li>
+              <Li><strong>Performance of Contract</strong>: Processing is necessary to deliver the clinic management services you subscribed to (Section 12[b]).</Li>
+              <Li><strong>Legitimate Interest</strong>: We process minimal usage data to keep the platform secure and functional.</Li>
+              <Li><strong>Compliance with Legal Obligation</strong>: Philippine health regulations may require retention of certain medical records.</Li>
             </ul>
           </Section>
 
@@ -120,13 +120,13 @@ export default function PrivacyPolicyPage() {
           <Section title="7. Your Rights as a Data Subject (Philippine DPA, Chapter IV)">
             <p className="mb-3">Under Sections 16–20 of the DPA, you have the following rights:</p>
             <ul className="space-y-3 list-none">
-              <Li><strong>Right to be Informed</strong> — You have the right to know how your data is collected, processed, and stored (Section 16).</Li>
-              <Li><strong>Right to Access</strong> — You may request a copy of your personal information held by us (Section 16[c]).</Li>
-              <Li><strong>Right to Rectification</strong> — You may request correction of inaccurate or outdated data (Section 16[d]).</Li>
-              <Li><strong>Right to Erasure or Blocking</strong> — You may request deletion or blocking of data that is unlawfully processed or no longer necessary (Section 16[e]).</Li>
-              <Li><strong>Right to Object</strong> — You may object to processing based on legitimate interest (Section 18).</Li>
-              <Li><strong>Right to Data Portability</strong> — You may request your data in a structured, commonly used format (Section 18[b]).</Li>
-              <Li><strong>Right to Damages</strong> — You may claim compensation if you suffered damages due to inaccurate, incomplete, or false data (Section 16[f]).</Li>
+              <Li><strong>Right to be Informed</strong>: You have the right to know how your data is collected, processed, and stored (Section 16).</Li>
+              <Li><strong>Right to Access</strong>: You may request a copy of your personal information held by us (Section 16[c]).</Li>
+              <Li><strong>Right to Rectification</strong>: You may request correction of inaccurate or outdated data (Section 16[d]).</Li>
+              <Li><strong>Right to Erasure or Blocking</strong>: You may request deletion or blocking of data that is unlawfully processed or no longer necessary (Section 16[e]).</Li>
+              <Li><strong>Right to Object</strong>: You may object to processing based on legitimate interest (Section 18).</Li>
+              <Li><strong>Right to Data Portability</strong>: You may request your data in a structured, commonly used format (Section 18[b]).</Li>
+              <Li><strong>Right to Damages</strong>: You may claim compensation if you suffered damages due to inaccurate, incomplete, or false data (Section 16[f]).</Li>
             </ul>
             <p className="mt-4">
               To exercise these rights, email our DPO at{' '}
@@ -142,12 +142,12 @@ export default function PrivacyPolicyPage() {
             <ul className="space-y-2 list-none">
               <Li>All data is encrypted in transit (TLS 1.2+) and at rest (AES-256)</Li>
               <Li>Passwords are hashed and never stored in plain text</Li>
-              <Li>Role-based access control — dentists can only access their clinic&apos;s patients</Li>
+              <Li>Role-based access control: dentists can only access their clinic&apos;s patients</Li>
               <Li>Regular security reviews and vulnerability assessments</Li>
               <Li>Supabase infrastructure complies with SOC 2 Type II standards</Li>
             </ul>
             <p className="mt-4 text-sm text-sky-600/80">
-              In the event of a personal data breach, we will notify the National Privacy Commission (NPC) within <strong>72 hours</strong> of discovery and inform affected data subjects without unreasonable delay, as required by Section 20(f) of the DPA.
+              If a personal data breach occurs, we will notify the National Privacy Commission (NPC) within <strong>72 hours</strong> of discovery and inform affected data subjects without unreasonable delay, as required by Section 20(f) of the DPA.
             </p>
           </Section>
 
@@ -156,7 +156,7 @@ export default function PrivacyPolicyPage() {
             <Table rows={[
               ['Session Cookie', 'Strictly Necessary', 'Keeps you logged in during your session'],
               ['CSRF Token', 'Strictly Necessary', 'Prevents cross-site request forgery attacks'],
-              ['Analytics (future)', 'Optional', 'Aggregate usage statistics — you can opt out'],
+              ['Analytics (future)', 'Optional', 'Aggregate usage statistics; you can opt out'],
             ]} headers={['Cookie', 'Type', 'Purpose']} />
             <p className="mt-4 text-sm text-sky-600/80">
               Strictly necessary cookies do not require consent. Optional analytics cookies, if implemented, will be subject to prior consent in line with NPC Advisory No. 2020-01.

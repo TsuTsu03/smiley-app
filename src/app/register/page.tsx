@@ -206,7 +206,7 @@ function RegisterFlow() {
             {step === 1 && (
               <motion.div key="plan" {...fadeSlide}>
                 <h2 className="font-display text-2xl text-sky-950 text-center mb-2">Choose your plan</h2>
-                <p className="text-sky-500 text-sm text-center mb-8">Pick a plan — activate with secure payment, cancel anytime</p>
+                <p className="text-sky-500 text-sm text-center mb-8">Pick a plan, activate with secure payment, and cancel anytime</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {PLANS.map(({ key, name, price, desc, popular, unit }) => (

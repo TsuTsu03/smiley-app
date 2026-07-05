@@ -2538,8 +2538,8 @@ export default function LandingPage() {
               className="relative text-sky-200/80 text-lg mb-9 max-w-xl mx-auto"
             >
               Launch your booking portal, automate reminders, and organize
-              patient records in one place. Setup takes less than 10 minutes —
-              book a free demo to see it live.
+              patient records in one place. Setup takes less than 10 minutes.
+              Book a free demo to see it live.
             </motion.p>
             <motion.div
               variants={fadeUp}

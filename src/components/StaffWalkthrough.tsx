@@ -48,7 +48,7 @@ const ADMIN_STEPS: Step[] = [
   {
     icon: <Bot size={28} />,
     title: 'Ask the AI assistant',
-    body: 'Open the assistant to ask about patients, schedules, or records in plain language — for example, “who has an appointment tomorrow?”. It reads only, and only your clinic’s data.',
+    body: 'Open the assistant to ask about patients, schedules, or records in plain language, for example “who has an appointment tomorrow?”. It only reads your clinic’s data.',
   },
 ];
 
@@ -67,7 +67,7 @@ const DENTIST_STEPS: Step[] = [
   {
     icon: <Bot size={28} />,
     title: 'Ask the AI assistant',
-    body: 'Ask the assistant about a patient’s history or your schedule in plain language. It reads only, and only your clinic’s data.',
+    body: 'Ask the assistant about a patient’s history or your schedule in plain language. It only reads your clinic’s data.',
   },
 ];
 

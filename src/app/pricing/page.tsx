@@ -89,7 +89,7 @@ const COMPARISON = [
 ];
 
 const FAQS = [
-  { q: "Can I try Smiley before committing?", a: "We offer a free live demo and walkthrough with our team so you can see Smiley in action before subscribing. There is no self-serve free trial — you activate a plan with payment when you're ready." },
+  { q: "Can I try Smiley before committing?", a: "We offer a free live demo and walkthrough with our team so you can see Smiley in action before subscribing. There's no self-serve free trial, so you'll activate a plan with payment when you're ready." },
   { q: "Can I switch plans later?", a: "Absolutely. Upgrade or downgrade at any time. Changes take effect at your next billing cycle." },
   { q: "What payment methods do you accept?", a: "We accept GCash, Maya, GrabPay, and major credit and debit cards through our secure Philippine payment partner, PayMongo." },
   { q: "Is my data secure?", a: "Yes. All data is encrypted at rest and in transit. We use Supabase (built on PostgreSQL) with row-level security and regular backups." },

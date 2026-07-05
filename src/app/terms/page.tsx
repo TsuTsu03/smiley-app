@@ -41,11 +41,11 @@ export default function TermsOfServicePage() {
 
           <Section title="1. Definitions">
             <ul className="space-y-2 list-none">
-              <Li><strong>&ldquo;StackWise&rdquo; / &ldquo;we&rdquo; / &ldquo;us&rdquo;</strong> — StackWise, the operator of the &ldquo;Smiley&rdquo; clinic management platform.</Li>
-              <Li><strong>&ldquo;Clinic&rdquo;</strong> — a dental clinic that registers and subscribes to the platform.</Li>
-              <Li><strong>&ldquo;Authorized User&rdquo;</strong> — an admin or dentist account created under a registered Clinic.</Li>
-              <Li><strong>&ldquo;Patient&rdquo;</strong> — an individual whose dental records are managed through the platform.</Li>
-              <Li><strong>&ldquo;Service&rdquo;</strong> — all features accessible through Smiley, including patient records, appointment scheduling, reminders, and dashboards.</Li>
+              <Li><strong>&ldquo;StackWise&rdquo; / &ldquo;we&rdquo; / &ldquo;us&rdquo;</strong>: StackWise, the operator of the &ldquo;Smiley&rdquo; clinic management platform.</Li>
+              <Li><strong>&ldquo;Clinic&rdquo;</strong>: a dental clinic that registers and subscribes to the platform.</Li>
+              <Li><strong>&ldquo;Authorized User&rdquo;</strong>: an admin or dentist account created under a registered Clinic.</Li>
+              <Li><strong>&ldquo;Patient&rdquo;</strong>: an individual whose dental records are managed through the platform.</Li>
+              <Li><strong>&ldquo;Service&rdquo;</strong>: all features accessible through Smiley, including patient records, appointment scheduling, reminders, and dashboards.</Li>
             </ul>
           </Section>
 
@@ -101,7 +101,7 @@ export default function TermsOfServicePage() {
 
           <Section title="6. Intellectual Property">
             <p>
-              All intellectual property rights in the Smiley platform — including software, designs, trademarks, logos, and content created by us — are and shall remain the exclusive property of StackWise. Nothing in these Terms grants you any rights to our intellectual property except the limited license in Section 3.
+              All intellectual property rights in the Smiley platform (including software, designs, trademarks, logos, and content created by us) are and shall remain the exclusive property of StackWise. Nothing in these Terms grants you any rights to our intellectual property except the limited license in Section 3.
             </p>
             <p className="mt-3">
               <strong>Your clinic data</strong> (patient records, appointment data, and content you upload) remains your property. You grant us a limited license to process and store this data solely to provide the Service.
@@ -163,15 +163,15 @@ export default function TermsOfServicePage() {
               These Terms are governed by and construed in accordance with the laws of the Republic of the Philippines, without regard to its conflict of law provisions.
             </p>
             <p className="mt-3">
-              <strong>Step 1 — Amicable Resolution:</strong> We encourage you to contact us at{' '}
+              <strong>Step 1: Amicable Resolution.</strong> We encourage you to contact us at{' '}
               <a href="mailto:support@stackwise.com" className="text-sky-600 underline">support@stackwise.com</a>{' '}
               first. Most issues can be resolved within 15 business days without formal proceedings.
             </p>
             <p className="mt-3">
-              <strong>Step 2 — Mediation:</strong> If the dispute cannot be resolved amicably, both parties agree to submit to mediation before filing formal legal action, in accordance with the Alternative Dispute Resolution Act of 2004 (RA 9285).
+              <strong>Step 2: Mediation.</strong> If the dispute cannot be resolved amicably, both parties agree to submit to mediation before filing formal legal action, in accordance with the Alternative Dispute Resolution Act of 2004 (RA 9285).
             </p>
             <p className="mt-3">
-              <strong>Step 3 — Jurisdiction:</strong> Any unresolved dispute shall be subject to the exclusive jurisdiction of the proper courts of <strong>Metro Manila, Philippines</strong>.
+              <strong>Step 3: Jurisdiction.</strong> Any unresolved dispute shall be subject to the exclusive jurisdiction of the proper courts of <strong>Metro Manila, Philippines</strong>.
             </p>
           </Section>
 
@@ -198,7 +198,7 @@ export default function TermsOfServicePage() {
 
           <Section title="15. Contact Us">
             <div className="bg-sky-50 border border-sky-100 rounded-xl p-4 text-sm space-y-1">
-              <p><strong>StackWise</strong> — operator of Smiley</p>
+              <p><strong>StackWise</strong>, operator of Smiley</p>
               <p>Email: <a href="mailto:support@stackwise.com" className="text-sky-600 underline">support@stackwise.com</a></p>
               <p>Data Privacy Officer: <a href="mailto:privacy@stackwise.com" className="text-sky-600 underline">privacy@stackwise.com</a></p>
               <p>Address: Philippines</p>

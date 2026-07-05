@@ -31,7 +31,7 @@ export default function StaffChatbot() {
   const [messages, setMessages] = useState<Message[]>([{
     id: '0',
     role: 'bot',
-    text: `Hi ${user?.fullName?.split(' ')[0] ?? 'there'} 👋 I'm your **Smiley** clinic assistant. Ask me about patients, appointments, schedules, or recent records — I read your clinic's live data.`,
+    text: `Hi ${user?.fullName?.split(' ')[0] ?? 'there'} 👋 I'm your **Smiley** clinic assistant. Ask me about patients, appointments, schedules, or recent records. I read your clinic's live data.`,
   }]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
@@ -61,9 +61,9 @@ export default function StaffChatbot() {
       });
       const json = await res.json();
       if (res.ok && json.configured && json.reply) reply = json.reply as string;
-      else if (json.error) reply = `Sorry — ${json.error}`;
+      else if (json.error) reply = `Sorry, ${json.error}`;
     } catch {
-      reply = 'Network error — please try again in a moment.';
+      reply = 'Network error. Please try again in a moment.';
     }
 
     setMessages((prev) => [...prev, { id: `b-${Date.now()}`, role: 'bot', text: reply }]);

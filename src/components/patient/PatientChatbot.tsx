@@ -20,7 +20,7 @@ function getBotResponse(input: string, userId: string | null): string {
   const today = new Date().toISOString().split('T')[0];
 
   if (/^(hi|hello|hey|good\s+(morning|afternoon|evening)|greetings)/.test(q)) {
-    return `Hello${patient ? `, ${patient.fullName.split(' ')[0]}` : ''}! I'm your Smiley dental assistant. I can help you with:\n\n• **My appointments** — "What are my upcoming appointments?"\n• **Dentist schedules** — "When is Dr. Santos available?"\n• **Procedures & FAQs** — Ask about any dental treatment\n• **Clinic info** — Address, contact, hours\n\nHow can I help you today?`;
+    return `Hello${patient ? `, ${patient.fullName.split(' ')[0]}` : ''}! I'm your Smiley dental assistant. I can help you with:\n\n• **My appointments**: "What are my upcoming appointments?"\n• **Dentist schedules**: "When is Dr. Santos available?"\n• **Procedures & FAQs**: Ask about any dental treatment\n• **Clinic info**: Address, contact, hours\n\nHow can I help you today?`;
   }
 
   if (/my appointment|my booking|my schedule|upcoming appointment|when is my/.test(q)) {
@@ -31,14 +31,14 @@ function getBotResponse(input: string, userId: string | null): string {
       return `You have no upcoming appointments. Head to the **"Book Appointment"** tab to schedule one!`;
     }
     const list = myApts
-      .map(a => `• **${a.type}** — ${fmtShortDate(a.date)} at ${a.time} with ${getDentistById(a.dentistId)?.fullName} (${a.status})`)
+      .map(a => `• **${a.type}**: ${fmtShortDate(a.date)} at ${a.time} with ${getDentistById(a.dentistId)?.fullName} (${a.status})`)
       .join('\n');
     return `Here are your upcoming appointments:\n\n${list}`;
   }
 
   if (/schedule|available|availability|when is|dentist hour|clinic hour|operating hour|open/.test(q)) {
     const formatSched = (d: typeof MOCK_DENTISTS[0]) =>
-      `**${d.fullName}** — ${d.specialization}\n` +
+      `**${d.fullName}**: ${d.specialization}\n` +
       d.schedule.map(s => `  ${s.day}: ${s.startTime}–${s.endTime}`).join('\n');
 
     if (/santos|maria/.test(q)) return `Dr. Santos's schedule:\n\n${formatSched(MOCK_DENTISTS[0])}`;
@@ -49,7 +49,7 @@ function getBotResponse(input: string, userId: string | null): string {
   }
 
   if (/dentist|doctor|dr\.|specialist/.test(q) && !/schedule|appointment|when/.test(q)) {
-    const list = MOCK_DENTISTS.map(d => `• **${d.fullName}** — ${d.specialization}`).join('\n');
+    const list = MOCK_DENTISTS.map(d => `• **${d.fullName}**: ${d.specialization}`).join('\n');
     return `Our dental team:\n\n${list}\n\nWant to know any of their schedules?`;
   }
 
@@ -78,7 +78,7 @@ function getBotResponse(input: string, userId: string | null): string {
   }
 
   if (/root canal|endodont/.test(q)) {
-    return `**Root Canal Treatment** removes infected pulp to save the tooth and relieve pain.\n\n⏱ Duration: 1–2 sessions of 60–90 minutes\n💡 You'll be under local anesthesia — it's more comfortable than it sounds! 😊`;
+    return `**Root Canal Treatment** removes infected pulp to save the tooth and relieve pain.\n\n⏱ Duration: 1–2 sessions of 60–90 minutes\n💡 You'll be under local anesthesia, and it's more comfortable than it sounds! 😊`;
   }
 
   if (/whitening|bleach/.test(q)) {
@@ -94,7 +94,7 @@ function getBotResponse(input: string, userId: string | null): string {
   }
 
   if (/crown|bridge|denture/.test(q)) {
-    return `We offer **Crowns**, **Bridges**, and **Dentures** to restore missing or damaged teeth:\n\n• **Crown** — caps a damaged tooth\n• **Bridge** — fills the gap from a missing tooth\n• **Denture** — removable replacement for multiple missing teeth\n\nBook a consultation to find the right option for you!`;
+    return `We offer **Crowns**, **Bridges**, and **Dentures** to restore missing or damaged teeth:\n\n• **Crown**: caps a damaged tooth\n• **Bridge**: fills the gap from a missing tooth\n• **Denture**: removable replacement for multiple missing teeth\n\nBook a consultation to find the right option for you!`;
   }
 
   if (/pediatric|child|kid|children/.test(q)) {
@@ -106,7 +106,7 @@ function getBotResponse(input: string, userId: string | null): string {
   }
 
   if (/pain|hurt|emergency|ache|toothache/.test(q)) {
-    return `Sorry you're in pain! 😟 For emergencies, call us immediately:\n\n📞 **${MOCK_CLINIC.phone}**\n\nWhile waiting:\n• Rinse with warm salt water\n• Take OTC pain relief if no allergies\n• Avoid very hot or cold foods\n\nDon't ignore tooth pain — it can worsen quickly!`;
+    return `Sorry you're in pain! 😟 For emergencies, call us immediately:\n\n📞 **${MOCK_CLINIC.phone}**\n\nWhile waiting:\n• Rinse with warm salt water\n• Take OTC pain relief if no allergies\n• Avoid very hot or cold foods\n\nDon't ignore tooth pain, it can worsen quickly!`;
   }
 
   if (/insurance|hmo|payment|cost|price|fee|charge/.test(q)) {
@@ -118,7 +118,7 @@ function getBotResponse(input: string, userId: string | null): string {
   }
 
   if (/help|what can you|what do you know|how do you work/.test(q)) {
-    return `Here's what I can help with:\n\n• **Your appointments** — "What are my upcoming appointments?"\n• **Dentist schedules** — "When is Dr. Reyes available?"\n• **Procedures** — cleaning, braces, extraction, fillings, implants, etc.\n• **Clinic info** — address, phone, email\n• **Booking** — how to book or reschedule\n• **Emergencies** — what to do for tooth pain\n\nJust type your question!`;
+    return `Here's what I can help with:\n\n• **Your appointments**: "What are my upcoming appointments?"\n• **Dentist schedules**: "When is Dr. Reyes available?"\n• **Procedures**: cleaning, braces, extraction, fillings, implants, etc.\n• **Clinic info**: address, phone, email\n• **Booking**: how to book or reschedule\n• **Emergencies**: what to do for tooth pain\n\nJust type your question!`;
   }
 
   return `I'm not sure I understood that. Try asking:\n\n• "What are my appointments?"\n• "When is Dr. Santos available?"\n• "Tell me about teeth cleaning"\n• "What's your clinic address?"\n\nType **help** to see everything I can do!`;
@@ -212,7 +212,7 @@ export default function PatientChatbot() {
               <div className="font-semibold text-sm leading-none">Smiley Assistant</div>
               <div className="text-sky-100 text-xs mt-0.5 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-300 inline-block animate-pulse" />
-                Online — Ask me anything!
+                Online, ask me anything!
               </div>
             </div>
             <button

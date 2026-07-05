@@ -19,7 +19,7 @@ export const SITE_URL = (
 export const SITE_NAME = 'Smiley';
 export const SITE_TAGLINE = 'Smart Dental Clinic Management Software';
 export const SITE_DESCRIPTION =
-  'Cloud-based dental clinic software for the Philippines — online booking, patient records, billing, and an AI assistant for staff and patients.';
+  'Cloud-based dental clinic software for the Philippines. Online booking, patient records, billing, and an AI assistant for staff and patients.';
 
 export const SITE_KEYWORDS = [
   'dental clinic management software',
@@ -50,7 +50,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How do patients book an appointment?',
-    a: 'Patients book online through the clinic’s Smiley portal — choosing a dentist, date, and procedure — and receive reminders automatically. Returning patients sign in with their name and date of birth plus a one-time code sent to their email, so there is no password to remember.',
+    a: 'Patients book online through the clinic’s Smiley portal, choosing a dentist, date, and procedure, and get reminders automatically. Returning patients sign in with their name and date of birth plus a one-time code sent to their email, so there is no password to remember.',
   },
   {
     q: 'Is patient data secure and private?',

@@ -5,10 +5,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Pricing',
   description:
-    'Smiley pricing for dental clinics — simple subscription plans for online booking, patient records, billing, and the AI assistant. See plans or request a demo.',
+    'Smiley pricing for dental clinics: simple subscription plans for online booking, patient records, billing, and the AI assistant. See plans or request a demo.',
   alternates: { canonical: '/pricing' },
   openGraph: {
-    title: 'Smiley Pricing — Dental Clinic Software Plans',
+    title: 'Smiley Pricing: Dental Clinic Software Plans',
     description:
       'Simple subscription plans for dental clinics: online booking, patient records, billing, and an AI assistant.',
     url: '/pricing',

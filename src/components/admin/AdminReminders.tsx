@@ -39,7 +39,7 @@ export default function AdminReminders() {
     const patient = MOCK_PATIENTS.find(p => p.id === patientId);
     const msg = type === 'sms'
       ? `Hi ${patient?.fullName.split(' ')[0]}! This is a reminder from BrightSmile Dental Clinic. Your orthodontic adjustment is scheduled on ${fmtShortDate(patient?.nextAdjustmentDate || '')}. Please call (02) 8123-4567 to confirm. Thank you!`
-      : `Dear ${patient?.fullName},\n\nThis is a friendly reminder that your orthodontic adjustment is scheduled on ${fmtDate(patient?.nextAdjustmentDate || '')}.\n\nPlease confirm your appointment by replying to this email or calling us at (02) 8123-4567.\n\nSee you soon!\n— BrightSmile Dental Clinic`;
+      : `Dear ${patient?.fullName},\n\nThis is a friendly reminder that your orthodontic adjustment is scheduled on ${fmtDate(patient?.nextAdjustmentDate || '')}.\n\nPlease confirm your appointment by replying to this email or calling us at (02) 8123-4567.\n\nSee you soon!\n\nBrightSmile Dental Clinic`;
     setMsgText(msg);
     setCompose({ kind: 'adjustment', patientId, type });
   };
@@ -50,7 +50,7 @@ export default function AdminReminders() {
     const dentist = getDentistById(apt?.dentistId || '');
     const msg = type === 'sms'
       ? `Hi ${patient?.fullName.split(' ')[0]}! Reminder from BrightSmile Dental Clinic: your ${apt?.type} with ${dentist?.fullName} is on ${fmtShortDate(apt?.date || '')} at ${apt?.time}. Call (02) 8123-4567 to confirm. Thank you!`
-      : `Dear ${patient?.fullName},\n\nThis is a reminder for your upcoming appointment:\n\nProcedure: ${apt?.type}\nDentist: ${dentist?.fullName}\nDate: ${fmtDate(apt?.date || '')}\nTime: ${apt?.time}\n\nPlease confirm by replying to this email or calling (02) 8123-4567.\n\nSee you soon!\n— BrightSmile Dental Clinic`;
+      : `Dear ${patient?.fullName},\n\nThis is a reminder for your upcoming appointment:\n\nProcedure: ${apt?.type}\nDentist: ${dentist?.fullName}\nDate: ${fmtDate(apt?.date || '')}\nTime: ${apt?.time}\n\nPlease confirm by replying to this email or calling (02) 8123-4567.\n\nSee you soon!\n\nBrightSmile Dental Clinic`;
     setMsgText(msg);
     setCompose({ kind: 'booking', appointmentId, type });
   };
@@ -142,7 +142,7 @@ export default function AdminReminders() {
       <Card className="p-5">
         <div className="flex items-center gap-2 mb-4">
           <Calendar size={16} className="text-sky-500" />
-          <h3 className="font-semibold text-sky-700">Booking Reminders — Upcoming Appointments ({upcomingApts.length})</h3>
+          <h3 className="font-semibold text-sky-700">Booking Reminders: Upcoming Appointments ({upcomingApts.length})</h3>
         </div>
         {upcomingApts.length === 0 ? (
           <div className="text-sm text-sky-400 py-4 text-center">No upcoming appointments</div>
@@ -158,7 +158,7 @@ export default function AdminReminders() {
         <Card className="p-5">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle size={16} className="text-amber-500" />
-            <h3 className="font-semibold text-amber-700">Orthodontic Adjustments — Urgent Within 7 Days ({upcoming7.length})</h3>
+            <h3 className="font-semibold text-amber-700">Orthodontic Adjustments: Urgent Within 7 Days ({upcoming7.length})</h3>
           </div>
           <div className="space-y-2">
             {upcoming7.map(p => <PatientAdjustmentRow key={p.id} patient={p} urgent />)}
@@ -168,7 +168,7 @@ export default function AdminReminders() {
 
       {upcoming14.length > 0 && (
         <Card className="p-5">
-          <h3 className="font-semibold text-sky-700 mb-4">Orthodontic Adjustments — 7–14 Days ({upcoming14.length})</h3>
+          <h3 className="font-semibold text-sky-700 mb-4">Orthodontic Adjustments: 7–14 Days ({upcoming14.length})</h3>
           <div className="space-y-2">
             {upcoming14.map(p => <PatientAdjustmentRow key={p.id} patient={p} />)}
           </div>

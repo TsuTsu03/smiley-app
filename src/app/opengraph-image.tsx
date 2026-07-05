@@ -5,7 +5,7 @@ import { SITE_NAME, SITE_TAGLINE } from '@/lib/seo';
 // by Next at /opengraph-image. Generated at build time — no static asset needed.
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = `${SITE_NAME} — ${SITE_TAGLINE}`;
+export const alt = `${SITE_NAME}: ${SITE_TAGLINE}`;
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -55,7 +55,7 @@ export default function OpengraphImage() {
           {SITE_TAGLINE}
         </div>
         <div style={{ marginTop: 24, fontSize: 30, opacity: 0.92, maxWidth: 940 }}>
-          Online booking, patient records, billing, and an AI assistant — for dental clinics.
+          Online booking, patient records, billing, and an AI assistant for dental clinics.
         </div>
       </div>
     ),
