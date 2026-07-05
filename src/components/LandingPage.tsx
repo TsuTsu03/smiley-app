@@ -1099,7 +1099,7 @@ const INCLUDED_FEATURES: { name: string; soon?: boolean }[] = [
 const PLANS = [
   {
     name: "Starter",
-    price: 1500,
+    price: 2000,
     desc: "For solo dentists and small clinics",
     features: [
       "1 clinic",

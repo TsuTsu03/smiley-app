@@ -17,7 +17,7 @@ import MarketingFooter from "@/components/MarketingFooter";
 import LoadingScreen from "@/components/LoadingScreen";
 
 const PLANS = [
-  { key: "starter", name: "Starter", price: 1500, unit: "/mo", desc: "Solo dentists & small clinics" },
+  { key: "starter", name: "Starter", price: 2000, unit: "/mo", desc: "Solo dentists & small clinics" },
   { key: "growth", name: "Growth", price: 3500, unit: "/mo", desc: "Multiple dentists & staff", popular: true },
   { key: "multi-clinic", name: "Multi-Clinic", price: 3000, unit: "/branch", desc: "Dental groups, per branch" },
 ];
