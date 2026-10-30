@@ -34,3 +34,6 @@ yarn-error.log*
 marketing-video/
 marketing-screenshots/
 *.stackdump
+
+# TypeScript incremental build cache
+*.tsbuildinfo
