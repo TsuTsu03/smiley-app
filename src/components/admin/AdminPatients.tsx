@@ -6,6 +6,7 @@ import { Card, SectionHeader, Modal, EmptyState, Btn } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
 import { fmtDate, fmtShortDate, calcAge } from '@/lib/data';
 import PatientImport from './PatientImport';
+import { daysUntil } from '@/lib/dates';
 
 export default function AdminPatients() {
   const { user } = useAuth();
@@ -17,16 +18,17 @@ export default function AdminPatients() {
   const [loading, setLoading]     = useState(true);
   const [importing, setImporting] = useState(false);
 
+  const clinicId = user?.clinicId;
   const load = useCallback(() => {
-    if (!user?.clinicId) return;
+    if (!clinicId) return;
     Promise.all([
-      fetch(`/api/patients?clinicId=${user.clinicId}`).then(r => r.json()),
-      fetch(`/api/records?clinicId=${user.clinicId}`).then(r => r.json()),
+      fetch(`/api/patients?clinicId=${clinicId}`).then(r => r.json()),
+      fetch(`/api/records?clinicId=${clinicId}`).then(r => r.json()),
     ]).then(([p, r]) => {
       setPatients(Array.isArray(p) ? p : []);
       setRecords(Array.isArray(r) ? r : []);
     }).finally(() => setLoading(false));
-  }, [user?.clinicId]);
+  }, [clinicId]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -76,7 +78,7 @@ export default function AdminPatients() {
               {filtered.map(p => {
                 const patRecords = records.filter(r => r.patientId === p.id);
                 const daysLeft = p.nextAdjustmentDate
-                  ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
+                  ? daysUntil(p.nextAdjustmentDate)
                   : null;
                 return (
                   <div key={p.id} className="flex items-center gap-3 px-4 py-3.5 hover:bg-sky-50/30 transition-colors">
@@ -121,7 +123,7 @@ export default function AdminPatients() {
                   {filtered.map((p, i) => {
                     const patRecords = records.filter(r => r.patientId === p.id);
                     const daysLeft  = p.nextAdjustmentDate
-                      ? Math.ceil((new Date(p.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
+                      ? daysUntil(p.nextAdjustmentDate)
                       : null;
                     return (
                       <tr key={p.id} className={`border-b border-sky-50/80 hover:bg-sky-50/40 transition-colors ${i % 2 ? 'bg-sky-50/20' : ''}`}>

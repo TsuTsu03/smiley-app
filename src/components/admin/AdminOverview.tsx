@@ -5,6 +5,7 @@ import { Users, Calendar, Bell, Clock, AlertCircle } from 'lucide-react';
 import { StatCard, Card, Badge, SectionHeader, Btn } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
 import { fmtDate, fmtShortDate } from '@/lib/data';
+import { daysUntil } from '@/lib/dates';
 
 export default function AdminOverview({ onNav }: { onNav: (k: string) => void }) {
   const { user } = useAuth();
@@ -119,7 +120,7 @@ export default function AdminOverview({ onNav }: { onNav: (k: string) => void })
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {upcomingAdj.map(p => {
-              const daysLeft = Math.ceil((new Date(p.nextAdjustmentDate!).getTime() - Date.now()) / 86400000);
+              const daysLeft = daysUntil(p.nextAdjustmentDate!);
               return (
                 <div key={p.id} className={`p-3.5 rounded-xl border ${daysLeft <= 3 ? 'bg-amber-50 border-amber-100' : 'bg-sky-50 border-sky-100'}`}>
                   <div className="flex items-start justify-between gap-2 mb-1">

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, FileText, Clock, AlertCircle } from 'lucide-react';
 import { StatCard, Card, Badge, SectionHeader, Btn } from '@/components/ui';
 import { fmtDate, fmtShortDate, calcAge } from '@/lib/data';
+import { daysUntil } from '@/lib/dates';
 
 export default function PatientOverview({ onNav }: { onNav: (k: string) => void }) {
   const { userId, user } = useAuth();
@@ -31,7 +32,7 @@ export default function PatientOverview({ onNav }: { onNav: (k: string) => void 
     .filter(a => a.date >= today && a.status !== 'cancelled')
     .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
   const daysToAdj = patient?.nextAdjustmentDate
-    ? Math.ceil((new Date(patient.nextAdjustmentDate).getTime() - Date.now()) / 86400000)
+    ? daysUntil(patient.nextAdjustmentDate)
     : null;
 
   return (

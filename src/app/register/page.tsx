@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useSyncExternalStore, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +16,8 @@ import MarketingNav from "@/components/MarketingNav";
 import MarketingFooter from "@/components/MarketingFooter";
 import LoadingScreen from "@/components/LoadingScreen";
 import { PLAN_PRICING } from "@/lib/plans";
+
+const noopSubscribe = () => () => {};
 
 const PLANS = [
   { key: "starter", name: PLAN_PRICING.starter.name, price: PLAN_PRICING.starter.monthly, unit: "/mo", desc: "Solo dentists & small clinics" },
@@ -45,17 +47,17 @@ function RegisterFlow() {
   // Demo gate — before starting a trial we ask whether they've already had a
   // live demo/walkthrough. If not, we send them to the "Schedule a demo"
   // section. Answer is remembered for the session so it only asks once.
-  const [demoConfirmed, setDemoConfirmed] = useState(true); // assume true until mounted
-  useEffect(() => {
-    const ok =
-      typeof window !== "undefined" &&
-      sessionStorage.getItem("smiley_demo_confirmed") === "1";
-    setDemoConfirmed(ok);
-  }, []);
+  const [confirmedNow, setConfirmedNow] = useState(false);
+  const confirmedEarlier = useSyncExternalStore(
+    noopSubscribe,
+    () => sessionStorage.getItem("smiley_demo_confirmed") === "1",
+    () => true, // assume confirmed during SSR so the gate never flashes
+  );
+  const demoConfirmed = confirmedNow || confirmedEarlier;
 
   const confirmDemo = () => {
     sessionStorage.setItem("smiley_demo_confirmed", "1");
-    setDemoConfirmed(true);
+    setConfirmedNow(true);
   };
 
   const [step, setStep] = useState(preselected ? 2 : 1);

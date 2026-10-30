@@ -57,16 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setTrialEndsAt(clinic?.trialEndsAt ?? null);
   }
 
-  useEffect(() => {
-    fetchMe();
-
-    const supabase = createClient();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      fetchMe();
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
   async function fetchMe() {
     try {
       const res = await fetch('/api/auth/me');
@@ -84,6 +74,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    // Supabase emits INITIAL_SESSION to every new subscriber, which covers the first load.
+    const supabase = createClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      fetchMe();
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
 
   async function login(
     emailOrName: string,

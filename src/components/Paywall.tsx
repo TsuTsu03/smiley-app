@@ -37,7 +37,7 @@ export default function Paywall() {
       });
       const json = await res.json();
       if (res.ok && json.url) {
-        window.location.href = json.url;
+        window.location.assign(json.url);
         return;
       }
       setError(json.error ?? 'Could not start checkout. Please try again.');

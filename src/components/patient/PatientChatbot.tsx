@@ -151,7 +151,6 @@ export default function PatientChatbot() {
 
   useEffect(() => {
     if (open) {
-      setHasUnread(false);
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [open]);
@@ -293,7 +292,7 @@ export default function PatientChatbot() {
 
       {/* Floating action button */}
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => { setOpen(o => !o); setHasUnread(false); }}
         aria-label={open ? 'Close chat' : 'Open Smiley Assistant'}
         className={`fixed bottom-6 right-4 sm:right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-200 ${open ? 'bg-sky-700 rotate-90' : 'bg-gradient-to-br from-sky-600 to-sky-800 hover:scale-110 active:scale-95'}`}
       >

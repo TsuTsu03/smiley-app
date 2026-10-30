@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useSyncExternalStore, useCallback, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
 const STORAGE_KEY = 'smiley-theme';
@@ -15,17 +15,21 @@ export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${
 interface ThemeCtx { theme: Theme; setTheme: (t: Theme) => void; toggle: () => void; }
 const Ctx = createContext<ThemeCtx | null>(null);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
+function subscribeTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  return () => observer.disconnect();
+}
 
-  // Sync from the value the no-flash script already applied.
-  useEffect(() => {
-    const current = (document.documentElement.dataset.theme as Theme) || 'light';
-    setThemeState(current);
-  }, []);
+function readTheme(): Theme {
+  return (document.documentElement.dataset.theme as Theme) || 'light';
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  // The no-flash script owns the initial value; read it from <html>.
+  const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light' as Theme);
 
   const setTheme = useCallback((t: Theme) => {
-    setThemeState(t);
     document.documentElement.dataset.theme = t;
     try { localStorage.setItem(STORAGE_KEY, t); } catch {}
   }, []);
